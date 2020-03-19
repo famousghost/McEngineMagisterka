@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Pliki źródłowe">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Pliki zasobów">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Pliki źródłowe\GLAD">
+      <UniqueIdentifier>{e077bcf1-94a4-4eee-be79-cf729aa8291e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\DEFINES">
+      <UniqueIdentifier>{7fed79c2-8bfd-425f-9ee7-170f45cdbd2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\GUI">
+      <UniqueIdentifier>{abea1b0e-55f5-4e25-ba01-352dccf0a7b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\SHADERS">
+      <UniqueIdentifier>{106343f7-001a-4c17-a0c2-4eb7bd29f39c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\GUI">
+      <UniqueIdentifier>{1d0d8e1b-8c70-4b21-8fbf-7d4295f44122}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\SHADERS">
+      <UniqueIdentifier>{035393d7-42de-4786-a179-ee4df4d32acd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\LOGGER">
+      <UniqueIdentifier>{899cfe23-eab2-4412-8e37-c5bed2655e86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\LOGGER">
+      <UniqueIdentifier>{c79ab76e-aad5-48b8-86a4-5450ccb59c3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\GUI\IMGUI">
+      <UniqueIdentifier>{b9ce43dd-9eb3-453d-81b8-0fce4ac341bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\MESHES">
+      <UniqueIdentifier>{27c3f6a4-3ba3-4252-9a9c-8134665fcbb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\MESHES">
+      <UniqueIdentifier>{22b7e283-fc30-4d3c-953b-7b2729d6b16a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\MESHES\BUILDERS">
+      <UniqueIdentifier>{3c298fc2-e110-4811-b349-935ee6055220}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\MESHES\BUILDERS">
+      <UniqueIdentifier>{b463fc12-9753-44df-8272-0fee0c87895f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\MESHES\OBJECTS">
+      <UniqueIdentifier>{e44ae294-70c3-49de-ba65-e6106b4412fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\MESHES\OBJECTS">
+      <UniqueIdentifier>{5a48b598-f304-4003-8b02-6dc2822dcec2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\GUI\IMGUI">
+      <UniqueIdentifier>{c6553ae8-b078-4da3-b388-93079f53f595}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\glad.c">
+      <Filter>Pliki źródłowe\GLAD</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Window.cpp">
+      <Filter>Pliki źródłowe\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VertexArray.cpp">
+      <Filter>Pliki źródłowe\MESHES</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Logger.cpp">
+      <Filter>Pliki źródłowe\LOGGER</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\ImGUI\imgui_widgets.cpp">
+      <Filter>Pliki źródłowe\GUI\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\ImGUI\imgui_draw.cpp">
+      <Filter>Pliki źródłowe\GUI\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\ImGUI\imgui_demo.cpp">
+      <Filter>Pliki źródłowe\GUI\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\ImGUI\imgui.cpp">
+      <Filter>Pliki źródłowe\GUI\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\ImGUI\imgui_impl_glfw.cpp">
+      <Filter>Pliki źródłowe\GUI\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\ImGUI\imgui_impl_opengl3.cpp">
+      <Filter>Pliki źródłowe\GUI\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ObjectManager.cpp">
+      <Filter>Pliki źródłowe\MESHES</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object.cpp">
+      <Filter>Pliki źródłowe\MESHES\OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CubeModelBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CubeBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EditorManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PhysicsManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RenderManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ScenesManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TextureManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shader.cpp">
+      <Filter>Pliki źródłowe\SHADERS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ShaderLoader.cpp">
+      <Filter>Pliki źródłowe\SHADERS</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\Defines.h">
+      <Filter>Pliki nagłówkowe\DEFINES</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Shader.h">
+      <Filter>Pliki nagłówkowe\SHADERS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ShaderLoader.h">
+      <Filter>Pliki nagłówkowe\SHADERS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Window.h">
+      <Filter>Pliki nagłówkowe\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\VertexArray.h">
+      <Filter>Pliki nagłówkowe\MESHES</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Logger.h">
+      <Filter>Pliki nagłówkowe\LOGGER</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ObjectManager.h">
+      <Filter>Pliki nagłówkowe\MESHES</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ModelBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Model.h">
+      <Filter>Pliki nagłówkowe\MESHES</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Object.h">
+      <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ObjectBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CubeModelBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CubeBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\ImGUI\imconfig.h">
+      <Filter>Pliki nagłówkowe\GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\ImGUI\imgui.h">
+      <Filter>Pliki nagłówkowe\GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\ImGUI\imgui_impl_glfw.h">
+      <Filter>Pliki nagłówkowe\GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\ImGUI\imgui_impl_opengl3.h">
+      <Filter>Pliki nagłówkowe\GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\ImGUI\imgui_internal.h">
+      <Filter>Pliki nagłówkowe\GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\ImGUI\imstb_rectpack.h">
+      <Filter>Pliki nagłówkowe\GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\ImGUI\imstb_textedit.h">
+      <Filter>Pliki nagłówkowe\GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\ImGUI\imstb_truetype.h">
+      <Filter>Pliki nagłówkowe\GUI\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GameManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GuiManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\PhysicsManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\RenderManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ScenesManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TextureManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
