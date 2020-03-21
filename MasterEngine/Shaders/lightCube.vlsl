@@ -1,0 +1,20 @@
+#version 330 core
+
+layout(location = 0) in vec3 vertexCoords;
+layout(location = 3) in vec3 normalCoords;
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
+out vec4 wPos;
+out vec3 normCoords;
+
+void main()
+{
+	vec4 worldPos = model * vec4(vertexCoords, 1.0);
+	normCoords = normalize(mat3(transpose(inverse(model))) * normalCoords);
+	wPos = worldPos;
+	vec4 vertPos = projection * view * worldPos;
+	gl_Position = vertPos;
+}

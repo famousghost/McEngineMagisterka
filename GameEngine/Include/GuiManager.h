@@ -17,7 +17,7 @@ public:
     
     void shutdown();
 
-    void meshGui(ImVec4 & p_clearColor);
+    void meshGui();
 
     static GuiManager& getInstance()
     {

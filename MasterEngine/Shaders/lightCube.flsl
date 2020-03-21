@@ -1,0 +1,31 @@
+#version 330 core
+
+in vec3 normCoords;
+in vec4 wPos;
+
+out vec4 fragColor;
+
+vec4 lightPosition = vec4(1.0, 2.0, 2.0, 1.0);
+vec4 cameraPos = vec4(0.0, 0.0, -3.0, 1.0);
+
+vec3 objColor = vec3(1.0, 0.0, 0.0);
+
+void main()
+{
+	vec3 ambientLight = vec3(0.2, 0.2, 0.2) * objColor;
+	vec3 diffuseLight = vec3(0.2, 0.2, 0.2);
+	vec3 specularLight = vec3(0.2, 0.2, 0.2);
+	vec4 lightPos = lightPosition - wPos;
+	float lightColor = max(dot(vec3(lightPos), normCoords), 0.0);
+	
+	diffuseLight *= lightColor * objColor;
+	
+	vec3 lightReflected = 2 * max(dot(vec3(lightPos), normCoords), 0.0) * normCoords;
+	vec4 cameraWorldPostion = wPos - cameraPos;
+	
+	float specularColor = pow(max(dot(vec3(cameraWorldPostion),lightReflected), 0.0), 32.0);
+	
+	specularLight *= specularColor * objColor;
+	
+	fragColor = vec4(ambientLight + diffuseLight + specularLight, 1.0);
+}

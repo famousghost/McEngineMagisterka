@@ -31,18 +31,15 @@ EditorManager & EditorManager::getInstance()
 
 void EditorManager::editorLoop()
 {
-    SET_LOG_TYPE(McEngine::LogType::DBG);
     LOG("Application start", McEngine::LogType::INF);
 
     auto& scene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
-
-    ImVec4 l_clearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     glEnable(GL_DEPTH_TEST);
 
     while (scene->getWindow().isOpen())
     {
-        Gui::GuiManager::getInstance().meshGui(l_clearColor);
+        Gui::GuiManager::getInstance().meshGui();
 
         Renderer::RenderManager::getInstance().draw(*scene);
     }

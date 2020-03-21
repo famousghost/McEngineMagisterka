@@ -11,6 +11,7 @@
 
 int main()
 {
+    SET_LOG_TYPE(McEngine::LogType::DBG);
     McEngine::Files::FileManager::getInstance().start();
     McEngine::Editor::EditorManager::getInstance().start();
     McEngine::Scenes::ScenesManager::getInstace().start();

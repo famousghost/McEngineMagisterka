@@ -31,14 +31,14 @@ void GuiManager::initImGui()
     ImGuiIO& io = ImGui::GetIO(); (void)io;
 
     ImGui::StyleColorsDark();
-    auto& scenes = Scenes::ScenesManager::getInstace().getScenes();
-    ImGui_ImplGlfw_InitForOpenGL(scenes.at(0)->getWindow().getGlfwWindow(), true);
+    auto& scene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
+    ImGui_ImplGlfw_InitForOpenGL(scene->getWindow().getGlfwWindow(), true);
     ImGui_ImplOpenGL3_Init(l_glsl_version);
 }
 
-void GuiManager::meshGui(ImVec4& p_clearColor)
+void GuiManager::meshGui()
 {
-    auto& l_objects = Scenes::ScenesManager::getInstace().getScenes().at(0)->getObjectManager().getObjects();
+    auto& l_objects = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -47,12 +47,14 @@ void GuiManager::meshGui(ImVec4& p_clearColor)
     ImGui::Text("The best engine on whole world");
 
     static std::vector<std::string> items;
-    static std::vector<std::string> shadersItems = { "defaultShader", "colorShader" };
+    static std::vector<std::string> shadersItems = { "defaultShader", "colorShader", "diffuseShader"};
 
     objectChoosingComboBox(items);
     updateShaderComboBox(shadersItems);
     objectMoveOperations();
-    ImGui::ColorEdit3("Change Color", (float*)&p_clearColor);
+    auto& scene =
+        Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
+    ImGui::ColorEdit3("Change Color", (float*)&scene->m_backgroundColor);
 
     addObject(items);
     deleteObject(items);
