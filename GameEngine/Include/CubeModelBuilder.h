@@ -17,8 +17,6 @@ public:
     std::shared_ptr<Model> getModel() const override;
 private:
     std::shared_ptr<Model> m_model;
-    std::vector<GLfloat> m_colorValues;
-    std::vector<GLfloat> m_textureCoords;
 };
 
 }//Meshes

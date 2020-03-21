@@ -33,19 +33,18 @@ void EditorManager::editorLoop()
 {
     SET_LOG_TYPE(McEngine::LogType::DBG);
     LOG("Application start", McEngine::LogType::INF);
-    std::vector<std::string> objectsName;
 
-    auto& scenes = Scenes::ScenesManager::getInstace().getScenes();
+    auto& scene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
 
     ImVec4 l_clearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     glEnable(GL_DEPTH_TEST);
 
-    while (scenes.at(0)->getWindow().isOpen())
+    while (scene->getWindow().isOpen())
     {
         Gui::GuiManager::getInstance().meshGui(l_clearColor);
 
-        Renderer::RenderManager::getInstance().draw(*scenes.at(0));
+        Renderer::RenderManager::getInstance().draw(*scene);
     }
 
     LOG("Application end", McEngine::LogType::INF);

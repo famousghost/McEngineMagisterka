@@ -5,12 +5,16 @@
 #include "GameManager.h"
 #include "PhysicsManager.h"
 #include "TextureManager.h"
+#include "VAOManager.h"
+#include "ShaderManager.h"
 
 int main()
 {
     McEngine::Editor::EditorManager::getInstance().start();
     McEngine::Scenes::ScenesManager::getInstace().start();
     McEngine::Renderer::RenderManager::getInstance().start();
+    McEngine::Meshes::VAOManager::getInstance().start();
+    McEngine::Shaders::ShaderManager::getInstance().start();
     McEngine::Gui::GuiManager::getInstance().start();
 
     //-----------------------------------------------------------//
@@ -20,6 +24,8 @@ int main()
     //-----------------------------------------------------------//
 
     McEngine::Gui::GuiManager::getInstance().shutdown();
+    McEngine::Shaders::ShaderManager::getInstance().shutdown();
+    McEngine::Meshes::VAOManager::getInstance().shutdown();
     McEngine::Renderer::RenderManager::getInstance().shutdown();
     McEngine::Scenes::ScenesManager::getInstace().shutdown();
     McEngine::Editor::EditorManager::getInstance().shutdown();

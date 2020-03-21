@@ -96,9 +96,6 @@
     <ClCompile Include="Source\ObjectManager.cpp">
       <Filter>Pliki źródłowe\MESHES</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Object.cpp">
-      <Filter>Pliki źródłowe\MESHES\OBJECTS</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CubeModelBuilder.cpp">
       <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
     </ClCompile>
@@ -137,6 +134,12 @@
     </ClCompile>
     <ClCompile Include="Source\ShaderLoader.cpp">
       <Filter>Pliki źródłowe\SHADERS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VAOManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ShaderManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -203,9 +206,6 @@
     <ClInclude Include="..\Libs\ImGUI\imstb_truetype.h">
       <Filter>Pliki nagłówkowe\GUI\IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="EditorManager.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="Include\GameManager.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -225,6 +225,15 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="Include\TextureManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\EditorManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\VAOManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ShaderManager.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>

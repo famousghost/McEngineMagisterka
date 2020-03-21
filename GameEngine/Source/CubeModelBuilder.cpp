@@ -1,4 +1,5 @@
 #include "CubeModelBuilder.h"
+
 namespace McEngine
 {
 namespace Meshes

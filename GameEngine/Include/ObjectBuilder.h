@@ -11,12 +11,10 @@ namespace Meshes
 class ObjectBuilder
 {
     public:
-        virtual ObjectBuilder& createModel() = 0;
-        virtual ObjectBuilder& setPosition(glm::vec3) = 0;
-        virtual ObjectBuilder& prepareAndAttachColorArray(const std::vector<ColorValues>&) = 0;
-        virtual ObjectBuilder& prepareAndAttachTextureArray(const std::vector<TextureCoords>&) = 0;
-        virtual ObjectBuilder& preapreAndAttachNormalArray() = 0;
-        virtual void reset() = 0;
+        virtual ~ObjectBuilder(){}
+        virtual ObjectBuilder& addVertexArrayObject() = 0;
+        virtual ObjectBuilder& addShaderProgram(std::string p_shaderLabel) = 0;
+        virtual ObjectBuilder& addTextures() = 0;
 
         virtual Object getObject() const = 0;
 };

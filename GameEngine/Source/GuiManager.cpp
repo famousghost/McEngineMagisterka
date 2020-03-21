@@ -107,7 +107,10 @@ void GuiManager::meshGui(ImVec4& p_clearColor)
         {
             return m_currentObject == label.second;
         });
-        l_objects.erase(objIt);
+        if(objIt != l_objects.end())
+        {
+            l_objects.erase(objIt);
+        }
     }
     if (ImGui::Button("Add"))
     {

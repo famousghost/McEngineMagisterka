@@ -70,7 +70,6 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
 void RenderManager::initGlad()
 {
-    
     if (not gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         LOG("Failed to initialize GLAD", LogType::ERR);

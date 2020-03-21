@@ -11,22 +11,23 @@ class ScenesManager
 {
 public:
 
-    static ScenesManager& getInstace()
-    {
-        static ScenesManager sceneManager;
-        return sceneManager;
-    }
+    static ScenesManager& getInstace();
 
     void start();
 
     void shutdown();
 
-    std::vector<std::unique_ptr<Scene>>& getScenes();
+    void updateCurrentScene(std::string sceneLabel);
+
+    std::vector<std::shared_ptr<Scene>>& getScenes();
+
+    std::shared_ptr<Scene>& getCurrentAvaiableScene();
 
 private:
     ScenesManager() = default;
     ~ScenesManager() = default;
-    std::vector<std::unique_ptr<Scene>> m_scenes;
+    std::vector<std::shared_ptr<Scene>> m_scenes;
+    std::shared_ptr<Scene> m_currentAvaibaleScene;
 };
 }//Scenes
 }//McEngine
