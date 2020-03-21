@@ -20,13 +20,15 @@ void ObjectManager::addObject(const Object& p_object, std::string p_objName)
     m_objects.push_back(std::make_pair(p_object, p_objName));
 }
 
-void ObjectManager::addDefaultObject(std::string p_objectName, DefaultObjectType p_defaultObjectType)
+void ObjectManager::addDefaultObject(std::string p_objectName, 
+                                     DefaultObjectType p_defaultObjectType,
+                                     std::string p_shaderLabel)
 {
     std::unique_ptr<ObjectBuilder> l_objectBuilder;
     if (p_defaultObjectType == DefaultObjectType::CUBE)
     {
         l_objectBuilder = std::make_unique<Meshes::CubeBuilder>();
-        l_objectBuilder->addShaderProgram("defaultShader").addVertexArrayObject();
+        l_objectBuilder->addShaderProgram(p_shaderLabel).addVertexArrayObject();
     }
 
     addObject(l_objectBuilder->getObject(), p_objectName);

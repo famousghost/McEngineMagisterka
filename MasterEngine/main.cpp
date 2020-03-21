@@ -7,27 +7,32 @@
 #include "TextureManager.h"
 #include "VAOManager.h"
 #include "ShaderManager.h"
+#include "FileManager.h"
 
 int main()
 {
+    McEngine::Files::FileManager::getInstance().start();
     McEngine::Editor::EditorManager::getInstance().start();
     McEngine::Scenes::ScenesManager::getInstace().start();
     McEngine::Renderer::RenderManager::getInstance().start();
     McEngine::Meshes::VAOManager::getInstance().start();
     McEngine::Shaders::ShaderManager::getInstance().start();
+    McEngine::Editor::EditorManager::getInstance().start();
     McEngine::Gui::GuiManager::getInstance().start();
 
     //-----------------------------------------------------------//
-    //                        Main Loop                          //
+    //                     Editor Main Loop                      //
     McEngine::Editor::EditorManager::getInstance().editorLoop();
     //                                                           //
     //-----------------------------------------------------------//
 
     McEngine::Gui::GuiManager::getInstance().shutdown();
+    McEngine::Editor::EditorManager::getInstance().shutdown();
     McEngine::Shaders::ShaderManager::getInstance().shutdown();
     McEngine::Meshes::VAOManager::getInstance().shutdown();
     McEngine::Renderer::RenderManager::getInstance().shutdown();
     McEngine::Scenes::ScenesManager::getInstace().shutdown();
     McEngine::Editor::EditorManager::getInstance().shutdown();
+    McEngine::Files::FileManager::getInstance().shutdown();
     return 0;
 }

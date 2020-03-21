@@ -1,5 +1,6 @@
 #include "GuiManager.h"
 #include "ScenesManager.h"
+#include "ShaderManager.h"
 #include <algorithm>
 #include "Logger.h"
 
@@ -10,9 +11,10 @@ namespace Gui
 
 void GuiManager::start()
 {
+    m_currentShader = "defaultShader";
     m_currentObject = "";
     m_objectElementSize = 0;
-    i = 0;
+    m_elementNumber = 0;
     initImGui();
 }
 
@@ -40,51 +42,58 @@ void GuiManager::meshGui(ImVec4& p_clearColor)
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    static int counter = 1;
 
     ImGui::Begin("McEngine");
     ImGui::Text("The best engine on whole world");
 
     static std::vector<std::string> items;
+    static std::vector<std::string> shadersItems = { "defaultShader", "colorShader" };
+
+    objectChoosingComboBox(items);
+    updateShaderComboBox(shadersItems);
+    objectMoveOperations();
+    ImGui::ColorEdit3("Change Color", (float*)&p_clearColor);
+
+    addObject(items);
+    deleteObject(items);
+    updateObjectShader();
+
+    ImGui::SameLine();
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("@copyright Marcin Czkeaj");
+
+    ImGui::End();
+    ImGui::Render();
+}
+
+void GuiManager::addObject(std::vector<std::string>& p_items)
+{
+    auto& l_objects =
+        Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
     if (m_objectElementSize < l_objects.size())
     {
         LOG("Object size is bigger than previous", LogType::INF);
         for (std::size_t i = m_objectElementSize; i < l_objects.size(); i++)
         {
-            items.push_back(l_objects.at(i).second);
+            p_items.push_back(l_objects.at(i).second);
         }
 
         m_objectElementSize = l_objects.size();
     }
-    else if (m_objectElementSize > l_objects.size())
+
+    if (ImGui::Button("Add Cube"))
     {
-        LOG("Object size is smaller than previous", LogType::INF);
-        auto comboItemToDelete = std::find_if(items.begin(), items.end(),
-            [&](auto& label)
-        {
-            return m_currentObject == label;
-        });
-
-        items.erase(comboItemToDelete);
-        m_currentObject = "";
-        m_objectElementSize = l_objects.size();
+        std::string label = "Obj" + std::to_string(++m_elementNumber);
+        auto& l_objManager = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager();
+        l_objManager.addDefaultObject(label, Meshes::DefaultObjectType::CUBE, m_currentShader);
+        m_currentObject = label;
     }
+}
 
-    if (ImGui::BeginCombo("##combo", m_currentObject.c_str()))
-    {
-        for (int i = 0; i < items.size(); i++)
-        {
-            bool is_selected = (m_currentObject == items.at(i));
-            if (ImGui::Selectable(items.at(i).c_str(), is_selected))
-            {
-                m_currentObject = items.at(i);
-                if (is_selected)
-                    ImGui::SetItemDefaultFocus();
-            }
-        }
-        ImGui::EndCombo();
-    }
-
+void GuiManager::objectMoveOperations()
+{
+    auto& l_objects =
+        Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
     auto objIt = std::find_if(l_objects.begin(), l_objects.end(),
         [&](auto& label)
     {
@@ -97,36 +106,96 @@ void GuiManager::meshGui(ImVec4& p_clearColor)
         ImGui::SliderFloat3("Rotatione", &objIt->first.m_rotatione.x, -360.0f, 360.0f);
         ImGui::SliderFloat3("Scale", &objIt->first.m_scale.x, -10.0f, 10.0f);
     }
+}
 
-    ImGui::ColorEdit3("clear color", (float*)&p_clearColor);
+void GuiManager::deleteObject(std::vector<std::string>& p_items)
+{
+    auto& l_objects = 
+        Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
 
-    if (ImGui::Button("Delete"))
+    if (m_objectElementSize > l_objects.size())
+    {
+        LOG("Object size is smaller than previous", LogType::INF);
+        auto comboItemToDelete = std::find_if(p_items.begin(), p_items.end(),
+            [&](auto& label)
+        {
+            return m_currentObject == label;
+        });
+
+        if(comboItemToDelete != p_items.end())
+        {
+            p_items.erase(comboItemToDelete);
+            m_currentObject = "";
+            m_objectElementSize = l_objects.size();
+        }
+    }
+    if (ImGui::Button("Delete Object"))
     {
         auto objIt = std::find_if(l_objects.begin(), l_objects.end(),
             [&](auto& label)
         {
             return m_currentObject == label.second;
         });
-        if(objIt != l_objects.end())
+        if (objIt != l_objects.end())
         {
             l_objects.erase(objIt);
         }
     }
-    if (ImGui::Button("Add"))
+}
+
+void GuiManager::updateShaderComboBox(std::vector<std::string>& p_shaderItems)
+{
+    if (ImGui::BeginCombo("##shaderCombo", m_currentShader.c_str()))
     {
-        std::string label = "Obj" + std::to_string(++i);
-        auto& l_objManager = Scenes::ScenesManager::getInstace().getScenes().at(0)->getObjectManager();
-        l_objManager.addDefaultObject(label, Meshes::DefaultObjectType::CUBE);
+        for (int i = 0; i < p_shaderItems.size(); i++)
+        {
+            bool is_selected = (m_currentShader == p_shaderItems.at(i));
+            if (ImGui::Selectable(p_shaderItems.at(i).c_str(), is_selected))
+            {
+                m_currentShader = p_shaderItems.at(i);
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
     }
+}
 
-    ImGui::SameLine();
+void GuiManager::objectChoosingComboBox(std::vector<std::string>& p_items)
+{
 
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    if (ImGui::BeginCombo("##objectCombo", m_currentObject.c_str()))
+    {
+        for (int i = 0; i < p_items.size(); i++)
+        {
+            bool is_selected = (m_currentObject == p_items.at(i));
+            if (ImGui::Selectable(p_items.at(i).c_str(), is_selected))
+            {
+                m_currentObject = p_items.at(i);
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
+}
 
-    ImGui::Text("@copyright Marcin Czkeaj");
-
-    ImGui::End();
-    ImGui::Render();
+void GuiManager::updateObjectShader()
+{
+    auto& l_objects = 
+        Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
+    if (ImGui::Button("Update Shader"))
+    {
+        auto objIt = std::find_if(l_objects.begin(), l_objects.end(),
+            [&](auto& label)
+        {
+            return m_currentObject == label.second;
+        });
+        if (objIt != l_objects.end())
+        {
+            objIt->first.m_shaderProgram = Shaders::ShaderManager::getInstance().getShader(m_currentShader);
+        }
+    }
 }
 
 }//Gui

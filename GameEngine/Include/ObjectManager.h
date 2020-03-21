@@ -23,7 +23,8 @@ public:
     void addObject(const Object& p_object, std::string p_objName);
 
     void addDefaultObject(std::string p_objectName, 
-                          DefaultObjectType p_defaultObjectType);
+                          DefaultObjectType p_defaultObjectType, 
+                          std::string p_shaderLabel);
 
     void deleteObject(std::string p_objName);
 

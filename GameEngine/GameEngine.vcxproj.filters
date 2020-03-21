@@ -61,6 +61,12 @@
     <Filter Include="Pliki nagłówkowe\GUI\IMGUI">
       <UniqueIdentifier>{c6553ae8-b078-4da3-b388-93079f53f595}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki źródłowe\Managers">
+      <UniqueIdentifier>{cb182ae9-386e-47dc-ae5e-49997400fd7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\Managers">
+      <UniqueIdentifier>{c2aa8c25-319e-4746-ad7a-955c9354fad6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\glad.c">
@@ -102,31 +108,7 @@
     <ClCompile Include="Source\CubeBuilder.cpp">
       <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Camera.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\EditorManager.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameManager.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GuiManager.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PhysicsManager.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\RenderManager.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ScenesManager.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\TextureManager.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="Source\Shader.cpp">
@@ -135,11 +117,38 @@
     <ClCompile Include="Source\ShaderLoader.cpp">
       <Filter>Pliki źródłowe\SHADERS</Filter>
     </ClCompile>
-    <ClCompile Include="Source\VAOManager.cpp">
-      <Filter>Pliki źródłowe</Filter>
+    <ClCompile Include="Source\EditorManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PhysicsManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RenderManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ScenesManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Source\ShaderManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TextureManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VAOManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
       <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FileManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,35 +215,41 @@
     <ClInclude Include="..\Libs\ImGUI\imstb_truetype.h">
       <Filter>Pliki nagłówkowe\GUI\IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="Include\GameManager.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\GuiManager.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\PhysicsManager.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\RenderManager.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Scene.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="Include\ScenesManager.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\TextureManager.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="Include\EditorManager.h">
-      <Filter>Pliki nagłówkowe</Filter>
+      <Filter>Pliki nagłówkowe\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Include\VAOManager.h">
-      <Filter>Pliki nagłówkowe</Filter>
+    <ClInclude Include="Include\GameManager.h">
+      <Filter>Pliki nagłówkowe\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GuiManager.h">
+      <Filter>Pliki nagłówkowe\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\PhysicsManager.h">
+      <Filter>Pliki nagłówkowe\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\RenderManager.h">
+      <Filter>Pliki nagłówkowe\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ScenesManager.h">
+      <Filter>Pliki nagłówkowe\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Include\ShaderManager.h">
+      <Filter>Pliki nagłówkowe\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TextureManager.h">
+      <Filter>Pliki nagłówkowe\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\VAOManager.h">
+      <Filter>Pliki nagłówkowe\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Camera.h">
       <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\FileManager.h">
+      <Filter>Pliki nagłówkowe\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

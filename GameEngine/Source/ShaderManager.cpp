@@ -15,7 +15,8 @@ ShaderManager & ShaderManager::getInstance()
 
 void ShaderManager::start()
 {
-    addShader("defaultShader", "Shaders/colorCube.vlsl", "Shaders/colorCube.flsl");
+    addShader("defaultShader", "Shaders/vertexShader.vlsl", "Shaders/fragmentShader.flsl");
+    addShader("colorShader", "Shaders/colorCube.vlsl", "Shaders/colorCube.flsl");
 }
 
 void ShaderManager::shutdown()

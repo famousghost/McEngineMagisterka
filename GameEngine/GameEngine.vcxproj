@@ -146,6 +146,7 @@
     <ClCompile Include="Source\CubeBuilder.cpp" />
     <ClCompile Include="Source\CubeModelBuilder.cpp" />
     <ClCompile Include="Source\EditorManager.cpp" />
+    <ClCompile Include="Source\FileManager.cpp" />
     <ClCompile Include="Source\GameManager.cpp" />
     <ClCompile Include="Source\glad.c" />
     <ClCompile Include="Source\GuiManager.cpp" />
@@ -172,10 +173,12 @@
     <ClInclude Include="..\Libs\ImGUI\imstb_rectpack.h" />
     <ClInclude Include="..\Libs\ImGUI\imstb_textedit.h" />
     <ClInclude Include="..\Libs\ImGUI\imstb_truetype.h" />
+    <ClInclude Include="Include\Camera.h" />
     <ClInclude Include="Include\CubeBuilder.h" />
     <ClInclude Include="Include\CubeModelBuilder.h" />
     <ClInclude Include="Include\Defines.h" />
     <ClInclude Include="Include\EditorManager.h" />
+    <ClInclude Include="Include\FileManager.h" />
     <ClInclude Include="Include\GameManager.h" />
     <ClInclude Include="Include\GuiManager.h" />
     <ClInclude Include="Include\Logger.h" />

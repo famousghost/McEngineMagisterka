@@ -31,7 +31,15 @@ private:
     void initImGui();
     std::size_t m_objectElementSize;
     std::string m_currentObject;
-    int i;
+    std::string m_currentShader;
+    std::size_t m_elementNumber;
+
+    void addObject(std::vector<std::string>& p_items);
+    void objectMoveOperations();
+    void deleteObject(std::vector<std::string>& p_items);
+    void updateShaderComboBox(std::vector<std::string>& p_shaderItems);
+    void objectChoosingComboBox(std::vector<std::string>& p_items);
+    void updateObjectShader();
 };
 }//Gui
 }//McEngine
