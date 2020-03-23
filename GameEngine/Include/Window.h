@@ -2,8 +2,6 @@
 #include <string>
 #include <glad.h>
 #include <GLFW/glfw3.h>
-#include <matrix_transform.hpp>
-#include <type_ptr.hpp>
 #include "Object.h"
 #include <vector>
 #include <utility>

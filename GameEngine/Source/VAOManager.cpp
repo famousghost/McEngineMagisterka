@@ -95,7 +95,51 @@ std::shared_ptr<VertexArray> VAOManager::createDefaultVertexArrayObject(std::str
 
         //---------------------------------------------------------------------------//
 
-        std::vector<Meshes::TextureCoords> l_textureCoords;
+        std::vector<Meshes::TextureCoords> l_textureCoords = 
+        {
+            Meshes::TextureCoords{ 0.0f, 0.0f },
+            Meshes::TextureCoords{ 1.0f, 0.0f},
+            Meshes::TextureCoords{ 1.0f, 1.0f  },
+            Meshes::TextureCoords{ 1.0f, 1.0f },
+            Meshes::TextureCoords{ 0.0f, 1.0f },
+            Meshes::TextureCoords{ 0.0f, 0.0f },
+
+            Meshes::TextureCoords{ 0.0f, 0.0f },
+            Meshes::TextureCoords{ 1.0f, 0.0f},
+            Meshes::TextureCoords{ 1.0f, 1.0f  },
+            Meshes::TextureCoords{ 1.0f, 1.0f },
+            Meshes::TextureCoords{ 0.0f, 1.0f },
+            Meshes::TextureCoords{ 0.0f, 0.0f },
+
+            Meshes::TextureCoords{ 0.0f, 0.0f },
+            Meshes::TextureCoords{ 1.0f, 0.0f},
+            Meshes::TextureCoords{ 1.0f, 1.0f  },
+            Meshes::TextureCoords{ 1.0f, 1.0f },
+            Meshes::TextureCoords{ 0.0f, 1.0f },
+            Meshes::TextureCoords{ 0.0f, 0.0f },
+
+            Meshes::TextureCoords{ 0.0f, 0.0f },
+            Meshes::TextureCoords{ 1.0f, 0.0f},
+            Meshes::TextureCoords{ 1.0f, 1.0f  },
+            Meshes::TextureCoords{ 1.0f, 1.0f },
+            Meshes::TextureCoords{ 0.0f, 1.0f },
+            Meshes::TextureCoords{ 0.0f, 0.0f },
+
+            Meshes::TextureCoords{ 0.0f, 0.0f },
+            Meshes::TextureCoords{ 1.0f, 0.0f},
+            Meshes::TextureCoords{ 1.0f, 1.0f  },
+            Meshes::TextureCoords{ 1.0f, 1.0f },
+            Meshes::TextureCoords{ 0.0f, 1.0f },
+            Meshes::TextureCoords{ 0.0f, 0.0f },
+
+            Meshes::TextureCoords{ 0.0f, 0.0f },
+            Meshes::TextureCoords{ 1.0f, 0.0f},
+            Meshes::TextureCoords{ 1.0f, 1.0f  },
+            Meshes::TextureCoords{ 1.0f, 1.0f },
+            Meshes::TextureCoords{ 0.0f, 1.0f },
+            Meshes::TextureCoords{ 0.0f, 0.0f }
+        };
+
         l_modelBuilder->buildTextureCoordinatesArray(l_textureCoords);
         auto l_textureCoordsSize = l_modelBuilder->getModel()->m_textureCoords.size();
 

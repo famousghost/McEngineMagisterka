@@ -47,7 +47,7 @@ void GuiManager::meshGui()
     ImGui::Text("The best engine on whole world");
 
     static std::vector<std::string> items;
-    static std::vector<std::string> shadersItems = { "defaultShader", "colorShader", "diffuseShader"};
+    static std::vector<std::string> shadersItems = { "defaultShader", "colorShader", "diffuseShader", "textureShader"};
 
     objectChoosingComboBox(items);
     updateShaderComboBox(shadersItems);
@@ -195,7 +195,14 @@ void GuiManager::updateObjectShader()
         });
         if (objIt != l_objects.end())
         {
-            objIt->first.m_shaderProgram = Shaders::ShaderManager::getInstance().getShader(m_currentShader);
+            try
+            {
+                objIt->first.m_shaderProgram = Shaders::ShaderManager::getInstance().getShader(m_currentShader);
+            }
+            catch (std::exception& ex)
+            {
+                LOG("Cannot find shader, there is no shader with this name", LogType::ERR);
+            }
         }
     }
 }

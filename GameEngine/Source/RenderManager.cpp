@@ -24,9 +24,7 @@ void RenderManager::shutdown()
 
 void RenderManager::draw(Scenes::Scene & p_scene)
 {
-    const int WIDTH = 1270;
-    const int HEIGHT = 720;
-    auto& objects = p_scene.getObjectManager().getObjects();
+    auto& objectManager = p_scene.getObjectManager();
     p_scene.getWindow().poolEvents();
     glClearColor(p_scene.m_backgroundColor.x, 
                  p_scene.m_backgroundColor.y, 
@@ -36,34 +34,19 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 l_view;
-    l_view = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
-    glm::mat4 l_projection;
-    l_projection = glm::perspective(glm::radians(45.0f), static_cast<float>(WIDTH) / static_cast<float>(HEIGHT), 0.1f, 100.0f);
-
-
-    for(auto& object : objects)
+    for(auto& object : objectManager.getObjects())
     {
         object.first.m_vertexArray->bindVao();
         object.first.m_shaderProgram->bindShaderProgram();
 
-        glm::mat4 l_model;
-        l_model = glm::translate(l_model, object.first.m_position);
-        l_model = glm::rotate(l_model, glm::radians(object.first.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
-        l_model = glm::rotate(l_model, glm::radians(object.first.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));
-        l_model = glm::rotate(l_model, glm::radians(object.first.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
-        l_model = glm::scale(l_model, object.first.m_scale);
-
-        object.first.m_shaderProgram->uniformMatrix4(l_model, "model");
-        object.first.m_shaderProgram->uniformMatrix4(l_view, "view");
-        object.first.m_shaderProgram->uniformMatrix4(l_projection, "projection");
+        objectManager.processObject(object.first);
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         object.first.m_shaderProgram->unbindShaderProgram();
         object.first.m_vertexArray->unbindVao();
     }
+
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     p_scene.getWindow().swapBuffer();
 }

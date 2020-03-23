@@ -75,28 +75,34 @@ void Shader::unbindShaderProgram()
     glUseProgram(0);
 }
 
-void Shader::uniformMatrix4(const glm::mat4& p_matrix, const std::string p_uniformName)
+void Shader::uniformMatrix4(const glm::mat4& p_matrix, const std::string& p_uniformName)
 {
     GLuint l_uniformLocationId = glGetUniformLocation(m_shaderProgramId, p_uniformName.c_str());
     glUniformMatrix4fv(l_uniformLocationId, 1, GL_FALSE, glm::value_ptr(p_matrix));
 }
 
-void Shader::uniformMatrix3(const glm::mat3& p_matrix, const std::string p_uniformName)
+void Shader::uniformMatrix3(const glm::mat3& p_matrix, const std::string& p_uniformName)
 {
     GLuint l_uniformLocationId = glGetUniformLocation(m_shaderProgramId, p_uniformName.c_str());
     glUniformMatrix4fv(l_uniformLocationId, 1, GL_FALSE, glm::value_ptr(p_matrix));
 }
 
-void Shader::uniformVec4(const glm::vec4& p_vec, const std::string p_uniformName)
+void Shader::uniformVec4(const glm::vec4& p_vec, const std::string& p_uniformName)
 {
     GLuint l_uniformLocationId = glGetUniformLocation(m_shaderProgramId, p_uniformName.c_str());
     glUniform4fv(l_uniformLocationId, 1, glm::value_ptr(p_vec));
 }
 
-void Shader::uniformVec3(const glm::vec3& p_vec, const std::string p_uniformName)
+void Shader::uniformVec3(const glm::vec3& p_vec, const std::string& p_uniformName)
 {
     GLuint l_uniformLocationId = glGetUniformLocation(m_shaderProgramId, p_uniformName.c_str());
     glUniform3fv(l_uniformLocationId, 1, glm::value_ptr(p_vec));
+}
+
+void Shader::uniform1I(GLuint p_textureUniformId, const std::string & p_uniformName)
+{
+    GLuint l_uniformLocationId = glGetUniformLocation(m_shaderProgramId, p_uniformName.c_str());
+    glUniform1i(l_uniformLocationId, p_textureUniformId);
 }
 
 }//Shaders

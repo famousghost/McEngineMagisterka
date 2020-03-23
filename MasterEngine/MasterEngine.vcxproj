@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\lib-vc2015;$(SolutionDir)GameEngine\Source;$(SolutionDir)GameEngine\Include;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Libs\ImGUI;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(SolutionDir)Libs\KHR;$(SolutionDir)Libs\glad;$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Libs\simple-opengl-image-library-master\libs;$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\lib-vc2015;$(SolutionDir)GameEngine\Source;$(SolutionDir)GameEngine\Include;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Libs\simple-opengl-image-library-master\include;$(SolutionDir)Libs\ImGUI;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(SolutionDir)Libs\KHR;$(SolutionDir)Libs\glad;$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\include;$(IncludePath)</IncludePath>
     <SourcePath>$(SolutionDir)Libs\ImGUI;$(ProjectDir)Source;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,7 +88,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Libs\ImGUI;$(SolutionDir)Dll;$(SolutionDir)GameEngine\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent />
     <PostBuildEvent />

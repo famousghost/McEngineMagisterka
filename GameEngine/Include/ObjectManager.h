@@ -1,5 +1,4 @@
 #pragma once
-#include "ObjectBuilder.h"
 #include "Object.h"
 #include <vector>
 #include <utility>
@@ -28,9 +27,12 @@ public:
 
     void deleteObject(std::string p_objName);
 
+    void processObject(Object & object);
+
     std::vector<std::pair<Object, std::string>>& getObjects();
 private:
     std::vector<std::pair<Object, std::string>> m_objects;
+
 };
 
 }//Meshes

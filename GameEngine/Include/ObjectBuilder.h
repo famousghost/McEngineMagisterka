@@ -1,7 +1,5 @@
 #pragma once
 #include "Object.h"
-#include <matrix_transform.hpp>
-#include <type_ptr.hpp>
 
 namespace McEngine
 {

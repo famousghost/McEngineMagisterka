@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\include;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Libs\ImGUI;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Libs\simple-opengl-image-library-master\libs;$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\include;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Libs\simple-opengl-image-library-master\include;$(SolutionDir)Libs\ImGUI;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\include;$(IncludePath)</IncludePath>
     <SourcePath>$(SolutionDir)Libs\ImGUI;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -159,6 +159,7 @@
     <ClCompile Include="Source\Shader.cpp" />
     <ClCompile Include="Source\ShaderLoader.cpp" />
     <ClCompile Include="Source\ShaderManager.cpp" />
+    <ClCompile Include="Source\TextureLoader.cpp" />
     <ClCompile Include="Source\TextureManager.cpp" />
     <ClCompile Include="Source\VAOManager.cpp" />
     <ClCompile Include="Source\VertexArray.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Include\Shader.h" />
     <ClInclude Include="Include\ShaderLoader.h" />
     <ClInclude Include="Include\ShaderManager.h" />
+    <ClInclude Include="Include\TextureLoader.h" />
     <ClInclude Include="Include\TextureManager.h" />
     <ClInclude Include="Include\VAOManager.h" />
     <ClInclude Include="Include\VertexArray.h" />
