@@ -6,6 +6,7 @@
 #include <matrix_transform.hpp>
 #include <type_ptr.hpp>
 #include <string>
+#include <map>
 
 namespace McEngine
 {
@@ -15,6 +16,8 @@ struct Object
 {
     std::shared_ptr<VertexArray> m_vertexArray;
     std::shared_ptr<Shaders::Shader> m_shaderProgram;
+    std::vector<std::string> m_textures;
+    std::string m_currentAvaiableTexture;
     glm::mat4 m_modelMatrix;
     glm::vec3 m_position;
     glm::vec3 m_rotatione;

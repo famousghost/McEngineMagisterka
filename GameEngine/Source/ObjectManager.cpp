@@ -37,7 +37,7 @@ void ObjectManager::addDefaultObject(std::string p_objectName,
 
 void ObjectManager::processObject(Object& object)
 {
-    auto& textureManager = Textrues::TextureManager::getInstance();
+    auto& textureManager = Textures::TextureManager::getInstance();
 
     const int WIDTH = 1270;
     const int HEIGHT = 720;
@@ -56,10 +56,22 @@ void ObjectManager::processObject(Object& object)
     l_model = glm::scale(l_model, object.m_scale);
 
     textureManager.setTextureIdInShader("textureShader");
-    textureManager.activeTexture();
+    textureManager.activeTexture(GL_TEXTURE0, object.m_currentAvaiableTexture);
+
     object.m_shaderProgram->uniformMatrix4(l_model, "model");
     object.m_shaderProgram->uniformMatrix4(l_view, "view");
     object.m_shaderProgram->uniformMatrix4(l_projection, "projection");
+}
+
+void ObjectManager::setTexture(Object& p_object,
+                               const std::string& p_textureLabel)
+{
+    p_object.m_textures.push_back(p_textureLabel);
+}
+
+void ObjectManager::activeTextures()
+{
+    
 }
 
 void ObjectManager::deleteObject(std::string p_objName)

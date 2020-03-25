@@ -3,7 +3,7 @@
 
 namespace McEngine
 {
-namespace Textrues
+namespace Textures
 {
 TextureManager & TextureManager::getInstance()
 {
@@ -13,17 +13,19 @@ TextureManager & TextureManager::getInstance()
 
 void TextureManager::createTexture(std::string p_texturePath,
                                    GLenum p_wrappingType,
-                                   GLenum p_drawingType)
+                                   GLenum p_drawingType,
+                                   std::string p_textureLabel)
 {
     TextureLoader l_textureLoader;
-    std::string l_textureLabel = "texture";
     GLuint l_textureId = l_textureLoader.loadTexture(p_texturePath, p_wrappingType, p_drawingType);
-    m_textures[l_textureLabel] = l_textureId;
+    m_textures[p_textureLabel] = l_textureId;
 }
 
 void TextureManager::start()
 {
-    createTexture("Textures/wall.jpg", GL_REPEAT, GL_LINEAR);
+    createTexture("Textures/wall.jpg", GL_REPEAT, GL_LINEAR, "texture");
+    createTexture("Textures/awesomeface.png", GL_REPEAT, GL_LINEAR, "texture2");
+    createTexture("Textures/Face_Side1.jpg", GL_REPEAT, GL_LINEAR, "texture3");
 }
 
 void TextureManager::setTextureIdInShader(const std::string& p_shaderLabel)
@@ -33,11 +35,24 @@ void TextureManager::setTextureIdInShader(const std::string& p_shaderLabel)
     l_shader->uniform1I(0, "texture1");
 }
 
-void TextureManager::activeTexture()
+GLuint TextureManager::getTexture(const std::string& p_textureLabel) const
 {
-    glActiveTexture(GL_TEXTURE0);
+    return m_textures.at(p_textureLabel);
+}
 
-    glBindTexture(GL_TEXTURE_2D, m_textures.at("texture"));
+void TextureManager::activeTexture(GLenum p_textureId, 
+                                   const std::string& p_textureLabel)
+{
+    glActiveTexture(p_textureId);
+
+    try
+    {
+        glBindTexture(GL_TEXTURE_2D, m_textures.at(p_textureLabel));
+    }
+    catch (std::exception& ex)
+    {
+        LOG(ex.what(), LogType::WARN);
+    }
 }
 
 void TextureManager::deactiveTexture()

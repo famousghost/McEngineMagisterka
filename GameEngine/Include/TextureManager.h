@@ -3,7 +3,7 @@
 #include <map>
 namespace McEngine
 {
-namespace Textrues
+namespace Textures
 {
 
 class TextureManager
@@ -11,17 +11,19 @@ class TextureManager
 public:
     static TextureManager& getInstance();
 
-    void createTexture(std::string p_texturePath, GLenum p_wrappingType, GLenum p_drawingType);
+    void createTexture(std::string p_texturePath, GLenum p_wrappingType, GLenum p_drawingType, std::string p_textureLabel);
 
     void start();
 
+    void shutdown();
+
     void setTextureIdInShader(const std::string & p_shaderLabel);
 
-    void activeTexture();
+    GLuint getTexture(const std::string & p_textureLabel) const;
+
+    void activeTexture(GLenum p_textureId, const std::string & p_textureLabel);
 
     void deactiveTexture();
-
-    void shutdown();
 private:
     TextureManager() = default;
     ~TextureManager() = default;

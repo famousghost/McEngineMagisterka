@@ -19,6 +19,8 @@ public:
 
     void meshGui();
 
+    void updateObjectTetxture();
+
     static GuiManager& getInstance()
     {
         static GuiManager guiManager;
@@ -32,12 +34,14 @@ private:
     std::size_t m_objectElementSize;
     std::string m_currentObject;
     std::string m_currentShader;
+    std::string m_currentTexture;
     std::size_t m_elementNumber;
 
     void addObject(std::vector<std::string>& p_items);
     void objectMoveOperations();
     void deleteObject(std::vector<std::string>& p_items);
     void updateShaderComboBox(std::vector<std::string>& p_shaderItems);
+    void updateTextureComboBox(std::vector<std::string>& p_textureItems);
     void objectChoosingComboBox(std::vector<std::string>& p_items);
     void updateObjectShader();
 };

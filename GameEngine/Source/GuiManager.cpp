@@ -1,6 +1,7 @@
 #include "GuiManager.h"
 #include "ScenesManager.h"
 #include "ShaderManager.h"
+#include "TextureManager.h"
 #include <algorithm>
 #include "Logger.h"
 
@@ -13,6 +14,7 @@ void GuiManager::start()
 {
     m_currentShader = "defaultShader";
     m_currentObject = "";
+    m_currentTexture = "texture";
     m_objectElementSize = 0;
     m_elementNumber = 0;
     initImGui();
@@ -38,7 +40,8 @@ void GuiManager::initImGui()
 
 void GuiManager::meshGui()
 {
-    auto& l_objects = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
+    auto& l_objectManager = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager();
+    auto& l_objects = l_objectManager.getObjects();
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -48,9 +51,10 @@ void GuiManager::meshGui()
 
     static std::vector<std::string> items;
     static std::vector<std::string> shadersItems = { "defaultShader", "colorShader", "diffuseShader", "textureShader"};
-
+    static std::vector<std::string> textureItems = {"texture", "texture2", "texture3"};
     objectChoosingComboBox(items);
     updateShaderComboBox(shadersItems);
+    updateTextureComboBox(textureItems);
     objectMoveOperations();
     auto& scene =
         Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
@@ -59,6 +63,9 @@ void GuiManager::meshGui()
     addObject(items);
     deleteObject(items);
     updateObjectShader();
+    updateObjectTetxture();
+
+
 
     ImGui::SameLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -66,6 +73,31 @@ void GuiManager::meshGui()
 
     ImGui::End();
     ImGui::Render();
+}
+
+void GuiManager::updateObjectTetxture()
+{
+    auto& l_objects =
+        Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
+    if (ImGui::Button("Update texture"))
+    {
+        auto objIt = std::find_if(l_objects.begin(), l_objects.end(),
+            [&](auto& label)
+        {
+            return m_currentObject == label.second;
+        });
+        if (objIt != l_objects.end())
+        {
+            try
+            {
+                objIt->first.m_currentAvaiableTexture = m_currentTexture;
+            }
+            catch (std::exception& ex)
+            {
+                LOG("Cannot find texture, there is no texture with this name", LogType::WARN);
+            }
+        }
+    }
 }
 
 void GuiManager::addObject(std::vector<std::string>& p_items)
@@ -155,6 +187,24 @@ void GuiManager::updateShaderComboBox(std::vector<std::string>& p_shaderItems)
             if (ImGui::Selectable(p_shaderItems.at(i).c_str(), is_selected))
             {
                 m_currentShader = p_shaderItems.at(i);
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
+}
+
+void GuiManager::updateTextureComboBox(std::vector<std::string>& p_textureItems)
+{
+    if (ImGui::BeginCombo("##textureCombo", m_currentTexture.c_str()))
+    {
+        for (int i = 0; i < p_textureItems.size(); i++)
+        {
+            bool is_selected = (m_currentTexture == p_textureItems.at(i));
+            if (ImGui::Selectable(p_textureItems.at(i).c_str(), is_selected))
+            {
+                m_currentTexture = p_textureItems.at(i);
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();
             }

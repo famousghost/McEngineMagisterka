@@ -18,7 +18,7 @@ int main()
     McEngine::Renderer::RenderManager::getInstance().start();
     McEngine::Meshes::VAOManager::getInstance().start();
     McEngine::Shaders::ShaderManager::getInstance().start();
-    McEngine::Textrues::TextureManager::getInstance().start();
+    McEngine::Textures::TextureManager::getInstance().start();
     McEngine::Editor::EditorManager::getInstance().start();
     McEngine::Gui::GuiManager::getInstance().start();
 
@@ -30,7 +30,7 @@ int main()
 
     McEngine::Gui::GuiManager::getInstance().shutdown();
     McEngine::Editor::EditorManager::getInstance().shutdown();
-    McEngine::Textrues::TextureManager::getInstance().shutdown();
+    McEngine::Textures::TextureManager::getInstance().shutdown();
     McEngine::Shaders::ShaderManager::getInstance().shutdown();
     McEngine::Meshes::VAOManager::getInstance().shutdown();
     McEngine::Renderer::RenderManager::getInstance().shutdown();

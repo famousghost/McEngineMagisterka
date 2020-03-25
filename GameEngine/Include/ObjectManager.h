@@ -29,6 +29,10 @@ public:
 
     void processObject(Object & object);
 
+    void setTexture(Object & p_object, const std::string & p_textureLabel);
+
+    void activeTextures();
+
     std::vector<std::pair<Object, std::string>>& getObjects();
 private:
     std::vector<std::pair<Object, std::string>> m_objects;

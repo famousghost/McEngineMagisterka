@@ -4,7 +4,7 @@
 
 namespace McEngine
 {
-namespace Textrues
+namespace Textures
 {
 TextureLoader::TextureLoader()
 {
