@@ -35,6 +35,15 @@ void ShaderManager::addShader(std::string p_shaderLabel,
     m_shaders.insert(std::make_pair(p_shaderLabel, l_shader));
 }
 
+void ShaderManager::resetShaders()
+{
+    m_shaders.clear();
+    addShader("defaultShader", "Shaders/vertexShader.vlsl", "Shaders/fragmentShader.flsl");
+    addShader("colorShader", "Shaders/colorCube.vlsl", "Shaders/colorCube.flsl");
+    addShader("diffuseShader", "Shaders/lightCube.vlsl", "Shaders/lightCube.flsl");
+    addShader("textureShader", "Shaders/textureCube.vlsl", "Shaders/textureCube.flsl");
+}
+
 std::shared_ptr<Shader>& ShaderManager::getShader(const std::string& p_label)
 {
     return m_shaders.at(p_label);

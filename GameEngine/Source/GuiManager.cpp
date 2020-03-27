@@ -56,6 +56,7 @@ void GuiManager::meshGui()
     updateShaderComboBox(shadersItems);
     updateTextureComboBox(textureItems);
     objectMoveOperations();
+    setObjectProperties();
     auto& scene =
         Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
     ImGui::ColorEdit3("Change Color", (float*)&scene->m_backgroundColor);
@@ -65,11 +66,9 @@ void GuiManager::meshGui()
     updateObjectShader();
     updateObjectTetxture();
 
-
-
     ImGui::SameLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::Text("@copyright Marcin Czkeaj");
+    ImGui::Text("@copyright Marcin Czekaj");
 
     ImGui::End();
     ImGui::Render();
@@ -139,6 +138,25 @@ void GuiManager::objectMoveOperations()
         ImGui::SliderFloat3("Translation", &objIt->first.m_position.x, -10.0f, 10.0f);
         ImGui::SliderFloat3("Rotatione", &objIt->first.m_rotatione.x, -360.0f, 360.0f);
         ImGui::SliderFloat3("Scale", &objIt->first.m_scale.x, -10.0f, 10.0f);
+    }
+}
+
+void GuiManager::setObjectProperties()
+{
+    auto& l_objects =
+        Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
+    auto objIt = std::find_if(l_objects.begin(), l_objects.end(),
+        [&](auto& label)
+    {
+        return m_currentObject == label.second;
+    });
+
+    if (objIt != l_objects.end())
+    {
+        ImGui::SliderFloat3("AmbientLight", &objIt->first.m_material.m_ambientLight.x, -1.0f, 1.0f);
+        ImGui::SliderFloat3("DiffuseLight", &objIt->first.m_material.m_diffuseLight.x, -1.0f, 1.0f);
+        ImGui::SliderFloat3("SpecularLight", &objIt->first.m_material.m_specularLight.x, -1.0f, 1.0f);
+        ImGui::SliderFloat3("ObjectColor", &objIt->first.m_material.m_objectColor.x, 0.0f, 1.0f);
     }
 }
 

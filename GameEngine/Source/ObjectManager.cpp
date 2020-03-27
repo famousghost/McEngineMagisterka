@@ -35,12 +35,14 @@ void ObjectManager::addDefaultObject(std::string p_objectName,
     addObject(l_objectBuilder->getObject(), p_objectName);
 }
 
-void ObjectManager::processObject(Object& object)
+void ObjectManager::processObject(Object& p_object)
 {
     auto& textureManager = Textures::TextureManager::getInstance();
 
     const int WIDTH = 1270;
     const int HEIGHT = 720;
+
+    setObjectPropertiesUniform(p_object);
 
     glm::mat4 l_view;
     l_view = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -49,18 +51,26 @@ void ObjectManager::processObject(Object& object)
     l_projection = glm::perspective(glm::radians(45.0f), static_cast<float>(WIDTH) / static_cast<float>(HEIGHT), 0.1f, 100.0f);
 
     glm::mat4 l_model;
-    l_model = glm::translate(l_model, object.m_position);
-    l_model = glm::rotate(l_model, glm::radians(object.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    l_model = glm::rotate(l_model, glm::radians(object.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    l_model = glm::rotate(l_model, glm::radians(object.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    l_model = glm::scale(l_model, object.m_scale);
+    l_model = glm::translate(l_model, p_object.m_position);
+    l_model = glm::rotate(l_model, glm::radians(p_object.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    l_model = glm::rotate(l_model, glm::radians(p_object.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    l_model = glm::rotate(l_model, glm::radians(p_object.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    l_model = glm::scale(l_model, p_object.m_scale);
 
     textureManager.setTextureIdInShader("textureShader");
-    textureManager.activeTexture(GL_TEXTURE0, object.m_currentAvaiableTexture);
+    textureManager.activeTexture(GL_TEXTURE0, p_object.m_currentAvaiableTexture);
 
-    object.m_shaderProgram->uniformMatrix4(l_model, "model");
-    object.m_shaderProgram->uniformMatrix4(l_view, "view");
-    object.m_shaderProgram->uniformMatrix4(l_projection, "projection");
+    p_object.m_shaderProgram->uniformMatrix4(l_model, "model");
+    p_object.m_shaderProgram->uniformMatrix4(l_view, "view");
+    p_object.m_shaderProgram->uniformMatrix4(l_projection, "projection");
+}
+
+void ObjectManager::setObjectPropertiesUniform(Object& p_object)
+{
+    p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_ambientLight, "material.ambient");
+    p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_diffuseLight, "material.diffuse");
+    p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_specularLight, "material.specular");
+    p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_objectColor, "material.objectColor");
 }
 
 void ObjectManager::setTexture(Object& p_object,

@@ -39,6 +39,7 @@ private:
 
     void addObject(std::vector<std::string>& p_items);
     void objectMoveOperations();
+    void setObjectProperties();
     void deleteObject(std::vector<std::string>& p_items);
     void updateShaderComboBox(std::vector<std::string>& p_shaderItems);
     void updateTextureComboBox(std::vector<std::string>& p_textureItems);
