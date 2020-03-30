@@ -150,6 +150,7 @@
     <ClCompile Include="Source\GameManager.cpp" />
     <ClCompile Include="Source\glad.c" />
     <ClCompile Include="Source\GuiManager.cpp" />
+    <ClCompile Include="Source\InputManager.cpp" />
     <ClCompile Include="Source\Logger.cpp" />
     <ClCompile Include="Source\ObjectManager.cpp" />
     <ClCompile Include="Source\PhysicsManager.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Include\FileManager.h" />
     <ClInclude Include="Include\GameManager.h" />
     <ClInclude Include="Include\GuiManager.h" />
+    <ClInclude Include="Include\InputManager.h" />
     <ClInclude Include="Include\Logger.h" />
     <ClInclude Include="Include\Model.h" />
     <ClInclude Include="Include\ModelBuilder.h" />

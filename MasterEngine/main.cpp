@@ -8,6 +8,7 @@
 #include "VAOManager.h"
 #include "ShaderManager.h"
 #include "FileManager.h"
+#include "InputManager.h"
 
 int main()
 {
@@ -20,6 +21,7 @@ int main()
     McEngine::Shaders::ShaderManager::getInstance().start();
     McEngine::Textures::TextureManager::getInstance().start();
     McEngine::Editor::EditorManager::getInstance().start();
+    McEngine::Inputs::InputManager::getInstance().start();
     McEngine::Gui::GuiManager::getInstance().start();
 
     //-----------------------------------------------------------//
@@ -29,6 +31,7 @@ int main()
     //-----------------------------------------------------------//
 
     McEngine::Gui::GuiManager::getInstance().shutdown();
+    McEngine::Inputs::InputManager::getInstance().shutdown();
     McEngine::Editor::EditorManager::getInstance().shutdown();
     McEngine::Textures::TextureManager::getInstance().shutdown();
     McEngine::Shaders::ShaderManager::getInstance().shutdown();

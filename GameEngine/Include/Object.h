@@ -3,8 +3,6 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include <memory>
-#include <matrix_transform.hpp>
-#include <type_ptr.hpp>
 #include <string>
 #include <map>
 
@@ -39,7 +37,6 @@ struct Object
     glm::vec3 m_position;
     glm::vec3 m_rotatione;
     glm::vec3 m_scale;
-    std::string m_label;
 
     Object()
     {
@@ -48,7 +45,6 @@ struct Object
         m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
         m_modelMatrix = glm::mat4();
         m_currentAvaiableTexture = "texture";
-        m_label = "";
     }
 };
 

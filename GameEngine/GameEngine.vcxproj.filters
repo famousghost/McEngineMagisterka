@@ -153,6 +153,9 @@
     <ClCompile Include="Source\TextureLoader.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="Source\InputManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Defines.h">
@@ -256,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="Include\TextureLoader.h">
       <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\InputManager.h">
+      <Filter>Pliki nagłówkowe\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

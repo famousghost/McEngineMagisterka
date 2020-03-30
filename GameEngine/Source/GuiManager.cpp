@@ -50,7 +50,7 @@ void GuiManager::meshGui()
     ImGui::Text("The best engine on whole world");
 
     static std::vector<std::string> items;
-    static std::vector<std::string> shadersItems = { "defaultShader", "colorShader", "diffuseShader", "textureShader"};
+    static std::vector<std::string> shadersItems = {"defaultShader", "colorShader", "diffuseShader", "textureShader"};
     static std::vector<std::string> textureItems = {"texture", "texture2", "texture3"};
     objectChoosingComboBox(items);
     updateShaderComboBox(shadersItems);
