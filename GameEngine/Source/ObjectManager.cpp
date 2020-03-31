@@ -39,16 +39,7 @@ void ObjectManager::processObject(Object& p_object)
 {
     auto& textureManager = Textures::TextureManager::getInstance();
 
-    const int WIDTH = 1270;
-    const int HEIGHT = 720;
-
     setObjectPropertiesUniform(p_object);
-
-    glm::mat4 l_view;
-    l_view = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
-    glm::mat4 l_projection;
-    l_projection = glm::perspective(glm::radians(45.0f), static_cast<float>(WIDTH) / static_cast<float>(HEIGHT), 0.1f, 100.0f);
 
     glm::mat4 l_model;
     l_model = glm::translate(l_model, p_object.m_position);
@@ -61,8 +52,6 @@ void ObjectManager::processObject(Object& p_object)
     textureManager.activeTexture(GL_TEXTURE0, p_object.m_currentAvaiableTexture);
 
     p_object.m_shaderProgram->uniformMatrix4(l_model, "model");
-    p_object.m_shaderProgram->uniformMatrix4(l_view, "view");
-    p_object.m_shaderProgram->uniformMatrix4(l_projection, "projection");
 }
 
 void ObjectManager::setObjectPropertiesUniform(Object& p_object)

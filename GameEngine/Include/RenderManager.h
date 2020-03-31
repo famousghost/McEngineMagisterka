@@ -14,11 +14,7 @@ public:
     void shutdown();
     void draw(Scenes::Scene& p_scene);
 
-    static RenderManager& getInstance()
-    {
-        static RenderManager renderManager;
-        return renderManager;
-    }
+    static RenderManager& getInstance();
 private:
     RenderManager() = default;
     ~RenderManager() = default;

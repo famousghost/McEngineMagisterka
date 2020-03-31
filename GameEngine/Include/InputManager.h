@@ -12,11 +12,16 @@ public:
     static float s_xOffset;
     static float s_yOffset;
 
-    static bool s_moveFront;
-    static bool s_moveRight;
-    static bool s_moveBack;
-    static bool s_moveLeft;
 
+    static bool s_canMoveCamera;
+    static bool s_canRotateCamera;
+
+    static GLfloat s_cameraMoveSpeedOnAxisZ;
+    static GLfloat s_cameraMoveSpeedOnAxisX;
+    static GLfloat s_cameraMoveSpeedOnAxisY;
+    static GLfloat s_cameraRotateSpeedOnAxisX;
+    static GLfloat s_cameraRotateSpeedOnAxisY;
+    static GLfloat s_cameraRotateSpeedOnAxisZ;
 
     static GLfloat s_changeStateOfMixTextures;
     static GLfloat s_xAxis;

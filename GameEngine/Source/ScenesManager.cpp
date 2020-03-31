@@ -15,8 +15,10 @@ ScenesManager& ScenesManager::getInstace()
 void ScenesManager::start()
 {
     LOG("Prepare Scene", LogType::INF);
-    m_scenes.push_back(std::make_unique<Scene>());
+    m_scenes.emplace_back(new Scene);
+    m_cameras.emplace_back(new Cameras::Camera);
     m_scenes.at(0)->prepareScene();
+    m_currentCamera = m_cameras.at(0);
     m_currentAvaibaleScene = m_scenes.at(0);
 }
 
@@ -38,6 +40,11 @@ std::vector<std::shared_ptr<Scene>>& ScenesManager::getScenes()
 std::shared_ptr<Scene>& ScenesManager::getCurrentAvaiableScene()
 {
     return m_currentAvaibaleScene;
+}
+
+std::shared_ptr<Cameras::Camera>& ScenesManager::getCurrentAvaiableCamera()
+{
+    return m_currentCamera;
 }
 
 }//Scenes

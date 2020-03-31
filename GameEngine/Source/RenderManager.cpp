@@ -24,7 +24,8 @@ void RenderManager::shutdown()
 
 void RenderManager::draw(Scenes::Scene & p_scene)
 {
-    auto& objectManager = p_scene.getObjectManager();
+    auto& l_camera = Scenes::ScenesManager::getInstace().getCurrentAvaiableCamera();
+    auto& l_objectManager = p_scene.getObjectManager();
     p_scene.getWindow().poolEvents();
     glClearColor(p_scene.m_backgroundColor.x, 
                  p_scene.m_backgroundColor.y, 
@@ -34,12 +35,24 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for(auto& object : objectManager.getObjects())
+    for(auto& object : l_objectManager.getObjects())
     {
+        const int WIDTH = 1270;
+        const int HEIGHT = 720;
+
         object.first.m_vertexArray->bindVao();
         object.first.m_shaderProgram->bindShaderProgram();
 
-        objectManager.processObject(object.first);
+        l_objectManager.processObject(object.first);
+
+        glm::mat4 l_projection;
+        l_projection = glm::perspective(glm::radians(45.0f), static_cast<float>(WIDTH) / static_cast<float>(HEIGHT), 0.1f, 100.0f);
+
+        l_camera->rotateCamera();
+        l_camera->moveCamera();
+        object.first.m_shaderProgram->uniformVec3(l_camera->getCameraPosition(), "cameraPos");
+        object.first.m_shaderProgram->uniformMatrix4(l_camera->getViewMatrix(), "view");
+        object.first.m_shaderProgram->uniformMatrix4(l_projection, "projection");
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -49,6 +62,12 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     p_scene.getWindow().swapBuffer();
+}
+
+RenderManager & RenderManager::getInstance()
+{
+    static RenderManager renderManager;
+    return renderManager;
 }
 
 void RenderManager::initGlad()

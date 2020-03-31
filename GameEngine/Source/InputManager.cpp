@@ -9,15 +9,18 @@ namespace Inputs
 float InputManager::s_lastX = 400.0f;
 float InputManager::s_lastY = 300.0f;
 float InputManager::s_xOffset = 0.0f;
-float InputManager::s_yOffset = 0.0;
-
-//move our camera in 3d space
-bool InputManager::s_moveFront = false;
-bool InputManager::s_moveRight = false;
-bool InputManager::s_moveBack = false;
-bool InputManager::s_moveLeft = false;
+float InputManager::s_yOffset = 0.0f;
 
 
+bool InputManager::s_canMoveCamera = false;
+bool InputManager::s_canRotateCamera = false;
+
+GLfloat InputManager::s_cameraMoveSpeedOnAxisZ = 0.0f;
+GLfloat InputManager::s_cameraMoveSpeedOnAxisX = 0.0f;
+GLfloat InputManager::s_cameraMoveSpeedOnAxisY = 0.0f;
+GLfloat InputManager::s_cameraRotateSpeedOnAxisX = 0.0f;
+GLfloat InputManager::s_cameraRotateSpeedOnAxisY = 0.0f;
+GLfloat InputManager::s_cameraRotateSpeedOnAxisZ = 0.0f;
 GLfloat InputManager::s_changeStateOfMixTextures = 0.0f;
 GLfloat InputManager::s_xAxis = 0.0f;
 GLfloat InputManager::s_yAxis = 0.0f;
@@ -32,16 +35,34 @@ InputManager & InputManager::getInstance()
 
 void InputManager::keyCallBack(GLFWwindow * p_window, int p_key, int p_scancode, int p_state, int p_mods)
 {
+    auto& l_scene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
     if (p_state == GLFW_PRESS)
     {
         if (p_key == GLFW_KEY_ESCAPE)
         {
             glfwSetWindowShouldClose(p_window, true);
         }
+        if (p_key == GLFW_KEY_LEFT_CONTROL)
+        {
+            s_canMoveCamera = true;
+        }
+        if (p_key == GLFW_KEY_LEFT_ALT)
+        {
+            glfwSetInputMode(l_scene->getWindow().getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            s_canRotateCamera = true;
+        }
     }
     else if (p_state == GLFW_RELEASE)
     {
-
+        if (p_key == GLFW_KEY_LEFT_CONTROL)
+        {
+            s_canMoveCamera = false;
+        }
+        if (p_key == GLFW_KEY_LEFT_ALT)
+        {
+            glfwSetInputMode(l_scene->getWindow().getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            s_canRotateCamera = false;
+        }
     }
 }
 
@@ -60,22 +81,31 @@ void InputManager::mouseCallBack(GLFWwindow * p_window, double p_xPos, double p_
 
     s_lastX = p_xPos;
     s_lastY = p_yPos;
+
+    if (s_canMoveCamera)
+    {
+        s_cameraMoveSpeedOnAxisX = s_xOffset;
+        s_cameraMoveSpeedOnAxisY = s_yOffset;
+    }
+    if (s_canRotateCamera)
+    {
+        s_cameraRotateSpeedOnAxisX = s_xOffset;
+        s_cameraRotateSpeedOnAxisY = s_yOffset;
+    }
 }
 
 void InputManager::scrollCallBack(GLFWwindow * p_window, double p_xOffset, double p_yOffset)
 {
-    if (s_fov >= 1.0f && s_fov <= 45.0f)
-        s_fov -= p_yOffset;
-    if (s_fov <= 1.0f)
-        s_fov = 1.0f;
-    if (s_fov >= 45.0f)
-        s_fov = 45.0f;
+    if(s_canMoveCamera)
+    {
+        s_cameraMoveSpeedOnAxisZ = p_yOffset;
+    }
 }
 
 void InputManager::start()
 {
     auto& l_scene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
-    glfwSetInputMode(l_scene->getWindow().getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(l_scene->getWindow().getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetKeyCallback(l_scene->getWindow().getGlfwWindow(), keyCallBack);
     glfwSetCursorPosCallback(l_scene->getWindow().getGlfwWindow(), mouseCallBack);
     glfwSetScrollCallback(l_scene->getWindow().getGlfwWindow(), scrollCallBack);
