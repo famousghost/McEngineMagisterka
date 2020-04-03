@@ -39,9 +39,11 @@ void RenderManager::draw(Scenes::Scene & p_scene)
     {
         const int WIDTH = 1270;
         const int HEIGHT = 720;
+        auto& l_vertexArray = object.first.m_vertexArray;
+        auto& l_shaderProgram = object.first.m_shaderProgram;
 
-        object.first.m_vertexArray->bindVao();
-        object.first.m_shaderProgram->bindShaderProgram();
+        l_vertexArray->bindVao();
+        l_shaderProgram->bindShaderProgram();
 
         l_objectManager.processObject(object.first);
 
@@ -50,14 +52,14 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
         l_camera->rotateCamera();
         l_camera->moveCamera();
-        object.first.m_shaderProgram->uniformVec3(l_camera->getCameraPosition(), "cameraPos");
-        object.first.m_shaderProgram->uniformMatrix4(l_camera->getViewMatrix(), "view");
-        object.first.m_shaderProgram->uniformMatrix4(l_projection, "projection");
+        l_shaderProgram->uniformVec3(l_camera->getCameraPosition(), "cameraPos");
+        l_shaderProgram->uniformMatrix4(l_camera->getViewMatrix(), "view");
+        l_shaderProgram->uniformMatrix4(l_projection, "projection");
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDrawElements(GL_TRIANGLES, l_vertexArray->getIndiciesSize(), GL_UNSIGNED_INT, 0);
 
-        object.first.m_shaderProgram->unbindShaderProgram();
-        object.first.m_vertexArray->unbindVao();
+        l_shaderProgram->unbindShaderProgram();
+        l_vertexArray->unbindVao();
     }
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

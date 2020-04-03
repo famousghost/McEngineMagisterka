@@ -153,9 +153,9 @@ void GuiManager::setObjectProperties()
 
     if (objIt != l_objects.end())
     {
-        ImGui::SliderFloat3("AmbientLight", &objIt->first.m_material.m_ambientLight.x, -1.0f, 1.0f);
-        ImGui::SliderFloat3("DiffuseLight", &objIt->first.m_material.m_diffuseLight.x, -1.0f, 1.0f);
-        ImGui::SliderFloat3("SpecularLight", &objIt->first.m_material.m_specularLight.x, -1.0f, 1.0f);
+        ImGui::SliderFloat3("AmbientLight", &objIt->first.m_material.m_ambientLight.x, 0.0f, 1.0f);
+        ImGui::SliderFloat3("DiffuseLight", &objIt->first.m_material.m_diffuseLight.x, 0.0f, 1.0f);
+        ImGui::SliderFloat3("SpecularLight", &objIt->first.m_material.m_specularLight.x, 0.0f, 1.0f);
         ImGui::SliderFloat3("ObjectColor", &objIt->first.m_material.m_objectColor.x, 0.0f, 1.0f);
     }
 }

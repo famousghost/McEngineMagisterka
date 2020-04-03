@@ -16,61 +16,105 @@ void CubeModelBuilder::buildVertexCoordinatesArray()
         VertexCoords{ -0.5f, -0.5f, -0.5f },
         VertexCoords{ 0.5f, -0.5f, -0.5f },
         VertexCoords{ 0.5f, 0.5f, -0.5f },
-        VertexCoords{ 0.5f, 0.5f, -0.5f },
         VertexCoords{ -0.5f, 0.5f, -0.5f },
-        VertexCoords{ -0.5f, -0.5f, -0.5f },
 
         VertexCoords{ -0.5f, -0.5f, 0.5f },
         VertexCoords{ 0.5f, -0.5f, 0.5f },
         VertexCoords{ 0.5f, 0.5f, 0.5f },
-        VertexCoords{ 0.5f, 0.5f, 0.5f },
         VertexCoords{ -0.5f, 0.5f, 0.5f },
-        VertexCoords{ -0.5f, -0.5f, 0.5f },
 
         VertexCoords{ -0.5f, 0.5f, 0.5f },
         VertexCoords{ -0.5f, 0.5f, -0.5f },
         VertexCoords{ -0.5f, -0.5f, -0.5f },
-        VertexCoords{ -0.5f, -0.5f, -0.5f },
         VertexCoords{ -0.5f, -0.5f, 0.5f },
-        VertexCoords{ -0.5f, 0.5f, 0.5f },
 
         VertexCoords{ 0.5f, 0.5f, 0.5f },
         VertexCoords{ 0.5f, 0.5f, -0.5f },
         VertexCoords{ 0.5f, -0.5f, -0.5f },
-        VertexCoords{ 0.5f, -0.5f, -0.5f },
         VertexCoords{ 0.5f, -0.5f, 0.5f },
-        VertexCoords{ 0.5f, 0.5f, 0.5f },
 
         VertexCoords{ -0.5f, -0.5f, -0.5f },
         VertexCoords{ 0.5f, -0.5f, -0.5f },
         VertexCoords{ 0.5f, -0.5f, 0.5f },
-        VertexCoords{ 0.5f, -0.5f, 0.5f },
         VertexCoords{ -0.5f, -0.5f, 0.5f },
-        VertexCoords{ -0.5f, -0.5f, -0.5f },
 
         VertexCoords{ -0.5f, 0.5f, -0.5f },
         VertexCoords{ 0.5f, 0.5f, -0.5f },
         VertexCoords{ 0.5f, 0.5f, 0.5f },
-        VertexCoords{ 0.5f, 0.5f, 0.5f },
         VertexCoords{ -0.5f, 0.5f, 0.5f },
-        VertexCoords{ -0.5f, 0.5f, -0.5f }
     };
 }
 
-void CubeModelBuilder::buildColorValuesArray(const std::vector<ColorValues>& p_colorValues)
+void CubeModelBuilder::buildColorValuesArray()
 {
-    if(p_colorValues.size() == 36)
+    m_model->m_colorValues = std::vector<Meshes::ColorValues>
     {
-        m_model->m_colorValues = p_colorValues;
-    }
+        Meshes::ColorValues{ 1.0f, 0.0f, 0.0f },
+        Meshes::ColorValues{ 1.0f, 0.0f, 0.0f },
+        Meshes::ColorValues{ 1.0f, 0.0f, 0.0f },
+        Meshes::ColorValues{ 1.0f, 0.0f, 0.0f },
+
+        Meshes::ColorValues{ 0.0f, 1.0f, 0.0f },
+        Meshes::ColorValues{ 0.0f, 1.0f, 0.0f },
+        Meshes::ColorValues{ 0.0f, 1.0f, 0.0f },
+        Meshes::ColorValues{ 0.0f, 1.0f, 0.0f },
+
+        Meshes::ColorValues{ 0.0f, 0.0f, 1.0f },
+        Meshes::ColorValues{ 0.0f, 0.0f, 1.0f },
+        Meshes::ColorValues{ 0.0f, 0.0f, 1.0f },
+        Meshes::ColorValues{ 0.0f, 0.0f, 1.0f },
+
+        Meshes::ColorValues{ 1.0f, 0.0f, 1.0f },
+        Meshes::ColorValues{ 1.0f, 0.0f, 1.0f },
+        Meshes::ColorValues{ 1.0f, 0.0f, 1.0f },
+        Meshes::ColorValues{ 1.0f, 0.0f, 1.0f },
+
+        Meshes::ColorValues{ 1.0f, 1.0f, 1.0f },
+        Meshes::ColorValues{ 1.0f, 1.0f, 1.0f },
+        Meshes::ColorValues{ 1.0f, 1.0f, 1.0f },
+        Meshes::ColorValues{ 1.0f, 1.0f, 1.0f },
+
+        Meshes::ColorValues{ 0.0f, 0.0f, 0.0f },
+        Meshes::ColorValues{ 0.0f, 0.0f, 0.0f },
+        Meshes::ColorValues{ 0.0f, 0.0f, 0.0f },
+        Meshes::ColorValues{ 0.0f, 0.0f, 0.0f },
+    };
 }
 
-void CubeModelBuilder::buildTextureCoordinatesArray(const std::vector<TextureCoords>& p_textureCoords)
+void CubeModelBuilder::buildTextureCoordinatesArray()
 {
-    if(p_textureCoords.size() == 36)
+    m_model->m_textureCoords = std::vector<Meshes::TextureCoords>
     {
-        m_model->m_textureCoords = p_textureCoords;
-    }
+        Meshes::TextureCoords{ 0.0f, 0.0f },
+        Meshes::TextureCoords{ 1.0f, 0.0f},
+        Meshes::TextureCoords{ 1.0f, 1.0f  },
+        Meshes::TextureCoords{ 0.0f, 1.0f },
+
+        Meshes::TextureCoords{ 0.0f, 0.0f },
+        Meshes::TextureCoords{ 1.0f, 0.0f},
+        Meshes::TextureCoords{ 1.0f, 1.0f  },
+        Meshes::TextureCoords{ 0.0f, 1.0f },
+
+        Meshes::TextureCoords{ 0.0f, 0.0f },
+        Meshes::TextureCoords{ 1.0f, 0.0f},
+        Meshes::TextureCoords{ 1.0f, 1.0f },
+        Meshes::TextureCoords{ 0.0f, 1.0f },
+
+        Meshes::TextureCoords{ 0.0f, 0.0f },
+        Meshes::TextureCoords{ 1.0f, 0.0f},
+        Meshes::TextureCoords{ 1.0f, 1.0f  },
+        Meshes::TextureCoords{ 0.0f, 1.0f },
+
+        Meshes::TextureCoords{ 0.0f, 0.0f },
+        Meshes::TextureCoords{ 1.0f, 0.0f},
+        Meshes::TextureCoords{ 1.0f, 1.0f },
+        Meshes::TextureCoords{ 0.0f, 1.0f },
+
+        Meshes::TextureCoords{ 0.0f, 0.0f },
+        Meshes::TextureCoords{ 1.0f, 0.0f},
+        Meshes::TextureCoords{ 1.0f, 1.0f },
+        Meshes::TextureCoords{ 0.0f, 1.0f },
+    };
 }
 
 void CubeModelBuilder::buildNormalValuesArray()
@@ -81,11 +125,7 @@ void CubeModelBuilder::buildNormalValuesArray()
         NormalCoords{ 0.0f, 0.0f, -1.0f },
         NormalCoords{ 0.0f, 0.0f, -1.0f },
         NormalCoords{ 0.0f, 0.0f, -1.0f },
-        NormalCoords{ 0.0f, 0.0f, -1.0f },
-        NormalCoords{ 0.0f, 0.0f, -1.0f },
 
-        NormalCoords{ 0.0f, 0.0f, 1.0f },
-        NormalCoords{ 0.0f, 0.0f, 1.0f },
         NormalCoords{ 0.0f, 0.0f, 1.0f },
         NormalCoords{ 0.0f, 0.0f, 1.0f },
         NormalCoords{ 0.0f, 0.0f, 1.0f },
@@ -95,11 +135,7 @@ void CubeModelBuilder::buildNormalValuesArray()
         NormalCoords{ -1.0f, 0.0f, 0.0f },
         NormalCoords{ -1.0f, 0.0f, 0.0f },
         NormalCoords{ -1.0f, 0.0f, 0.0f },
-        NormalCoords{ -1.0f, 0.0f, 0.0f },
-        NormalCoords{ -1.0f, 0.0f, 0.0f },
 
-        NormalCoords{ 1.0f, 0.0f, 0.0f },
-        NormalCoords{ 1.0f, 0.0f, 0.0f },
         NormalCoords{ 1.0f, 0.0f, 0.0f },
         NormalCoords{ 1.0f, 0.0f, 0.0f },
         NormalCoords{ 1.0f, 0.0f, 0.0f },
@@ -109,15 +145,30 @@ void CubeModelBuilder::buildNormalValuesArray()
         NormalCoords{ 0.0f, -1.0f, 0.0f },
         NormalCoords{ 0.0f, -1.0f, 0.0f },
         NormalCoords{ 0.0f, -1.0f, 0.0f },
-        NormalCoords{ 0.0f, -1.0f, 0.0f },
-        NormalCoords{ 0.0f, -1.0f, 0.0f },
 
         NormalCoords{ 0.0f, 1.0f, 0.0f },
         NormalCoords{ 0.0f, 1.0f, 0.0f },
         NormalCoords{ 0.0f, 1.0f, 0.0f },
         NormalCoords{ 0.0f, 1.0f, 0.0f },
-        NormalCoords{ 0.0f, 1.0f, 0.0f },
-        NormalCoords{ 0.0f, 1.0f, 0.0f }
+    };
+}
+
+void CubeModelBuilder::buildIndicies()
+{
+    m_model->m_indicies = std::vector<uint32_t>
+    {
+        0, 1, 3,
+        1, 2, 3,
+        4, 5, 7,
+        5, 6, 7,
+        8, 9, 11,
+        9, 10, 11,
+        12, 13, 15,
+        13, 14, 15,
+        16, 17, 19,
+        17, 18, 19,
+        20, 21, 23,
+        21, 22, 23
     };
 }
 

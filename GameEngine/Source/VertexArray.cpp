@@ -37,5 +37,10 @@ void VertexArray::createEbo()
     glGenBuffers(1, &m_eboId);
 }
 
+std::size_t VertexArray::getIndiciesSize() const
+{
+    return m_indicies.size();
+}
+
 }//Meshes
 }//GameEngine

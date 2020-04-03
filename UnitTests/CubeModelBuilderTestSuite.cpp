@@ -118,7 +118,7 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfColorValueArrayIsAppropriatelyBuild)
         ColorValues{ 0.0f, 0.0f, 0.0f },
         ColorValues{ 0.0f, 0.0f, 0.0f }
     };
-    m_cubeBuilder.buildColorValuesArray(l_expectedColorValues);
+    m_cubeBuilder.buildColorValuesArray();
     auto& l_colorValues = m_cubeBuilder.getModel()->m_colorValues;
     ASSERT_TRUE(l_colorValues.size() > 0);
     ASSERT_TRUE(std::equal(l_colorValues.begin(), l_colorValues.end(), l_expectedColorValues.begin()));
@@ -174,6 +174,58 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfNormalCoordsArrayIsAppropriatelyBuild)
     auto& l_normalCoords = m_cubeBuilder.getModel()->m_normalCoords;
     ASSERT_TRUE(l_normalCoords.size() > 0);
     ASSERT_TRUE(std::equal(l_normalCoords.begin(), l_normalCoords.end(), l_expectedNormalCoords.begin()));
+}
+
+TEST_F(CubeModelBuilderTestSuite, CheckIfTextrueCoordsArrayIsAppropriatelyBuild)
+{
+    std::vector<TextureCoords> l_expectedTextureCoords =
+    {
+        TextureCoords{ 0.0f, 0.0f },
+        TextureCoords{ 1.0f, 0.0f},
+        TextureCoords{ 1.0f, 1.0f  },
+        TextureCoords{ 1.0f, 1.0f },
+        TextureCoords{ 0.0f, 1.0f },
+        TextureCoords{ 0.0f, 0.0f },
+
+        TextureCoords{ 0.0f, 0.0f },
+        TextureCoords{ 1.0f, 0.0f},
+        TextureCoords{ 1.0f, 1.0f  },
+        TextureCoords{ 1.0f, 1.0f },
+        TextureCoords{ 0.0f, 1.0f },
+        TextureCoords{ 0.0f, 0.0f },
+
+        TextureCoords{ 0.0f, 0.0f },
+        TextureCoords{ 1.0f, 0.0f},
+        TextureCoords{ 1.0f, 1.0f  },
+        TextureCoords{ 1.0f, 1.0f },
+        TextureCoords{ 0.0f, 1.0f },
+        TextureCoords{ 0.0f, 0.0f },
+
+        TextureCoords{ 0.0f, 0.0f },
+        TextureCoords{ 1.0f, 0.0f},
+        TextureCoords{ 1.0f, 1.0f  },
+        TextureCoords{ 1.0f, 1.0f },
+        TextureCoords{ 0.0f, 1.0f },
+        TextureCoords{ 0.0f, 0.0f },
+
+        TextureCoords{ 0.0f, 0.0f },
+        TextureCoords{ 1.0f, 0.0f},
+        TextureCoords{ 1.0f, 1.0f  },
+        TextureCoords{ 1.0f, 1.0f },
+        TextureCoords{ 0.0f, 1.0f },
+        TextureCoords{ 0.0f, 0.0f },
+
+        TextureCoords{ 0.0f, 0.0f },
+        TextureCoords{ 1.0f, 0.0f},
+        TextureCoords{ 1.0f, 1.0f  },
+        TextureCoords{ 1.0f, 1.0f },
+        TextureCoords{ 0.0f, 1.0f },
+        TextureCoords{ 0.0f, 0.0f }
+    };
+    m_cubeBuilder.buildTextureCoordinatesArray();
+    auto& l_textureCoords = m_cubeBuilder.getModel()->m_textureCoords;
+    ASSERT_TRUE(l_textureCoords.size() > 0);
+    ASSERT_TRUE(std::equal(l_textureCoords.begin(), l_textureCoords.end(), l_expectedTextureCoords.begin()));
 }
 
 }//Meshes

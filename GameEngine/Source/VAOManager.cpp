@@ -43,151 +43,48 @@ std::shared_ptr<VertexArray> VAOManager::createDefaultVertexArrayObject(std::str
         l_modelBuilder->buildVertexCoordinatesArray();
         auto l_vertexCoordSize = l_modelBuilder->getModel()->m_vertexCoords.size();
 
-        //---------------------------------------------------------------------------//
-
-        std::vector<Meshes::ColorValues> l_colorValues =
-        {
-            Meshes::ColorValues{ 1.0f, 0.0f, 0.0f },
-            Meshes::ColorValues{ 1.0f, 0.0f, 0.0f },
-            Meshes::ColorValues{ 1.0f, 0.0f, 0.0f },
-            Meshes::ColorValues{ 1.0f, 0.0f, 0.0f },
-            Meshes::ColorValues{ 1.0f, 0.0f, 0.0f },
-            Meshes::ColorValues{ 1.0f, 0.0f, 0.0f },
-
-            Meshes::ColorValues{ 0.0f, 1.0f, 0.0f },
-            Meshes::ColorValues{ 0.0f, 1.0f, 0.0f },
-            Meshes::ColorValues{ 0.0f, 1.0f, 0.0f },
-            Meshes::ColorValues{ 0.0f, 1.0f, 0.0f },
-            Meshes::ColorValues{ 0.0f, 1.0f, 0.0f },
-            Meshes::ColorValues{ 0.0f, 1.0f, 0.0f },
-
-            Meshes::ColorValues{ 0.0f, 0.0f, 1.0f },
-            Meshes::ColorValues{ 0.0f, 0.0f, 1.0f },
-            Meshes::ColorValues{ 0.0f, 0.0f, 1.0f },
-            Meshes::ColorValues{ 0.0f, 0.0f, 1.0f },
-            Meshes::ColorValues{ 0.0f, 0.0f, 1.0f },
-            Meshes::ColorValues{ 0.0f, 0.0f, 1.0f },
-
-            Meshes::ColorValues{ 1.0f, 0.0f, 1.0f },
-            Meshes::ColorValues{ 1.0f, 0.0f, 1.0f },
-            Meshes::ColorValues{ 1.0f, 0.0f, 1.0f },
-            Meshes::ColorValues{ 1.0f, 0.0f, 1.0f },
-            Meshes::ColorValues{ 1.0f, 0.0f, 1.0f },
-            Meshes::ColorValues{ 1.0f, 0.0f, 1.0f },
-
-            Meshes::ColorValues{ 1.0f, 1.0f, 1.0f },
-            Meshes::ColorValues{ 1.0f, 1.0f, 1.0f },
-            Meshes::ColorValues{ 1.0f, 1.0f, 1.0f },
-            Meshes::ColorValues{ 1.0f, 1.0f, 1.0f },
-            Meshes::ColorValues{ 1.0f, 1.0f, 1.0f },
-            Meshes::ColorValues{ 1.0f, 1.0f, 1.0f },
-
-            Meshes::ColorValues{ 0.0f, 0.0f, 0.0f },
-            Meshes::ColorValues{ 0.0f, 0.0f, 0.0f },
-            Meshes::ColorValues{ 0.0f, 0.0f, 0.0f },
-            Meshes::ColorValues{ 0.0f, 0.0f, 0.0f },
-            Meshes::ColorValues{ 0.0f, 0.0f, 0.0f },
-            Meshes::ColorValues{ 0.0f, 0.0f, 0.0f }
-        };
-
-        l_modelBuilder->buildColorValuesArray(l_colorValues);
+        l_modelBuilder->buildColorValuesArray();
         auto l_colorValueSize = l_modelBuilder->getModel()->m_colorValues.size();
 
-        //---------------------------------------------------------------------------//
-
-        std::vector<Meshes::TextureCoords> l_textureCoords = 
-        {
-            Meshes::TextureCoords{ 0.0f, 0.0f },
-            Meshes::TextureCoords{ 1.0f, 0.0f},
-            Meshes::TextureCoords{ 1.0f, 1.0f  },
-            Meshes::TextureCoords{ 1.0f, 1.0f },
-            Meshes::TextureCoords{ 0.0f, 1.0f },
-            Meshes::TextureCoords{ 0.0f, 0.0f },
-
-            Meshes::TextureCoords{ 0.0f, 0.0f },
-            Meshes::TextureCoords{ 1.0f, 0.0f},
-            Meshes::TextureCoords{ 1.0f, 1.0f  },
-            Meshes::TextureCoords{ 1.0f, 1.0f },
-            Meshes::TextureCoords{ 0.0f, 1.0f },
-            Meshes::TextureCoords{ 0.0f, 0.0f },
-
-            Meshes::TextureCoords{ 0.0f, 0.0f },
-            Meshes::TextureCoords{ 1.0f, 0.0f},
-            Meshes::TextureCoords{ 1.0f, 1.0f  },
-            Meshes::TextureCoords{ 1.0f, 1.0f },
-            Meshes::TextureCoords{ 0.0f, 1.0f },
-            Meshes::TextureCoords{ 0.0f, 0.0f },
-
-            Meshes::TextureCoords{ 0.0f, 0.0f },
-            Meshes::TextureCoords{ 1.0f, 0.0f},
-            Meshes::TextureCoords{ 1.0f, 1.0f  },
-            Meshes::TextureCoords{ 1.0f, 1.0f },
-            Meshes::TextureCoords{ 0.0f, 1.0f },
-            Meshes::TextureCoords{ 0.0f, 0.0f },
-
-            Meshes::TextureCoords{ 0.0f, 0.0f },
-            Meshes::TextureCoords{ 1.0f, 0.0f},
-            Meshes::TextureCoords{ 1.0f, 1.0f  },
-            Meshes::TextureCoords{ 1.0f, 1.0f },
-            Meshes::TextureCoords{ 0.0f, 1.0f },
-            Meshes::TextureCoords{ 0.0f, 0.0f },
-
-            Meshes::TextureCoords{ 0.0f, 0.0f },
-            Meshes::TextureCoords{ 1.0f, 0.0f},
-            Meshes::TextureCoords{ 1.0f, 1.0f  },
-            Meshes::TextureCoords{ 1.0f, 1.0f },
-            Meshes::TextureCoords{ 0.0f, 1.0f },
-            Meshes::TextureCoords{ 0.0f, 0.0f }
-        };
-
-        l_modelBuilder->buildTextureCoordinatesArray(l_textureCoords);
+        l_modelBuilder->buildTextureCoordinatesArray();
         auto l_textureCoordsSize = l_modelBuilder->getModel()->m_textureCoords.size();
-
-        //---------------------------------------------------------------------------//
 
         l_modelBuilder->buildNormalValuesArray();
         auto l_normalCoordsSize = l_modelBuilder->getModel()->m_normalCoords.size();
 
-        //---------------------------------------------------------------------------//
+        l_modelBuilder->buildIndicies();
 
         l_vertexArray->createVao();
         l_vertexArray->createVbo();
+        l_vertexArray->createEbo();
 
-        //---------------------------------------------------------------------------//
 
+        l_vertexArray->bindVao();
         if(l_vertexCoordSize)
         {
-            l_vertexArray->bindVao();
             l_vertexArray->addValuesToAttribPointer(0, l_modelBuilder->getModel()->m_vertexCoords);
-            l_vertexArray->unbindVao();
         }
-
-        //---------------------------------------------------------------------------//
 
         if(l_colorValueSize)
         {
-            l_vertexArray->bindVao();
             l_vertexArray->addValuesToAttribPointer(1, l_modelBuilder->getModel()->m_colorValues);
-            l_vertexArray->unbindVao();
         }
-
-        //---------------------------------------------------------------------------//
 
         if(l_textureCoordsSize)
         {
-            l_vertexArray->bindVao();
             l_vertexArray->addValuesToAttribPointer(2, l_modelBuilder->getModel()->m_textureCoords);
-            l_vertexArray->unbindVao();
         }
-
-        //---------------------------------------------------------------------------//
 
         if(l_normalCoordsSize)
         {
-            l_vertexArray->bindVao();
             l_vertexArray->addValuesToAttribPointer(3, l_modelBuilder->getModel()->m_normalCoords);
-            l_vertexArray->unbindVao();
         }
+
+        if (l_modelBuilder->getModel()->m_indicies.size())
+        {
+            l_vertexArray->addIndicies(l_modelBuilder->getModel()->m_indicies);
+        }
+        l_vertexArray->unbindVao();
     }
 
     return l_vertexArray;

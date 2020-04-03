@@ -165,6 +165,7 @@ struct Model
     std::vector<ColorValues> m_colorValues;
     std::vector<NormalCoords> m_normalCoords;
     std::vector<TextureCoords> m_textureCoords;
+    std::vector<uint32_t> m_indicies;
 };
 
 }//Meshes
