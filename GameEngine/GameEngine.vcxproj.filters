@@ -67,6 +67,9 @@
     <Filter Include="Pliki nagłówkowe\Managers">
       <UniqueIdentifier>{c2aa8c25-319e-4746-ad7a-955c9354fad6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki nagłówkowe\LIBS">
+      <UniqueIdentifier>{c9e21470-fbae-4316-afa3-55abf219a10a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\glad.c">
@@ -155,6 +158,9 @@
     </ClCompile>
     <ClCompile Include="Source\InputManager.cpp">
       <Filter>Pliki źródłowe\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CustomModelBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -262,6 +268,15 @@
     </ClInclude>
     <ClInclude Include="Include\InputManager.h">
       <Filter>Pliki nagłówkowe\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\STB.h">
+      <Filter>Pliki nagłówkowe\DEFINES</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\stb_image.h">
+      <Filter>Pliki nagłówkowe\LIBS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CustomModelBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

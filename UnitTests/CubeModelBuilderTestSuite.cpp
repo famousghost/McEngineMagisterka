@@ -27,44 +27,32 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfVertexArrayIsAppropriatelyBuild)
         VertexCoords{ -0.5f, -0.5f, -0.5f },
         VertexCoords{ 0.5f, -0.5f, -0.5f },
         VertexCoords{ 0.5f, 0.5f, -0.5f },
+        VertexCoords{ -0.5f, 0.5f, -0.5f },
+
+        VertexCoords{ -0.5f, -0.5f, 0.5f },
+        VertexCoords{ 0.5f, -0.5f, 0.5f },
+        VertexCoords{ 0.5f, 0.5f, 0.5f },
+        VertexCoords{ -0.5f, 0.5f, 0.5f },
+
+        VertexCoords{ -0.5f, 0.5f, 0.5f },
+        VertexCoords{ -0.5f, 0.5f, -0.5f },
+        VertexCoords{ -0.5f, -0.5f, -0.5f },
+        VertexCoords{ -0.5f, -0.5f, 0.5f },
+
+        VertexCoords{ 0.5f, 0.5f, 0.5f },
         VertexCoords{ 0.5f, 0.5f, -0.5f },
-        VertexCoords{ -0.5f, 0.5f, -0.5f },
-        VertexCoords{ -0.5f, -0.5f, -0.5f },
-
-        VertexCoords{ -0.5f, -0.5f, 0.5f },
-        VertexCoords{ 0.5f, -0.5f, 0.5f },
-        VertexCoords{ 0.5f, 0.5f, 0.5f },
-        VertexCoords{ 0.5f, 0.5f, 0.5f },
-        VertexCoords{ -0.5f, 0.5f, 0.5f },
-        VertexCoords{ -0.5f, -0.5f, 0.5f },
-
-        VertexCoords{ -0.5f, 0.5f, 0.5f },
-        VertexCoords{ -0.5f, 0.5f, -0.5f },
-        VertexCoords{ -0.5f, -0.5f, -0.5f },
-        VertexCoords{ -0.5f, -0.5f, -0.5f },
-        VertexCoords{ -0.5f, -0.5f, 0.5f },
-        VertexCoords{ -0.5f, 0.5f, 0.5f },
-
-        VertexCoords{ 0.5f, 0.5f, 0.5f },
-        VertexCoords{ 0.5f, 0.0f, -0.5f },
-        VertexCoords{ 0.5f, -0.5f, -0.5f },
         VertexCoords{ 0.5f, -0.5f, -0.5f },
         VertexCoords{ 0.5f, -0.5f, 0.5f },
-        VertexCoords{ 0.5f, 0.5f, 0.5f },
 
         VertexCoords{ -0.5f, -0.5f, -0.5f },
         VertexCoords{ 0.5f, -0.5f, -0.5f },
         VertexCoords{ 0.5f, -0.5f, 0.5f },
-        VertexCoords{ 0.5f, -0.5f, 0.5f },
         VertexCoords{ -0.5f, -0.5f, 0.5f },
-        VertexCoords{ -0.5f, -0.5f, -0.5f },
 
         VertexCoords{ -0.5f, 0.5f, -0.5f },
         VertexCoords{ 0.5f, 0.5f, -0.5f },
         VertexCoords{ 0.5f, 0.5f, 0.5f },
-        VertexCoords{ 0.5f, 0.5f, 0.5f },
         VertexCoords{ -0.5f, 0.5f, 0.5f },
-        VertexCoords{ -0.5f, 0.5f, -0.5f }
     };
     m_cubeBuilder.buildVertexCoordinatesArray();
     auto& l_vertCoords = m_cubeBuilder.getModel()->m_vertexCoords;
@@ -80,11 +68,7 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfColorValueArrayIsAppropriatelyBuild)
         ColorValues{ 1.0f, 0.0f, 0.0f },
         ColorValues{ 1.0f, 0.0f, 0.0f },
         ColorValues{ 1.0f, 0.0f, 0.0f },
-        ColorValues{ 1.0f, 0.0f, 0.0f },
-        ColorValues{ 1.0f, 0.0f, 0.0f },
 
-        ColorValues{ 0.0f, 1.0f, 0.0f },
-        ColorValues{ 0.0f, 1.0f, 0.0f },
         ColorValues{ 0.0f, 1.0f, 0.0f },
         ColorValues{ 0.0f, 1.0f, 0.0f },
         ColorValues{ 0.0f, 1.0f, 0.0f },
@@ -94,11 +78,7 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfColorValueArrayIsAppropriatelyBuild)
         ColorValues{ 0.0f, 0.0f, 1.0f },
         ColorValues{ 0.0f, 0.0f, 1.0f },
         ColorValues{ 0.0f, 0.0f, 1.0f },
-        ColorValues{ 0.0f, 0.0f, 1.0f },
-        ColorValues{ 0.0f, 0.0f, 1.0f },
 
-        ColorValues{ 1.0f, 0.0f, 1.0f },
-        ColorValues{ 1.0f, 0.0f, 1.0f },
         ColorValues{ 1.0f, 0.0f, 1.0f },
         ColorValues{ 1.0f, 0.0f, 1.0f },
         ColorValues{ 1.0f, 0.0f, 1.0f },
@@ -108,15 +88,11 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfColorValueArrayIsAppropriatelyBuild)
         ColorValues{ 1.0f, 1.0f, 1.0f },
         ColorValues{ 1.0f, 1.0f, 1.0f },
         ColorValues{ 1.0f, 1.0f, 1.0f },
-        ColorValues{ 1.0f, 1.0f, 1.0f },
-        ColorValues{ 1.0f, 1.0f, 1.0f },
 
         ColorValues{ 0.0f, 0.0f, 0.0f },
         ColorValues{ 0.0f, 0.0f, 0.0f },
         ColorValues{ 0.0f, 0.0f, 0.0f },
         ColorValues{ 0.0f, 0.0f, 0.0f },
-        ColorValues{ 0.0f, 0.0f, 0.0f },
-        ColorValues{ 0.0f, 0.0f, 0.0f }
     };
     m_cubeBuilder.buildColorValuesArray();
     auto& l_colorValues = m_cubeBuilder.getModel()->m_colorValues;
@@ -132,11 +108,7 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfNormalCoordsArrayIsAppropriatelyBuild)
         NormalCoords{ 0.0f, 0.0f, -1.0f },
         NormalCoords{ 0.0f, 0.0f, -1.0f },
         NormalCoords{ 0.0f, 0.0f, -1.0f },
-        NormalCoords{ 0.0f, 0.0f, -1.0f },
-        NormalCoords{ 0.0f, 0.0f, -1.0f },
 
-        NormalCoords{ 0.0f, 0.0f, 1.0f },
-        NormalCoords{ 0.0f, 0.0f, 1.0f },
         NormalCoords{ 0.0f, 0.0f, 1.0f },
         NormalCoords{ 0.0f, 0.0f, 1.0f },
         NormalCoords{ 0.0f, 0.0f, 1.0f },
@@ -146,11 +118,7 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfNormalCoordsArrayIsAppropriatelyBuild)
         NormalCoords{ -1.0f, 0.0f, 0.0f },
         NormalCoords{ -1.0f, 0.0f, 0.0f },
         NormalCoords{ -1.0f, 0.0f, 0.0f },
-        NormalCoords{ -1.0f, 0.0f, 0.0f },
-        NormalCoords{ -1.0f, 0.0f, 0.0f },
 
-        NormalCoords{ 1.0f, 0.0f, 0.0f },
-        NormalCoords{ 1.0f, 0.0f, 0.0f },
         NormalCoords{ 1.0f, 0.0f, 0.0f },
         NormalCoords{ 1.0f, 0.0f, 0.0f },
         NormalCoords{ 1.0f, 0.0f, 0.0f },
@@ -160,15 +128,11 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfNormalCoordsArrayIsAppropriatelyBuild)
         NormalCoords{ 0.0f, -1.0f, 0.0f },
         NormalCoords{ 0.0f, -1.0f, 0.0f },
         NormalCoords{ 0.0f, -1.0f, 0.0f },
-        NormalCoords{ 0.0f, -1.0f, 0.0f },
-        NormalCoords{ 0.0f, -1.0f, 0.0f },
 
         NormalCoords{ 0.0f, 1.0f, 0.0f },
         NormalCoords{ 0.0f, 1.0f, 0.0f },
         NormalCoords{ 0.0f, 1.0f, 0.0f },
         NormalCoords{ 0.0f, 1.0f, 0.0f },
-        NormalCoords{ 0.0f, 1.0f, 0.0f },
-        NormalCoords{ 0.0f, 1.0f, 0.0f }
     };
     m_cubeBuilder.buildNormalValuesArray();
     auto& l_normalCoords = m_cubeBuilder.getModel()->m_normalCoords;
@@ -183,44 +147,32 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfTextrueCoordsArrayIsAppropriatelyBuild)
         TextureCoords{ 0.0f, 0.0f },
         TextureCoords{ 1.0f, 0.0f},
         TextureCoords{ 1.0f, 1.0f  },
-        TextureCoords{ 1.0f, 1.0f },
         TextureCoords{ 0.0f, 1.0f },
-        TextureCoords{ 0.0f, 0.0f },
 
         TextureCoords{ 0.0f, 0.0f },
         TextureCoords{ 1.0f, 0.0f},
         TextureCoords{ 1.0f, 1.0f  },
+        TextureCoords{ 0.0f, 1.0f },
+
+        TextureCoords{ 0.0f, 0.0f },
+        TextureCoords{ 1.0f, 0.0f},
         TextureCoords{ 1.0f, 1.0f },
         TextureCoords{ 0.0f, 1.0f },
-        TextureCoords{ 0.0f, 0.0f },
 
         TextureCoords{ 0.0f, 0.0f },
         TextureCoords{ 1.0f, 0.0f},
         TextureCoords{ 1.0f, 1.0f  },
-        TextureCoords{ 1.0f, 1.0f },
         TextureCoords{ 0.0f, 1.0f },
-        TextureCoords{ 0.0f, 0.0f },
 
         TextureCoords{ 0.0f, 0.0f },
         TextureCoords{ 1.0f, 0.0f},
-        TextureCoords{ 1.0f, 1.0f  },
         TextureCoords{ 1.0f, 1.0f },
         TextureCoords{ 0.0f, 1.0f },
-        TextureCoords{ 0.0f, 0.0f },
 
         TextureCoords{ 0.0f, 0.0f },
         TextureCoords{ 1.0f, 0.0f},
-        TextureCoords{ 1.0f, 1.0f  },
         TextureCoords{ 1.0f, 1.0f },
         TextureCoords{ 0.0f, 1.0f },
-        TextureCoords{ 0.0f, 0.0f },
-
-        TextureCoords{ 0.0f, 0.0f },
-        TextureCoords{ 1.0f, 0.0f},
-        TextureCoords{ 1.0f, 1.0f  },
-        TextureCoords{ 1.0f, 1.0f },
-        TextureCoords{ 0.0f, 1.0f },
-        TextureCoords{ 0.0f, 0.0f }
     };
     m_cubeBuilder.buildTextureCoordinatesArray();
     auto& l_textureCoords = m_cubeBuilder.getModel()->m_textureCoords;

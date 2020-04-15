@@ -70,14 +70,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)glew-2.1.0-win32\glew-2.1.0\include;$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\include;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(ProjectDir)googletest\googletest;$(ProjectDir)googletest\googlemock;$(ProjectDir)googletest\googlemock\include;$(ProjectDir)googletest\googletest\include;$(IncludePath)</IncludePath>
-    <SourcePath>$(SolutionDir)Libs\ImGUI;$(ProjectDir)googletest\googlemock\src;$(ProjectDir)googletest\googletest\src;$(SourcePath)</SourcePath>
-    <LibraryPath>$(SolutionDir)GameEngine\Include;$(SolutionDir)GameEngine\Source;$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\lib-vc2015;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)googletest\googletest\include;$(ProjectDir)googletest\googlemock\include;$(ProjectDir)googletest\googlemock;$(ProjectDir)googletest\googletest;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\include;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)googletest\googletest\src;$(ProjectDir)googletest\googlemock\src;$(SolutionDir)Libs\ImGUI</SourcePath>
+    <LibraryPath>$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\lib-vc2017;$(SolutionDir)GameEngine\Source;$(SolutionDir)GameEngine\Include;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)googletest\googletest;$(ProjectDir)googletest\googlemock;$(ProjectDir)googletest\googlemock\include;$(ProjectDir)googletest\googletest\include;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)googletest\googlemock\src;$(ProjectDir)googletest\googletest\src;$(SourcePath)</SourcePath>
     <LibraryPath>$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\lib-vc2015;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\include;$(ProjectDir)googletest\googletest\include;$(ProjectDir)googletest\googlemock\include;$(ProjectDir)googletest\googlemock;$(ProjectDir)googletest\googletest;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\lib-vc2017;$(SolutionDir)GameEngine\Source;$(SolutionDir)GameEngine\Include;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(ProjectDir)googletest\googletest\src;$(ProjectDir)googletest\googlemock\src;$(SolutionDir)Libs\ImGUI</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -85,7 +90,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dll;$(SolutionDir)GameEngine\UnitTests\ShaderTestCases;$(SolutionDir)GameEngine\UnitTests;$(SolutionDir)GameEngine\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine\Include;$(SolutionDir)GameEngine\UnitTests;$(SolutionDir)GameEngine\UnitTests\ShaderTestCases;$(SolutionDir)Dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <StructMemberAlignment>Default</StructMemberAlignment>
     </ClCompile>
     <Link>
@@ -99,7 +104,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine\Include;$(SolutionDir)GameEngine\UnitTests;$(SolutionDir)GameEngine\UnitTests\ShaderTestCases;$(SolutionDir)Dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

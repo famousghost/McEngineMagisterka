@@ -30,7 +30,7 @@ TEST_F(ShaderLoaderTestSuite, verifyIfShaderLoaderReturnEmptyStringWhenFileIsNot
 
 TEST_F(ShaderLoaderTestSuite, verifyIfShaderLoaderReturnFileContentWhenFileExists)
 {
-    std::string l_shaderSource = "../MasterEngine/Shaders/TestFile.vlsl";
+    std::string l_shaderSource = "../../MasterEngine/Shaders/TestFile.vlsl";
     std::string l_result = m_shaderLoader.loadShaderFromFile(l_shaderSource);
     std::cout << l_result<<std::endl;
     ASSERT_TRUE(l_result.length() > 0);
