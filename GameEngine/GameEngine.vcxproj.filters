@@ -141,9 +141,6 @@
     <ClCompile Include="Source\TextureManager.cpp">
       <Filter>Pliki źródłowe\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\VAOManager.cpp">
-      <Filter>Pliki źródłowe\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Camera.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -159,8 +156,8 @@
     <ClCompile Include="Source\InputManager.cpp">
       <Filter>Pliki źródłowe\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CustomModelBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
+    <ClCompile Include="Source\PrefabManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -184,9 +181,6 @@
     </ClInclude>
     <ClInclude Include="Include\ModelBuilder.h">
       <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Model.h">
-      <Filter>Pliki nagłówkowe\MESHES</Filter>
     </ClInclude>
     <ClInclude Include="Include\Object.h">
       <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
@@ -251,9 +245,6 @@
     <ClInclude Include="Include\TextureManager.h">
       <Filter>Pliki nagłówkowe\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Include\VAOManager.h">
-      <Filter>Pliki nagłówkowe\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Camera.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -275,8 +266,11 @@
     <ClInclude Include="Include\stb_image.h">
       <Filter>Pliki nagłówkowe\LIBS</Filter>
     </ClInclude>
-    <ClInclude Include="Include\CustomModelBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
+    <ClInclude Include="Include\Mesh.h">
+      <Filter>Pliki nagłówkowe\MESHES</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\PrefabManager.h">
+      <Filter>Pliki nagłówkowe\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

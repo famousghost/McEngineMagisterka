@@ -1,6 +1,6 @@
 #include "CubeBuilder.h"
 #include "Logger.h"
-#include "VAOManager.h"
+#include "PrefabManager.h"
 #include "ShaderManager.h"
 
 namespace McEngine
@@ -12,7 +12,7 @@ ObjectBuilder& CubeBuilder::addVertexArrayObject()
 {
     try
     {
-        m_object.m_vertexArray = VAOManager::getInstance().getVertexArray("CUBE");
+        m_object.m_meshes.push_back(PrefabManager::getInstance().getMesh("CUBE"));
     }
     catch (std::exception& ex)
     {

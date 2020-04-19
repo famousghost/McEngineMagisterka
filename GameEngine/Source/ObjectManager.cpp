@@ -62,10 +62,10 @@ void ObjectManager::setObjectPropertiesUniform(Object& p_object)
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_objectColor, "material.objectColor");
 }
 
-void ObjectManager::setTexture(Object& p_object,
-                               const std::string& p_textureLabel)
+void ObjectManager::setTexture(Mesh& p_mesh,
+                               const Texture& p_texture)
 {
-    p_object.m_textures.push_back(p_textureLabel);
+    p_mesh.m_textures.push_back(p_texture);
 }
 
 void ObjectManager::activeTextures()

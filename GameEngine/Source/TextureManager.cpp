@@ -55,6 +55,28 @@ void TextureManager::activeTexture(GLenum p_textureId,
     }
 }
 
+void TextureManager::activeTextureDraft(Meshes::Mesh& p_mesh,
+                                        Shaders::Shader& p_shader)
+{
+    unsigned int diffuseNr = 1;
+    unsigned int specularNr = 1;
+    auto& l_textures = p_mesh.m_textures;
+    for (std::size_t i = 0; i < l_textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i);
+        std::string l_number;
+        std::string l_name = l_textures[i].label;
+        if (l_name == "texture_diffuse")
+            l_number = std::to_string(diffuseNr++);
+        else if (l_name == "texture_specular")
+            l_number = std::to_string(specularNr++);
+
+        p_shader.uniform1I(i, ("material." + l_name + l_number).c_str());
+        glBindTexture(GL_TEXTURE_2D, l_textures[i].id);
+    }
+    glActiveTexture(GL_TEXTURE0);
+}
+
 void TextureManager::deactiveTexture()
 {
     glBindTexture(GL_TEXTURE_2D, 0);

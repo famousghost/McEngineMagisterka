@@ -6,9 +6,12 @@ namespace Meshes
 {
 VertexArray::~VertexArray()
 {
-    glDeleteBuffers(VBO_SIZE, m_vboId.data());
-    glDeleteBuffers(1, &m_eboId);
-    glDeleteVertexArrays(1, &m_vaoId);
+    if(not m_vboId.empty())
+    {
+        glDeleteBuffers(VBO_SIZE, m_vboId.data());
+        glDeleteBuffers(1, &m_eboId);
+        glDeleteVertexArrays(1, &m_vaoId);
+    }
 }
 
 void VertexArray::createVbo()
@@ -35,11 +38,6 @@ void VertexArray::unbindVao()
 void VertexArray::createEbo()
 {
     glGenBuffers(1, &m_eboId);
-}
-
-std::size_t VertexArray::getIndiciesSize() const
-{
-    return m_indicies.size();
 }
 
 }//Meshes

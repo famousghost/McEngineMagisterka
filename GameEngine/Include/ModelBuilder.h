@@ -1,5 +1,5 @@
 #pragma once
-#include "Model.h"
+#include "Mesh.h"
 #include <vector>
 #include <memory>
 #include <iostream>
@@ -19,7 +19,7 @@ public:
     virtual void buildIndicies() = 0;
     virtual void reset() = 0;
 
-    virtual std::shared_ptr<Model> getModel() const = 0;
+    virtual std::shared_ptr<Mesh> getMesh() const = 0;
 };
 
 }//Meshes

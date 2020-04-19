@@ -1,6 +1,5 @@
 #pragma once
-#include "Model.h"
-#include "VertexArray.h"
+#include "Mesh.h"
 #include "Shader.h"
 #include <memory>
 #include <string>
@@ -28,9 +27,8 @@ struct Material
 
 struct Object
 {
-    std::shared_ptr<VertexArray> m_vertexArray;
+    std::vector<std::shared_ptr<Mesh>> m_meshes;
     std::shared_ptr<Shaders::Shader> m_shaderProgram;
-    std::vector<std::string> m_textures;
     std::string m_currentAvaiableTexture;
     Material m_material;
     glm::mat4 m_modelMatrix;

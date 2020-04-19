@@ -39,10 +39,8 @@ void RenderManager::draw(Scenes::Scene & p_scene)
     {
         const int WIDTH = 1270;
         const int HEIGHT = 720;
-        auto& l_vertexArray = object.first.m_vertexArray;
         auto& l_shaderProgram = object.first.m_shaderProgram;
 
-        l_vertexArray->bindVao();
         l_shaderProgram->bindShaderProgram();
 
         l_objectManager.processObject(object.first);
@@ -52,14 +50,19 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
         l_camera->rotateCamera();
         l_camera->moveCamera();
+
         l_shaderProgram->uniformVec3(l_camera->getCameraPosition(), "cameraPos");
         l_shaderProgram->uniformMatrix4(l_camera->getViewMatrix(), "view");
         l_shaderProgram->uniformMatrix4(l_projection, "projection");
 
-        glDrawElements(GL_TRIANGLES, l_vertexArray->getIndiciesSize(), GL_UNSIGNED_INT, 0);
+        for(auto& mesh : object.first.m_meshes)
+        {
+            mesh->m_vertexArray.bindVao();
+            glDrawElements(GL_TRIANGLES, mesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
+            mesh->m_vertexArray.unbindVao();
+        }
 
         l_shaderProgram->unbindShaderProgram();
-        l_vertexArray->unbindVao();
     }
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

@@ -15,9 +15,9 @@ public:
     void buildIndicies() override;
     void reset() override;
 
-    std::shared_ptr<Model> getModel() const override;
+    std::shared_ptr<Mesh> getMesh() const override;
 private:
-    std::shared_ptr<Model> m_model;
+    std::shared_ptr<Mesh> m_model;
 };
 
 }//Meshes

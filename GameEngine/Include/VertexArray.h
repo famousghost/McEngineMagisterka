@@ -1,5 +1,5 @@
 #pragma once
-#include "glad.h"
+#include <glad.h>
 #include <vector>
 #include "Logger.h"
 namespace McEngine
@@ -10,8 +10,11 @@ constexpr std::size_t VBO_SIZE = 4;
 class VertexArray
 {
 public:
+    
+
     VertexArray() = default;
     ~VertexArray();
+
     void createVbo();
     template<typename ValuesArray>
     void addValuesToAttribPointer(int p_index, const std::vector<ValuesArray>& p_values)
@@ -29,11 +32,9 @@ public:
 
     void addIndicies(const std::vector<uint32_t>& p_indicies)
     {
-        m_indicies = std::move(p_indicies);
-
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboId);
 
-        bufferDataT(GL_ELEMENT_ARRAY_BUFFER, m_indicies, GL_STATIC_DRAW);
+        bufferDataT(GL_ELEMENT_ARRAY_BUFFER, p_indicies, GL_STATIC_DRAW);
     }
 
     void createVao();
@@ -47,12 +48,9 @@ public:
         glBufferData(p_target, p_array.size() * sizeof(Type), &p_array[0], p_usage);
     }
 
-    std::size_t getIndiciesSize() const;
-
 private:
     GLuint m_vaoId;
     std::vector<GLuint> m_vboId;
-    std::vector<GLuint> m_indicies;
     GLuint m_eboId;
 };
 

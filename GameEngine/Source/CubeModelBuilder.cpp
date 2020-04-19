@@ -5,7 +5,7 @@ namespace McEngine
 namespace Meshes
 {
 CubeModelBuilder::CubeModelBuilder()
-    :m_model(std::make_shared<Model>())
+    :m_model(std::make_shared<Mesh>())
 {
 }
 
@@ -174,10 +174,10 @@ void CubeModelBuilder::buildIndicies()
 
 void CubeModelBuilder::reset()
 {
-    m_model.reset(new Model);
+    m_model.reset(new Mesh);
 }
 
-std::shared_ptr<Model> CubeModelBuilder::getModel() const
+std::shared_ptr<Mesh> CubeModelBuilder::getMesh() const
 {
     return m_model;
 }

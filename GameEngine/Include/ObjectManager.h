@@ -31,7 +31,7 @@ public:
 
     void setObjectPropertiesUniform(Object & p_object);
 
-    void setTexture(Object & p_object, const std::string & p_textureLabel);
+    void setTexture(Mesh & p_mesh, const Texture & p_texture);
 
     void activeTextures();
 

@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "VertexArray.h"
+
 namespace McEngine
 {
 namespace Meshes
@@ -159,13 +161,21 @@ struct ColorValues
     }
 };
 
-struct Model
+struct Texture
+{
+    uint32_t id;
+    std::string label;
+};
+
+struct Mesh
 {
     std::vector<VertexCoords> m_vertexCoords;
     std::vector<ColorValues> m_colorValues;
     std::vector<NormalCoords> m_normalCoords;
     std::vector<TextureCoords> m_textureCoords;
     std::vector<uint32_t> m_indicies;
+    std::vector<Texture> m_textures;
+    VertexArray m_vertexArray;
 };
 
 }//Meshes
