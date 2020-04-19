@@ -5,7 +5,7 @@
 #include "GameManager.h"
 #include "PhysicsManager.h"
 #include "TextureManager.h"
-#include "VAOManager.h"
+#include "PrefabManager.h"
 #include "ShaderManager.h"
 #include "FileManager.h"
 #include "InputManager.h"
@@ -17,7 +17,7 @@ int main()
     McEngine::Editor::EditorManager::getInstance().start();
     McEngine::Scenes::ScenesManager::getInstace().start();
     McEngine::Renderer::RenderManager::getInstance().start();
-    McEngine::Meshes::VAOManager::getInstance().start();
+    McEngine::Meshes::PrefabManager::getInstance().start();
     McEngine::Shaders::ShaderManager::getInstance().start();
     McEngine::Textures::TextureManager::getInstance().start();
     McEngine::Editor::EditorManager::getInstance().start();
@@ -35,7 +35,7 @@ int main()
     McEngine::Editor::EditorManager::getInstance().shutdown();
     McEngine::Textures::TextureManager::getInstance().shutdown();
     McEngine::Shaders::ShaderManager::getInstance().shutdown();
-    McEngine::Meshes::VAOManager::getInstance().shutdown();
+    McEngine::Meshes::PrefabManager::getInstance().shutdown();
     McEngine::Renderer::RenderManager::getInstance().shutdown();
     McEngine::Scenes::ScenesManager::getInstace().shutdown();
     McEngine::Editor::EditorManager::getInstance().shutdown();

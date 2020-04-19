@@ -55,7 +55,7 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfVertexArrayIsAppropriatelyBuild)
         VertexCoords{ -0.5f, 0.5f, 0.5f },
     };
     m_cubeBuilder.buildVertexCoordinatesArray();
-    auto& l_vertCoords = m_cubeBuilder.getModel()->m_vertexCoords;
+    auto& l_vertCoords = m_cubeBuilder.getMesh()->m_vertexCoords;
     ASSERT_TRUE(l_vertCoords.size() > 0);
     ASSERT_TRUE(std::equal(l_vertCoords.begin(), l_vertCoords.end(), l_expectedVertCoords.begin()));
 }
@@ -95,7 +95,7 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfColorValueArrayIsAppropriatelyBuild)
         ColorValues{ 0.0f, 0.0f, 0.0f },
     };
     m_cubeBuilder.buildColorValuesArray();
-    auto& l_colorValues = m_cubeBuilder.getModel()->m_colorValues;
+    auto& l_colorValues = m_cubeBuilder.getMesh()->m_colorValues;
     ASSERT_TRUE(l_colorValues.size() > 0);
     ASSERT_TRUE(std::equal(l_colorValues.begin(), l_colorValues.end(), l_expectedColorValues.begin()));
 }
@@ -135,7 +135,7 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfNormalCoordsArrayIsAppropriatelyBuild)
         NormalCoords{ 0.0f, 1.0f, 0.0f },
     };
     m_cubeBuilder.buildNormalValuesArray();
-    auto& l_normalCoords = m_cubeBuilder.getModel()->m_normalCoords;
+    auto& l_normalCoords = m_cubeBuilder.getMesh()->m_normalCoords;
     ASSERT_TRUE(l_normalCoords.size() > 0);
     ASSERT_TRUE(std::equal(l_normalCoords.begin(), l_normalCoords.end(), l_expectedNormalCoords.begin()));
 }
@@ -175,7 +175,7 @@ TEST_F(CubeModelBuilderTestSuite, CheckIfTextrueCoordsArrayIsAppropriatelyBuild)
         TextureCoords{ 0.0f, 1.0f },
     };
     m_cubeBuilder.buildTextureCoordinatesArray();
-    auto& l_textureCoords = m_cubeBuilder.getModel()->m_textureCoords;
+    auto& l_textureCoords = m_cubeBuilder.getMesh()->m_textureCoords;
     ASSERT_TRUE(l_textureCoords.size() > 0);
     ASSERT_TRUE(std::equal(l_textureCoords.begin(), l_textureCoords.end(), l_expectedTextureCoords.begin()));
 }
