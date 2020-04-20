@@ -121,6 +121,15 @@ void GuiManager::addObject(std::vector<std::string>& p_items)
         l_objManager.addDefaultObject(label, Meshes::DefaultObjectType::CUBE, m_currentShader);
         m_currentObject = label;
     }
+
+    if (ImGui::Button("Add Custom"))
+    {
+        std::string label = "Obj" + std::to_string(++m_elementNumber);
+        std::string l_objectName = "nanosuit.fbx";
+        auto& l_objManager = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager();
+        l_objManager.addCustomObject(label, l_objectName, m_currentShader);
+        m_currentObject = label;
+    }
 }
 
 void GuiManager::objectMoveOperations()

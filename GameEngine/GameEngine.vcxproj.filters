@@ -159,6 +159,9 @@
     <ClCompile Include="Source\PrefabManager.cpp">
       <Filter>Pliki źródłowe\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CustomObjectBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Defines.h">
@@ -271,6 +274,9 @@
     </ClInclude>
     <ClInclude Include="Include\PrefabManager.h">
       <Filter>Pliki nagłówkowe\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CustomObjectBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

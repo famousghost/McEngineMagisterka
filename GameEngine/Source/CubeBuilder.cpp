@@ -8,7 +8,7 @@ namespace McEngine
 namespace Meshes
 {
 
-ObjectBuilder& CubeBuilder::addVertexArrayObject()
+ObjectBuilder& CubeBuilder::addMesh()
 {
     try
     {
@@ -33,11 +33,6 @@ ObjectBuilder& CubeBuilder::addShaderProgram(std::string p_shaderLabel)
         std::string err = ex.what();
         LOG(err, LogType::ERR);
     }
-    return *this;
-}
-
-ObjectBuilder& CubeBuilder::addTextures()
-{
     return *this;
 }
 

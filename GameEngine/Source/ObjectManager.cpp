@@ -1,5 +1,6 @@
 #include "ObjectManager.h"
 #include "CubeModelBuilder.h"
+#include "CustomObjectBuilder.h"
 #include "CubeBuilder.h"
 #include "TextureManager.h"
 #include <algorithm>
@@ -29,10 +30,20 @@ void ObjectManager::addDefaultObject(std::string p_objectName,
     if (p_defaultObjectType == DefaultObjectType::CUBE)
     {
         l_objectBuilder = std::make_unique<Meshes::CubeBuilder>();
-        l_objectBuilder->addShaderProgram(p_shaderLabel).addVertexArrayObject();
+        l_objectBuilder->addShaderProgram(p_shaderLabel).addMesh();
     }
 
     addObject(l_objectBuilder->getObject(), p_objectName);
+}
+
+void ObjectManager::addCustomObject(std::string p_objectLabel,
+                                    std::string p_objectName,
+                                    std::string p_shaderLabel)
+{
+    CustomObjectBuilder l_customObjectBuilder(p_objectName);
+    l_customObjectBuilder.addShaderProgram(p_shaderLabel).addMesh();
+
+    addObject(l_customObjectBuilder.getObject(), p_objectLabel);
 }
 
 void ObjectManager::processObject(Object& p_object)

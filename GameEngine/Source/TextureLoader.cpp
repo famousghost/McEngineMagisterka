@@ -24,14 +24,22 @@ GLuint TextureLoader::loadTexture(std::string p_texturePath,
     int l_width, l_height, l_nrChannels;
 
     glGenTextures(1, &l_textureId);
-    glBindTexture(GL_TEXTURE_2D, l_textureId);
-
-    setTextureParameters(p_wrappingType, p_drawingType);
 
     unsigned char *l_image = stbi_load(p_texturePath.c_str(), &l_width, &l_height, &l_nrChannels, 0);
+
     if (l_image)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, l_width, l_height, 0, GL_RGB, GL_UNSIGNED_BYTE, l_image);
+        GLenum l_format;
+        if (l_nrChannels == 1)
+            l_format = GL_RED;
+        else if (l_nrChannels == 3)
+            l_format = GL_RGB;
+        else if (l_nrChannels == 4)
+            l_format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, l_textureId);
+        setTextureParameters(p_wrappingType, p_drawingType);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, l_width, l_height, 0, l_format, GL_UNSIGNED_BYTE, l_image);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
@@ -42,6 +50,40 @@ GLuint TextureLoader::loadTexture(std::string p_texturePath,
     glBindTexture(GL_TEXTURE_2D, 0);
 
     return l_textureId;
+}
+
+std::vector<Meshes::Texture> TextureLoader::loadMaterialTexture(aiMaterial *p_material, 
+                                                                aiTextureType p_type, 
+                                                                std::string p_typeName,
+                                                                std::string p_directory)
+{
+    std::vector<Meshes::Texture> l_textures;
+    for (unsigned int i = 0; i < p_material->GetTextureCount(p_type); i++)
+    {
+        aiString l_str;
+        p_material->GetTexture(p_type, i, &l_str);
+
+        bool l_skip = false;
+        for (unsigned int j = 0; j < m_loadedTextures.size(); j++)
+        {
+            if (std::strcmp(m_loadedTextures[j].path.data(), l_str.C_Str()) == 0)
+            {
+                l_textures.push_back(m_loadedTextures[j]);
+                l_skip = true;
+                break;
+            }
+        }
+        if (!l_skip)
+        {
+            Meshes::Texture l_texture;
+            l_texture.id = loadTexture(l_str.C_Str(), GL_REPEAT, GL_LINEAR);
+            l_texture.label = p_typeName;
+            l_texture.path = l_str.C_Str();
+            l_textures.push_back(l_texture);
+            m_loadedTextures.push_back(l_texture);
+        }
+    }
+    return l_textures;
 }
 
 void TextureLoader::setTextureParameters(GLenum p_wrappingType, GLenum p_drawingType)

@@ -3,6 +3,9 @@
 #include "CubeModelBuilder.h"
 #include <map>
 #include <string>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 namespace McEngine
 {
@@ -23,6 +26,8 @@ public:
 
     std::shared_ptr<Mesh> getMesh(std::string p_label) const;
 
+    std::vector<std::shared_ptr<Mesh>> getMeshes(std::string p_label) const;
+
 private:
     std::string m_directory;
 
@@ -30,7 +35,13 @@ private:
 
     std::shared_ptr<Mesh> createDefaultMesh(std::string p_label);
 
-    std::shared_ptr<Mesh> loadMesh(std::string p_filePath);
+    std::vector<std::shared_ptr<Mesh>> loadMesh(std::string p_filePath);
+
+    void processNode(aiNode * p_node, 
+                     const aiScene * p_scene, 
+                     std::vector<std::shared_ptr<Mesh>>& p_meshes);
+
+    std::shared_ptr<Mesh> processMesh(aiMesh * p_mesh, const aiScene * p_scene);
 
     void createCube(std::unique_ptr<ModelBuilder>& p_modelBuilder);
 

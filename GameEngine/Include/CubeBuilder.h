@@ -12,9 +12,8 @@ class CubeBuilder : public ObjectBuilder
 {
 public:
     CubeBuilder() = default;
-    ObjectBuilder& addVertexArrayObject() override;
+    ObjectBuilder & addMesh() override;
     ObjectBuilder& addShaderProgram(std::string p_shaderLabel) override;
-    ObjectBuilder& addTextures() override;
     Object getObject() const override;
 private:
     Object m_object;

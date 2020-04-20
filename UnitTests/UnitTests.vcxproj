@@ -90,7 +90,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine\Include;$(SolutionDir)GameEngine\UnitTests;$(SolutionDir)GameEngine\UnitTests\ShaderTestCases;$(SolutionDir)Dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs\KHR;$(SolutionDir)Libs\glad;$(SolutionDir)GameEngine\Include;$(SolutionDir)GameEngine\UnitTests;$(SolutionDir)GameEngine\UnitTests\ShaderTestCases;$(SolutionDir)Dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <StructMemberAlignment>Default</StructMemberAlignment>
     </ClCompile>
     <Link>
@@ -104,7 +104,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine\Include;$(SolutionDir)GameEngine\UnitTests;$(SolutionDir)GameEngine\UnitTests\ShaderTestCases;$(SolutionDir)Dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs\KHR;$(SolutionDir)Libs\glad;$(SolutionDir)GameEngine\Include;$(SolutionDir)GameEngine\UnitTests;$(SolutionDir)GameEngine\UnitTests\ShaderTestCases;$(SolutionDir)Dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>

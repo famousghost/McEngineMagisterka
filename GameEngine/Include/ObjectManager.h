@@ -25,6 +25,10 @@ public:
                           DefaultObjectType p_defaultObjectType, 
                           std::string p_shaderLabel);
 
+    void addCustomObject(std::string p_objectLabel, 
+                         std::string p_objectName, 
+                         std::string p_shaderLabel);
+
     void deleteObject(std::string p_objName);
 
     void processObject(Object & object);

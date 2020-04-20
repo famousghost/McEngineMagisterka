@@ -154,6 +154,7 @@
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CubeBuilder.cpp" />
     <ClCompile Include="Source\CubeModelBuilder.cpp" />
+    <ClCompile Include="Source\CustomObjectBuilder.cpp" />
     <ClCompile Include="Source\EditorManager.cpp" />
     <ClCompile Include="Source\FileManager.cpp" />
     <ClCompile Include="Source\GameManager.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Include\Camera.h" />
     <ClInclude Include="Include\CubeBuilder.h" />
     <ClInclude Include="Include\CubeModelBuilder.h" />
+    <ClInclude Include="Include\CustomObjectBuilder.h" />
     <ClInclude Include="Include\Defines.h" />
     <ClInclude Include="Include\EditorManager.h" />
     <ClInclude Include="Include\FileManager.h" />

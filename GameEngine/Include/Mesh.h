@@ -165,6 +165,7 @@ struct Texture
 {
     uint32_t id;
     std::string label;
+    std::string path;
 };
 
 struct Mesh

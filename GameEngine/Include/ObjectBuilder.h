@@ -10,9 +10,8 @@ class ObjectBuilder
 {
     public:
         virtual ~ObjectBuilder(){}
-        virtual ObjectBuilder& addVertexArrayObject() = 0;
+        virtual ObjectBuilder& addMesh() = 0;
         virtual ObjectBuilder& addShaderProgram(std::string p_shaderLabel) = 0;
-        virtual ObjectBuilder& addTextures() = 0;
 
         virtual Object getObject() const = 0;
 };
