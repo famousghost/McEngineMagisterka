@@ -9,9 +9,24 @@ namespace Meshes
 {
 struct VertexCoords
 {
-    GLfloat x;
-    GLfloat y;
-    GLfloat z;
+    union
+    {
+        GLfloat x;
+        GLfloat r;
+        GLfloat s;
+    };
+    union
+    {
+        GLfloat y;
+        GLfloat g;
+        GLfloat t;
+    };
+    union
+    {
+        GLfloat z;
+        GLfloat b;
+        GLfloat w;
+    };
 
     bool operator==(const VertexCoords& p_verCoords)
     {
@@ -33,8 +48,18 @@ struct VertexCoords
 };
 struct TextureCoords
 {
-    GLfloat x;
-    GLfloat y;
+    union
+    {
+        GLfloat x;
+        GLfloat r;
+        GLfloat s;
+    };
+    union
+    {
+        GLfloat y;
+        GLfloat g;
+        GLfloat t;
+    };
 
     bool operator==(const TextureCoords& p_verCoords)
     {
@@ -56,9 +81,24 @@ struct TextureCoords
 struct NormalCoords
 {
 
-    GLfloat x;
-    GLfloat y;
-    GLfloat z;
+    union
+    {
+        GLfloat x;
+        GLfloat r;
+        GLfloat s;
+    };
+    union
+    {
+        GLfloat y;
+        GLfloat g;
+        GLfloat t;
+    };
+    union
+    {
+        GLfloat z;
+        GLfloat b;
+        GLfloat w;
+    };
 
 
     bool operator==(const NormalCoords& p_verCoords)
@@ -82,9 +122,24 @@ struct NormalCoords
 struct ColorValues
 {
 
-    GLfloat x;
-    GLfloat y;
-    GLfloat z;
+    union
+    {
+        GLfloat x;
+        GLfloat r;
+        GLfloat s;
+    };
+    union
+    {
+        GLfloat y;
+        GLfloat g;
+        GLfloat t;
+    };
+    union
+    {
+        GLfloat z;
+        GLfloat b;
+        GLfloat w;
+    };
 
     bool operator==(const ColorValues& p_verCoords)
     {
