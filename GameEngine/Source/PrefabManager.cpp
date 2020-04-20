@@ -123,7 +123,7 @@ std::shared_ptr<Mesh> PrefabManager::processMesh(aiMesh* p_mesh, const aiScene* 
     std::vector<uint32_t> l_indicies;
     std::vector<Texture> l_textures;
 
-    for(std::size_t i = 0; i < p_mesh->mNumVertices; i++)
+    for(std::size_t i = 0; i < p_mesh->mNumVertices; ++i)
     {
         VertexCoords l_vertCoords;
         l_vertCoords.x = p_mesh->mVertices[i].x;
@@ -173,7 +173,6 @@ std::shared_ptr<Mesh> PrefabManager::processMesh(aiMesh* p_mesh, const aiScene* 
 
     std::vector<Texture> l_heightMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_AMBIENT, "texture_height", m_directory);
     l_mesh->m_textures.insert(l_mesh->m_textures.end(), l_heightMaps.begin(), l_heightMaps.end());
-
 
     auto& l_vertexArray = l_mesh->m_vertexArray;
 

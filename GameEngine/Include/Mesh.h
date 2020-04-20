@@ -7,27 +7,11 @@ namespace McEngine
 {
 namespace Meshes
 {
-typedef float GLfloat;
 struct VertexCoords
 {
-    union
-    {
-        GLfloat x;
-        GLfloat y;
-        GLfloat z;
-    };
-    union
-    {
-        GLfloat r;
-        GLfloat g;
-        GLfloat b;
-    };
-    union
-    {
-        GLfloat s;
-        GLfloat t;
-        GLfloat b;
-    };
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
 
     bool operator==(const VertexCoords& p_verCoords)
     {
@@ -49,21 +33,8 @@ struct VertexCoords
 };
 struct TextureCoords
 {
-    union
-    {
-        GLfloat x;
-        GLfloat y;
-    };
-    union
-    {
-        GLfloat r;
-        GLfloat g;
-    };
-    union
-    {
-        GLfloat s;
-        GLfloat t;
-    };
+    GLfloat x;
+    GLfloat y;
 
     bool operator==(const TextureCoords& p_verCoords)
     {
@@ -84,24 +55,11 @@ struct TextureCoords
 };
 struct NormalCoords
 {
-    union
-    {
-        GLfloat x;
-        GLfloat y;
-        GLfloat z;
-    };
-    union
-    {
-        GLfloat r;
-        GLfloat g;
-        GLfloat b;
-    };
-    union
-    {
-        GLfloat s;
-        GLfloat t;
-        GLfloat b;
-    };
+
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
+
 
     bool operator==(const NormalCoords& p_verCoords)
     {
@@ -123,24 +81,10 @@ struct NormalCoords
 };
 struct ColorValues
 {
-    union
-    {
-        GLfloat x;
-        GLfloat y;
-        GLfloat z;
-    };
-    union
-    {
-        GLfloat r;
-        GLfloat g;
-        GLfloat b;
-    };
-    union
-    {
-        GLfloat s;
-        GLfloat t;
-        GLfloat b;
-    };
+
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
 
     bool operator==(const ColorValues& p_verCoords)
     {

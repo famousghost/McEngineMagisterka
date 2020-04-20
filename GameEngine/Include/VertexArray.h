@@ -38,9 +38,9 @@ public:
     }
 
     void createVao();
+    void createEbo();
     void bindVao();
     void unbindVao();
-    void createEbo();
 
     template<typename Type>
     void bufferDataT(GLenum p_target, const std::vector<Type>& p_array, GLenum p_usage)
