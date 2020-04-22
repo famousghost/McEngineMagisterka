@@ -55,8 +55,8 @@ void TextureManager::activeTexture(GLenum p_textureId,
     }
 }
 
-void TextureManager::activeTextureDraft(Meshes::Mesh& p_mesh,
-                                        Shaders::Shader& p_shader)
+void TextureManager::activeTexturesForCustomObject(Meshes::Mesh& p_mesh,
+                                                   Shaders::Shader& p_shader)
 {
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
@@ -71,7 +71,9 @@ void TextureManager::activeTextureDraft(Meshes::Mesh& p_mesh,
         else if (l_name == "texture_specular")
             l_number = std::to_string(specularNr++);
 
-        p_shader.uniform1I(i, ("material." + l_name + l_number).c_str());
+        std::string l_textureName = "Load texture " + l_name + l_number;
+        LOG(l_textureName, LogType::DBG);
+        p_shader.uniform1I(i, ("textureMaterial." + l_name + l_number).c_str());
         glBindTexture(GL_TEXTURE_2D, l_textures[i].id);
     }
     glActiveTexture(GL_TEXTURE0);

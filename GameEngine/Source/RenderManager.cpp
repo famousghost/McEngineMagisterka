@@ -1,6 +1,7 @@
 #include "RenderManager.h"
 #include "ScenesManager.h"
 #include "GuiManager.h"
+#include "TextureManager.h"
 
 namespace McEngine
 {
@@ -57,6 +58,7 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
         for(auto& mesh : object.first.m_meshes)
         {
+            Textures::TextureManager::getInstance().activeTexturesForCustomObject(*mesh, *l_shaderProgram);
             mesh->m_vertexArray.bindVao();
             glDrawElements(GL_TRIANGLES, mesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
             mesh->m_vertexArray.unbindVao();

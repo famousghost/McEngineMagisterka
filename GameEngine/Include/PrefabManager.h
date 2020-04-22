@@ -30,6 +30,7 @@ public:
 
 private:
     std::string m_directory;
+    std::string m_objectName;
 
     std::map<std::string, std::shared_ptr<Mesh>> m_prefabMeshes;
 

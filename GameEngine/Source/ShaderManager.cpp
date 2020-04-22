@@ -19,6 +19,7 @@ void ShaderManager::start()
     addShader("colorShader", "Shaders/colorCube.vlsl", "Shaders/colorCube.flsl");
     addShader("diffuseShader", "Shaders/lightCube.vlsl", "Shaders/lightCube.flsl");
     addShader("textureShader", "Shaders/textureCube.vlsl", "Shaders/textureCube.flsl");
+    addShader("customObjectShader", "Shaders/textureCustom.vlsl", "Shaders/textureCustom.flsl");
 }
 
 void ShaderManager::shutdown()
@@ -42,6 +43,7 @@ void ShaderManager::resetShaders()
     addShader("colorShader", "Shaders/colorCube.vlsl", "Shaders/colorCube.flsl");
     addShader("diffuseShader", "Shaders/lightCube.vlsl", "Shaders/lightCube.flsl");
     addShader("textureShader", "Shaders/textureCube.vlsl", "Shaders/textureCube.flsl");
+    addShader("customObjectShader", "Shaders/textureCustom.vlsl", "Shaders/textureCustom.flsl");
 }
 
 std::shared_ptr<Shader>& ShaderManager::getShader(const std::string& p_label)

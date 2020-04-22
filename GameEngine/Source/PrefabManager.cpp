@@ -16,7 +16,7 @@ PrefabManager& PrefabManager::getInstance()
 void PrefabManager::start()
 {
     addDefaultMesh();
-    loadMeshFromFile("Objects/nanosuit.fbx");
+    loadMeshFromFile("Objects/nanosuit.obj");
 }
 
 void PrefabManager::shutdown()
@@ -33,11 +33,13 @@ void PrefabManager::addDefaultMesh()
 void PrefabManager::loadMeshFromFile(std::string p_pathFile)
 {
     auto l_fromLastSlash = p_pathFile.find_last_of("/");
-    std::string l_elemetLabel = p_pathFile.substr(l_fromLastSlash + 1);
+    m_objectName = p_pathFile.substr(l_fromLastSlash + 1);
+    auto l_findElem = m_objectName.find_first_of(".");
+    m_objectName = m_objectName.substr(0, l_findElem);
     auto l_meshes = loadMesh(p_pathFile);
     for(std::size_t i = 0; i < l_meshes.size(); ++i)
     {
-        std::string l_label = l_elemetLabel + "_element_" + std::to_string(i);
+        std::string l_label = m_objectName + "_element_" + std::to_string(i);
         m_prefabMeshes.insert(std::make_pair(l_label, l_meshes[i]));
     }
     for (auto& l_prefabMesh : m_prefabMeshes)
@@ -162,16 +164,16 @@ std::shared_ptr<Mesh> PrefabManager::processMesh(aiMesh* p_mesh, const aiScene* 
 
     aiMaterial* l_material = p_scene->mMaterials[p_mesh->mMaterialIndex];
 
-    std::vector<Texture> l_diffuseMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_DIFFUSE, "texture_diffuse", m_directory);
+    std::vector<Texture> l_diffuseMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_DIFFUSE, "texture_diffuse", m_directory, m_objectName);
     l_mesh->m_textures.insert(l_mesh->m_textures.end(), l_diffuseMaps.begin(), l_diffuseMaps.end());
 
-    std::vector<Texture> l_specularMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_SPECULAR, "texture_specular", m_directory);
+    std::vector<Texture> l_specularMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_SPECULAR, "texture_specular", m_directory, m_objectName);
     l_mesh->m_textures.insert(l_mesh->m_textures.end(), l_specularMaps.begin(), l_specularMaps.end());
 
-    std::vector<Texture> l_normalMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_HEIGHT, "texture_normal", m_directory);
+    std::vector<Texture> l_normalMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_HEIGHT, "texture_normal", m_directory, m_objectName);
     l_mesh->m_textures.insert(l_mesh->m_textures.end(), l_normalMaps.begin(), l_normalMaps.end());
 
-    std::vector<Texture> l_heightMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_AMBIENT, "texture_height", m_directory);
+    std::vector<Texture> l_heightMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_AMBIENT, "texture_height", m_directory, m_objectName);
     l_mesh->m_textures.insert(l_mesh->m_textures.end(), l_heightMaps.begin(), l_heightMaps.end());
 
     auto& l_vertexArray = l_mesh->m_vertexArray;

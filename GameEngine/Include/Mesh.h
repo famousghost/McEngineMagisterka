@@ -80,7 +80,6 @@ struct TextureCoords
 };
 struct NormalCoords
 {
-
     union
     {
         GLfloat x;

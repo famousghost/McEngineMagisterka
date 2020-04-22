@@ -22,7 +22,8 @@ public:
     std::vector<Meshes::Texture> loadMaterialTexture(aiMaterial * p_material, 
                                                      aiTextureType p_type,
                                                      std::string p_typeName, 
-                                                     std::string p_directory);
+                                                     std::string p_directory,
+                                                     std::string p_objectName);
 
 private:
     void setTextureParameters(GLenum p_wrappingType, GLenum p_drawingType);

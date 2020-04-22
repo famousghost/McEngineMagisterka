@@ -44,7 +44,8 @@ GLuint TextureLoader::loadTexture(std::string p_texturePath,
     }
     else
     {
-       LOG("Cannot load texture", LogType::WARN);
+        std::string wrnMsg = "Cannot load texture from path " + p_texturePath;
+        LOG(wrnMsg, LogType::WARN);
     }
     stbi_image_free(l_image);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -55,7 +56,8 @@ GLuint TextureLoader::loadTexture(std::string p_texturePath,
 std::vector<Meshes::Texture> TextureLoader::loadMaterialTexture(aiMaterial *p_material, 
                                                                 aiTextureType p_type, 
                                                                 std::string p_typeName,
-                                                                std::string p_directory)
+                                                                std::string p_directory,
+                                                                std::string p_objectName)
 {
     std::vector<Meshes::Texture> l_textures;
     for (unsigned int i = 0; i < p_material->GetTextureCount(p_type); i++)
@@ -75,10 +77,13 @@ std::vector<Meshes::Texture> TextureLoader::loadMaterialTexture(aiMaterial *p_ma
         }
         if (!l_skip)
         {
+            std::string l_texturePath = l_str.C_Str();
+            auto l_fromLastSlash = l_texturePath.find_last_of("\\");
+            l_texturePath = "Textures/" + p_objectName + "/" + l_texturePath.substr(l_fromLastSlash + 1);
             Meshes::Texture l_texture;
-            l_texture.id = loadTexture(l_str.C_Str(), GL_REPEAT, GL_LINEAR);
+            l_texture.id = loadTexture(l_texturePath, GL_REPEAT, GL_LINEAR);
             l_texture.label = p_typeName;
-            l_texture.path = l_str.C_Str();
+            l_texture.path = l_texturePath;
             l_textures.push_back(l_texture);
             m_loadedTextures.push_back(l_texture);
         }

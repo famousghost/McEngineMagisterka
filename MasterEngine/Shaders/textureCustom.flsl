@@ -1,0 +1,58 @@
+#version 330 core
+
+uniform sampler2D texture1;
+struct TextureMaterial
+{
+	sampler2D texture_diffuse1;
+	sampler2D texture_diffuse2;
+	sampler2D texture_diffuse3;
+	sampler2D texture_specular1;
+	sampler2D texture_specular2;
+};
+
+in vec3 normCoords;
+in vec4 wPos;
+in vec2 texturesCoords;
+
+out vec4 fragColor;
+
+struct Material
+{
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	vec3 objectColor;
+};
+
+uniform vec3 cameraPos;
+
+vec4 lightPosition = vec4(0.0, 10.0, 0.0, 1.0);
+
+uniform Material material;
+uniform TextureMaterial textureMaterial;
+
+void main()
+{
+	vec3 ambientLight = material.ambient * material.objectColor;
+	vec3 diffuseLight = material.diffuse;
+	vec3 specularLight = material.specular;
+	vec4 lightPos = lightPosition - wPos;
+	float lightColor = max(dot(vec3(lightPos), normCoords), 0.0);
+	
+	diffuseLight *= lightColor * material.objectColor;
+	
+	vec3 lightReflected = 2 * max(dot(vec3(lightPos), normCoords), 0.0) * normCoords;
+	vec4 cameraWorldPostion = wPos - vec4(cameraPos, 1.0);
+	
+	float specularColor = pow(max(dot(vec3(cameraWorldPostion),lightReflected), 0.0), 32.0);
+	
+	specularLight *= specularColor * material.objectColor;
+	
+	vec4 tex_diffuse1 = texture(textureMaterial.texture_diffuse1, texturesCoords);
+	vec4 tex_diffuse2 = texture(textureMaterial.texture_diffuse2, texturesCoords);
+	vec4 tex_diffuse3 = texture(textureMaterial.texture_diffuse3, texturesCoords);
+	vec4 tex_specular1 = texture(textureMaterial.texture_specular1, texturesCoords);
+	vec4 tex_specular2 = texture(textureMaterial.texture_specular2, texturesCoords);
+	
+	fragColor = (tex_diffuse1 + tex_diffuse2 + tex_diffuse3 + tex_specular1 + tex_specular2) * vec4(ambientLight + diffuseLight + specularLight, 1.0);
+}
