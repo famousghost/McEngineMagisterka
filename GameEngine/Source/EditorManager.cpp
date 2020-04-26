@@ -3,7 +3,6 @@
 #include <vector>
 #include "Shader.h"
 #include "CubeBuilder.h"
-#include "CubeModelBuilder.h"
 #include "ObjectManager.h"
 #include "ScenesManager.h"
 #include "RenderManager.h"
@@ -35,6 +34,7 @@ void EditorManager::editorLoop()
 
     auto& scene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
 
+    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 
     while (scene->getWindow().isOpen())

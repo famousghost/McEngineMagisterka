@@ -1,6 +1,6 @@
 #pragma once
 #include "VertexArray.h"
-#include "CubeModelBuilder.h"
+#include "Mesh.h"
 #include <map>
 #include <string>
 #include <assimp/Importer.hpp>
@@ -34,8 +34,6 @@ private:
 
     std::map<std::string, std::shared_ptr<Mesh>> m_prefabMeshes;
 
-    std::shared_ptr<Mesh> createDefaultMesh(std::string p_label);
-
     std::vector<std::shared_ptr<Mesh>> loadMesh(std::string p_filePath);
 
     void processNode(aiNode * p_node, 
@@ -43,8 +41,6 @@ private:
                      std::vector<std::shared_ptr<Mesh>>& p_meshes);
 
     std::shared_ptr<Mesh> processMesh(aiMesh * p_mesh, const aiScene * p_scene);
-
-    void createCube(std::unique_ptr<ModelBuilder>& p_modelBuilder);
 
     PrefabManager() = default;
     ~PrefabManager() = default;

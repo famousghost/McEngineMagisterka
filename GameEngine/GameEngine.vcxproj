@@ -152,9 +152,11 @@
     <ClCompile Include="..\Libs\ImGUI\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\Libs\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\ConeBuilder.cpp" />
     <ClCompile Include="Source\CubeBuilder.cpp" />
-    <ClCompile Include="Source\CubeModelBuilder.cpp" />
-    <ClCompile Include="Source\CustomObjectBuilder.cpp" />
+    <ClCompile Include="Source\CylinderBuilder.cpp" />
+    <ClCompile Include="Source\MonkeyHeadBuilder.cpp" />
+    <ClCompile Include="Source\NanoSuitBuilder.cpp" />
     <ClCompile Include="Source\EditorManager.cpp" />
     <ClCompile Include="Source\FileManager.cpp" />
     <ClCompile Include="Source\GameManager.cpp" />
@@ -170,9 +172,11 @@
     <ClCompile Include="Source\Shader.cpp" />
     <ClCompile Include="Source\ShaderLoader.cpp" />
     <ClCompile Include="Source\ShaderManager.cpp" />
+    <ClCompile Include="Source\SphereBuilder.cpp" />
     <ClCompile Include="Source\TextureLoader.cpp" />
     <ClCompile Include="Source\TextureManager.cpp" />
     <ClCompile Include="Source\PrefabManager.cpp" />
+    <ClCompile Include="Source\TorusBuilder.cpp" />
     <ClCompile Include="Source\VertexArray.cpp" />
     <ClCompile Include="Source\Window.cpp" />
   </ItemGroup>
@@ -186,9 +190,11 @@
     <ClInclude Include="..\Libs\ImGUI\imstb_textedit.h" />
     <ClInclude Include="..\Libs\ImGUI\imstb_truetype.h" />
     <ClInclude Include="Include\Camera.h" />
+    <ClInclude Include="Include\ConeBuilder.h" />
     <ClInclude Include="Include\CubeBuilder.h" />
-    <ClInclude Include="Include\CubeModelBuilder.h" />
-    <ClInclude Include="Include\CustomObjectBuilder.h" />
+    <ClInclude Include="Include\CylinderBuilder.h" />
+    <ClInclude Include="Include\MonkeyHeadBuilder.h" />
+    <ClInclude Include="Include\NanoSuitBuilder.h" />
     <ClInclude Include="Include\Defines.h" />
     <ClInclude Include="Include\EditorManager.h" />
     <ClInclude Include="Include\FileManager.h" />
@@ -208,11 +214,13 @@
     <ClInclude Include="Include\Shader.h" />
     <ClInclude Include="Include\ShaderLoader.h" />
     <ClInclude Include="Include\ShaderManager.h" />
+    <ClInclude Include="Include\SphereBuilder.h" />
     <ClInclude Include="Include\STB.h" />
     <ClInclude Include="Include\stb_image.h" />
     <ClInclude Include="Include\TextureLoader.h" />
     <ClInclude Include="Include\TextureManager.h" />
     <ClInclude Include="Include\PrefabManager.h" />
+    <ClInclude Include="Include\TorusBuilder.h" />
     <ClInclude Include="Include\VertexArray.h" />
     <ClInclude Include="Include\Window.h" />
   </ItemGroup>

@@ -1,5 +1,4 @@
-#include "CubeBuilder.h"
-#include "Logger.h"
+#include "CylinderBuilder.h"
 #include "PrefabManager.h"
 #include "ShaderManager.h"
 
@@ -7,12 +6,11 @@ namespace McEngine
 {
 namespace Meshes
 {
-
-ObjectBuilder& CubeBuilder::addMesh()
+ObjectBuilder & CylinderBuilder::addMesh()
 {
     try
     {
-        m_object.m_meshes.push_back(PrefabManager::getInstance().getMesh("Cube"));
+        m_object.m_meshes.push_back(PrefabManager::getInstance().getMesh("Cylinder"));
     }
     catch (std::exception& ex)
     {
@@ -21,8 +19,7 @@ ObjectBuilder& CubeBuilder::addMesh()
     }
     return *this;
 }
-
-ObjectBuilder& CubeBuilder::addShaderProgram(std::string p_shaderLabel)
+ObjectBuilder & CylinderBuilder::addShaderProgram(std::string p_shaderLabel)
 {
     try
     {
@@ -35,11 +32,10 @@ ObjectBuilder& CubeBuilder::addShaderProgram(std::string p_shaderLabel)
     }
     return *this;
 }
-
-Object CubeBuilder::getObject() const
+Object CylinderBuilder::getObject() const
 {
     return m_object;
 }
 
 }//Meshes
-}//GameEngine
+}//McEngine

@@ -9,8 +9,9 @@ namespace McEngine
 namespace GameWindow
 {
 Window::Window(const char* p_title, int p_width, int p_height)
+    :m_width(p_width), m_height(p_height)
 {
-    createWindow(p_title, p_width, p_height);
+    createWindow(p_title, m_width, m_height);
 }
 
 Window::~Window()

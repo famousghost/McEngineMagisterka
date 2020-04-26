@@ -14,6 +14,7 @@ void GuiManager::start()
 {
     m_currentShader = "defaultShader";
     m_currentObject = "";
+    m_currentObjectToAdd = "cube";
     m_currentTexture = "texture";
     m_objectElementSize = 0;
     m_elementNumber = 0;
@@ -52,7 +53,9 @@ void GuiManager::meshGui()
     static std::vector<std::string> items;
     static std::vector<std::string> shadersItems = {"defaultShader", "colorShader", "diffuseShader", "textureShader", "customObjectShader"};
     static std::vector<std::string> textureItems = {"texture", "texture2", "texture3"};
+    static std::vector<std::string> objectsToAdd = { "cube", "sphere", "cylinder", "cone", "torus", "monkeyhead", "nanosuit" };
     objectChoosingComboBox(items);
+    choosingObjectToAddComboBox(objectsToAdd);
     updateShaderComboBox(shadersItems);
     updateTextureComboBox(textureItems);
     objectMoveOperations();
@@ -114,20 +117,11 @@ void GuiManager::addObject(std::vector<std::string>& p_items)
         m_objectElementSize = l_objects.size();
     }
 
-    if (ImGui::Button("Add Cube"))
+    if (ImGui::Button("Add Object"))
     {
         std::string label = "Obj" + std::to_string(++m_elementNumber);
         auto& l_objManager = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager();
-        l_objManager.addDefaultObject(label, Meshes::DefaultObjectType::CUBE, m_currentShader);
-        m_currentObject = label;
-    }
-
-    if (ImGui::Button("Add Custom"))
-    {
-        std::string label = "Obj" + std::to_string(++m_elementNumber);
-        std::string l_objectName = "nanosuit";
-        auto& l_objManager = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager();
-        l_objManager.addCustomObject(label, l_objectName, m_currentShader);
+        l_objManager.addCustomObject(label, m_currentObjectToAdd, m_currentShader);
         m_currentObject = label;
     }
 }
@@ -214,6 +208,24 @@ void GuiManager::updateShaderComboBox(std::vector<std::string>& p_shaderItems)
             if (ImGui::Selectable(p_shaderItems.at(i).c_str(), is_selected))
             {
                 m_currentShader = p_shaderItems.at(i);
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
+}
+
+void GuiManager::choosingObjectToAddComboBox(std::vector<std::string>& p_shaderItems)
+{
+    if (ImGui::BeginCombo("##objectToAddCombo", m_currentObjectToAdd.c_str()))
+    {
+        for (int i = 0; i < p_shaderItems.size(); i++)
+        {
+            bool is_selected = (m_currentObjectToAdd == p_shaderItems.at(i));
+            if (ImGui::Selectable(p_shaderItems.at(i).c_str(), is_selected))
+            {
+                m_currentObjectToAdd = p_shaderItems.at(i);
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();
             }

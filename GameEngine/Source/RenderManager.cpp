@@ -26,6 +26,7 @@ void RenderManager::shutdown()
 void RenderManager::draw(Scenes::Scene & p_scene)
 {
     auto& l_camera = Scenes::ScenesManager::getInstace().getCurrentAvaiableCamera();
+    auto& l_window = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getWindow();
     auto& l_objectManager = p_scene.getObjectManager();
     p_scene.getWindow().poolEvents();
     glClearColor(p_scene.m_backgroundColor.x, 
@@ -36,10 +37,12 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    int l_width;
+    int l_height;
+    glfwGetWindowSize(l_window.getGlfwWindow(), &l_width, &l_height);
+
     for(auto& object : l_objectManager.getObjects())
     {
-        const int WIDTH = 1270;
-        const int HEIGHT = 720;
         auto& l_shaderProgram = object.first.m_shaderProgram;
 
         l_shaderProgram->bindShaderProgram();
@@ -47,7 +50,7 @@ void RenderManager::draw(Scenes::Scene & p_scene)
         l_objectManager.processObject(object.first);
 
         glm::mat4 l_projection;
-        l_projection = glm::perspective(glm::radians(45.0f), static_cast<float>(WIDTH) / static_cast<float>(HEIGHT), 0.1f, 100.0f);
+        l_projection = glm::perspective(glm::radians(45.0f), static_cast<float>(l_width) / static_cast<float>(l_height), 0.1f, 100.0f);
 
         l_camera->rotateCamera();
         l_camera->moveCamera();
@@ -60,7 +63,7 @@ void RenderManager::draw(Scenes::Scene & p_scene)
         {
             Textures::TextureManager::getInstance().activeTexturesForCustomObject(*mesh, *l_shaderProgram);
             mesh->m_vertexArray.bindVao();
-            glDrawElements(GL_TRIANGLES, mesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_LINES, mesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
             mesh->m_vertexArray.unbindVao();
         }
 

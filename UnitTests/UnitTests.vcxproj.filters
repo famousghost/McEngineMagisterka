@@ -27,8 +27,5 @@
     <ClCompile Include="googletest\googletest\src\gtest-all.cc">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="CubeModelBuilderTestSuite.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

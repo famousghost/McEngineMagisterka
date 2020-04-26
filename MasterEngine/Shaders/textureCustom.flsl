@@ -27,6 +27,7 @@ struct Material
 uniform vec3 cameraPos;
 
 vec4 lightPosition = vec4(0.0, 10.0, 0.0, 1.0);
+float shinness = 64.0;
 
 uniform Material material;
 uniform TextureMaterial textureMaterial;
@@ -44,7 +45,7 @@ void main()
 	vec3 lightReflected = 2 * max(dot(vec3(lightPos), normCoords), 0.0) * normCoords;
 	vec4 cameraWorldPostion = wPos - vec4(cameraPos, 1.0);
 	
-	float specularColor = pow(max(dot(vec3(cameraWorldPostion),lightReflected), 0.0), 32.0);
+	float specularColor = pow(max(dot(vec3(cameraWorldPostion),lightReflected), 0.0), shinness);
 	
 	specularLight *= specularColor * material.objectColor;
 	

@@ -1,6 +1,5 @@
 #include "Scene.h"
 #include "CubeBuilder.h"
-#include "CubeModelBuilder.h"
 
 namespace McEngine
 {

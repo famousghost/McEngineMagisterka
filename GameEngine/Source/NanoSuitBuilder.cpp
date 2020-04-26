@@ -1,17 +1,16 @@
-#include "CustomObjectBuilder.h"
+#include "NanoSuitBuilder.h"
 #include "PrefabManager.h"
 #include "ShaderManager.h"
-
 
 namespace McEngine
 {
 namespace Meshes
 {
-CustomObjectBuilder::CustomObjectBuilder(std::string p_filePath)
+NanoSuitBuilder::NanoSuitBuilder(std::string p_filePath)
     :m_filePath(p_filePath)
     {}
 
-ObjectBuilder & McEngine::Meshes::CustomObjectBuilder::addMesh()
+ObjectBuilder & NanoSuitBuilder::addMesh()
 {
     try
     {
@@ -26,7 +25,7 @@ ObjectBuilder & McEngine::Meshes::CustomObjectBuilder::addMesh()
     return *this;
 }
 
-ObjectBuilder & McEngine::Meshes::CustomObjectBuilder::addShaderProgram(std::string p_shaderLabel)
+ObjectBuilder & NanoSuitBuilder::addShaderProgram(std::string p_shaderLabel)
 {
     try
     {
@@ -40,7 +39,7 @@ ObjectBuilder & McEngine::Meshes::CustomObjectBuilder::addShaderProgram(std::str
     return *this;
 }
 
-Object McEngine::Meshes::CustomObjectBuilder::getObject() const
+Object NanoSuitBuilder::getObject() const
 {
     return m_object;
 }

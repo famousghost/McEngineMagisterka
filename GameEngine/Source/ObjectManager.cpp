@@ -1,8 +1,12 @@
 #include "ObjectManager.h"
-#include "CubeModelBuilder.h"
-#include "CustomObjectBuilder.h"
-#include "CubeBuilder.h"
 #include "TextureManager.h"
+#include "SphereBuilder.h"
+#include "NanoSuitBuilder.h"
+#include "CubeBuilder.h"
+#include "ConeBuilder.h"
+#include "TorusBuilder.h"
+#include "CylinderBuilder.h"
+#include "MonkeyHeadBuilder.h"
 #include <algorithm>
 
 namespace McEngine
@@ -40,10 +44,44 @@ void ObjectManager::addCustomObject(std::string p_objectLabel,
                                     std::string p_objectName,
                                     std::string p_shaderLabel)
 {
-    CustomObjectBuilder l_customObjectBuilder(p_objectName);
-    l_customObjectBuilder.addShaderProgram(p_shaderLabel).addMesh();
+    std::unique_ptr<ObjectBuilder> l_objectBuilder;
+    if(p_objectName == "nanosuit")
+    {
+        l_objectBuilder = std::make_unique<NanoSuitBuilder>(p_objectName);
+        l_objectBuilder->addShaderProgram(p_shaderLabel).addMesh();
+    }
+    else if (p_objectName == "cube")
+    {
+        l_objectBuilder = std::make_unique<CubeBuilder>();
+        l_objectBuilder->addShaderProgram(p_shaderLabel).addMesh();
+    }
+    else if (p_objectName == "sphere")
+    {
+        l_objectBuilder = std::make_unique<SphereBuilder>();
+        l_objectBuilder->addShaderProgram(p_shaderLabel).addMesh();
+    }
+    else if (p_objectName == "cone")
+    {
+        l_objectBuilder = std::make_unique<ConeBuilder>();
+        l_objectBuilder->addShaderProgram(p_shaderLabel).addMesh();
+    }
+    else if (p_objectName == "torus")
+    {
+        l_objectBuilder = std::make_unique<TorusBuilder>();
+        l_objectBuilder->addShaderProgram(p_shaderLabel).addMesh();
+    }
+    else if (p_objectName == "monkeyhead")
+    {
+        l_objectBuilder = std::make_unique<MonkeyHeadBuilder>();
+        l_objectBuilder->addShaderProgram(p_shaderLabel).addMesh();
+    }
+    else if (p_objectName == "cylinder")
+    {
+        l_objectBuilder = std::make_unique<CylinderBuilder>();
+        l_objectBuilder->addShaderProgram(p_shaderLabel).addMesh();
+    }
 
-    addObject(l_customObjectBuilder.getObject(), p_objectLabel);
+    addObject(l_objectBuilder->getObject(), p_objectLabel);
 }
 
 void ObjectManager::processObject(Object& p_object)

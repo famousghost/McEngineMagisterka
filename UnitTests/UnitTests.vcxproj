@@ -142,7 +142,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CubeModelBuilderTestSuite.cpp" />
     <ClCompile Include="googletest\googlemock\src\gmock-all.cc" />
     <ClCompile Include="googletest\googlemock\src\gmock_main.cc" />
     <ClCompile Include="googletest\googletest\src\gtest-all.cc" />

@@ -33,6 +33,7 @@ private:
     void initImGui();
     std::size_t m_objectElementSize;
     std::string m_currentObject;
+    std::string m_currentObjectToAdd;
     std::string m_currentShader;
     std::string m_currentTexture;
     std::size_t m_elementNumber;
@@ -42,6 +43,7 @@ private:
     void setObjectProperties();
     void deleteObject(std::vector<std::string>& p_items);
     void updateShaderComboBox(std::vector<std::string>& p_shaderItems);
+    void choosingObjectToAddComboBox(std::vector<std::string>& p_shaderItems);
     void updateTextureComboBox(std::vector<std::string>& p_textureItems);
     void objectChoosingComboBox(std::vector<std::string>& p_items);
     void updateObjectShader();

@@ -34,6 +34,8 @@ public:
 
 private:
     GLFWwindow* m_window;
+    GLuint m_width;
+    GLuint m_height;
 };
 
 } // GameWindow
