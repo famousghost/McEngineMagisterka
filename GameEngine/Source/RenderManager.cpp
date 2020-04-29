@@ -26,52 +26,70 @@ void RenderManager::shutdown()
 void RenderManager::draw(Scenes::Scene & p_scene)
 {
     auto& l_camera = Scenes::ScenesManager::getInstace().getCurrentAvaiableCamera();
-    auto& l_window = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getWindow();
     auto& l_objectManager = p_scene.getObjectManager();
+
     p_scene.getWindow().poolEvents();
     glClearColor(p_scene.m_backgroundColor.x, 
                  p_scene.m_backgroundColor.y, 
                  p_scene.m_backgroundColor.z, 
                  p_scene.m_backgroundColor.w);
 
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    drawObjects(p_scene);
+
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    p_scene.getWindow().swapBuffer();
+}
+
+void RenderManager::drawObjects(Scenes::Scene & p_scene)
+{
+    auto& l_camera = Scenes::ScenesManager::getInstace().getCurrentAvaiableCamera();
+    auto& l_objectManager = p_scene.getObjectManager();
+    for (auto& object : l_objectManager.getObjects())
+    {
+        auto& l_object = object.first;
+        auto& l_shaderProgram = *l_object.m_shaderProgram;
+
+        l_shaderProgram.bindShaderProgram();
+
+        l_objectManager.update(l_object);
+        l_camera->update(l_shaderProgram, "cameraPos", "view");
+        setProjectionMatrix(45.0f, 0.1f, 100.0f, l_shaderProgram);
+
+        drawMeshes(l_object);
+
+        l_shaderProgram.unbindShaderProgram();
+    }
+}
+
+void RenderManager::drawMeshes(Meshes::Object& p_object)
+{
+    for (auto& mesh : p_object.m_meshes)
+    {
+        Textures::TextureManager::getInstance().activeTexturesForCustomObject(*mesh, *p_object.m_shaderProgram);
+        mesh->m_vertexArray.bindVao();
+        glDrawElements(GL_TRIANGLES, mesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
+        mesh->m_vertexArray.unbindVao();
+    }
+}
+
+void RenderManager::setProjectionMatrix(float p_fov, 
+                                        float p_near, 
+                                        float p_far,
+                                        Shaders::Shader& p_shaderProgram)
+{
+    auto& l_window = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getWindow();
     int l_width;
     int l_height;
     glfwGetWindowSize(l_window.getGlfwWindow(), &l_width, &l_height);
 
-    for(auto& object : l_objectManager.getObjects())
-    {
-        auto& l_shaderProgram = object.first.m_shaderProgram;
-
-        l_shaderProgram->bindShaderProgram();
-
-        l_objectManager.processObject(object.first);
-
-        glm::mat4 l_projection;
-        l_projection = glm::perspective(glm::radians(45.0f), static_cast<float>(l_width) / static_cast<float>(l_height), 0.1f, 100.0f);
-
-        l_camera->rotateCamera();
-        l_camera->moveCamera();
-
-        l_shaderProgram->uniformVec3(l_camera->getCameraPosition(), "cameraPos");
-        l_shaderProgram->uniformMatrix4(l_camera->getViewMatrix(), "view");
-        l_shaderProgram->uniformMatrix4(l_projection, "projection");
-
-        for(auto& mesh : object.first.m_meshes)
-        {
-            Textures::TextureManager::getInstance().activeTexturesForCustomObject(*mesh, *l_shaderProgram);
-            mesh->m_vertexArray.bindVao();
-            glDrawElements(GL_LINES, mesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
-            mesh->m_vertexArray.unbindVao();
-        }
-
-        l_shaderProgram->unbindShaderProgram();
-    }
-
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    p_scene.getWindow().swapBuffer();
+    glm::mat4 l_projection;
+    l_projection = glm::perspective(glm::radians(p_fov), 
+                                    static_cast<float>(l_width) / static_cast<float>(l_height), 
+                                    p_near, 
+                                    p_far);
+    p_shaderProgram.uniformMatrix4(l_projection, "projection");
 }
 
 RenderManager & RenderManager::getInstance()

@@ -2,40 +2,33 @@
 #include <glad.h>
 #include <vector>
 #include "Logger.h"
+#include <matrix_transform.hpp>
+#include <type_ptr.hpp>
+
 namespace McEngine
 {
 namespace Meshes
 {
-constexpr std::size_t VBO_SIZE = 4;
+struct Vertex
+{
+    glm::vec3 m_position;
+    glm::vec3 m_normalCoords;
+    glm::vec2 m_textureCoords;
+};
+
 class VertexArray
 {
 public:
     
 
-    VertexArray() = default;
+    VertexArray();
     ~VertexArray();
 
     void createVbo();
-    template<typename Type>
-    void addValuesToAttribPointer(int p_index, const std::vector<Type>& p_values)
-    {
-        glBindBuffer(GL_ARRAY_BUFFER, m_vboId.at(p_index));
 
-        bufferDataT(GL_ARRAY_BUFFER, p_values, GL_STATIC_DRAW);
+    void addValuesToAttribPointer(const std::vector<Vertex>& p_values);
 
-        glVertexAttribPointer(p_index, sizeof(Type) / sizeof(p_values[0].x), GL_FLOAT, GL_FALSE, sizeof(Type), (GLvoid*)0);
-
-        glEnableVertexAttribArray(p_index);
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-
-    void addIndicies(const std::vector<uint32_t>& p_indicies)
-    {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboId);
-
-        bufferDataT(GL_ELEMENT_ARRAY_BUFFER, p_indicies, GL_STATIC_DRAW);
-    }
+    void addIndicies(const std::vector<unsigned int>& p_indicies);
 
     template<typename Type>
     void bufferDataT(GLenum p_target, const std::vector<Type>& p_array, GLenum p_usage)
@@ -50,7 +43,7 @@ public:
 
 private:
     GLuint m_vaoId;
-    std::vector<GLuint> m_vboId;
+    GLuint m_vboId;
     GLuint m_eboId;
 };
 

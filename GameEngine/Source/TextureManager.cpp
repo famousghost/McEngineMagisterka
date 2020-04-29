@@ -71,8 +71,6 @@ void TextureManager::activeTexturesForCustomObject(Meshes::Mesh& p_mesh,
         else if (l_name == "texture_specular")
             l_number = std::to_string(specularNr++);
 
-        std::string l_textureName = "Load texture " + l_name + l_number;
-        LOG(l_textureName, LogType::DBG);
         p_shader.uniform1I(i, ("textureMaterial." + l_name + l_number).c_str());
         glBindTexture(GL_TEXTURE_2D, l_textures[i].id);
     }

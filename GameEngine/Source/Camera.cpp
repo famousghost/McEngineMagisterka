@@ -63,6 +63,16 @@ void Camera::rotateCamera()
     m_cameraFront = l_newFront;
 }
 
+void Camera::update(Shaders::Shader& p_shaderProgram, 
+                    std::string p_cameraPostionUniform,
+                    std::string p_viewMatrixUniform)
+{
+    rotateCamera();
+    moveCamera();
+    p_shaderProgram.uniformVec3(m_cameraPosition, p_cameraPostionUniform);
+    p_shaderProgram.uniformMatrix4(m_view, p_viewMatrixUniform);
+}
+
 glm::vec3 Camera::getCameraPosition() const
 {
     return m_cameraPosition;

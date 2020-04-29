@@ -1,6 +1,7 @@
 #pragma once
 #include <matrix_transform.hpp>
 #include <type_ptr.hpp>
+#include "Shader.h"
 
 namespace McEngine
 {
@@ -15,6 +16,10 @@ public:
     void moveCamera();
 
     void rotateCamera();
+
+    void update(Shaders::Shader & p_shaderProgram, 
+                std::string p_cameraPostionUniform, 
+                std::string p_viewMatrixUniform);
 
     glm::vec3 getCameraPosition() const;
 

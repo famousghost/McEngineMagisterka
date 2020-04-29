@@ -48,7 +48,7 @@ void GuiManager::meshGui()
     ImGui::NewFrame();
 
     ImGui::Begin("McEngine");
-    ImGui::Text("The best engine on whole world");
+    ImGui::Text("Simple game engine");
 
     static std::vector<std::string> items;
     static std::vector<std::string> shadersItems = {"defaultShader", "colorShader", "diffuseShader", "textureShader", "customObjectShader"};
@@ -60,6 +60,7 @@ void GuiManager::meshGui()
     updateTextureComboBox(textureItems);
     objectMoveOperations();
     setObjectProperties();
+
     auto& scene =
         Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
     ImGui::ColorEdit3("Change Color", (float*)&scene->m_backgroundColor);
@@ -68,6 +69,15 @@ void GuiManager::meshGui()
     deleteObject(items);
     updateObjectShader();
     updateObjectTetxture();
+
+    if (ImGui::Button("Show Raw Mesh"))
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    if (ImGui::Button("Fill Mesh"))
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
 
     ImGui::SameLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);

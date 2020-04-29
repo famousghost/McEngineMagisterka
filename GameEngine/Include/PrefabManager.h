@@ -22,7 +22,9 @@ public:
 
     void addDefaultMesh();
 
-    void loadMeshFromFile(std::string p_pathFile);
+    void loadMeshFromFile(std::string p_filePath);
+
+    std::string fetchObjectName(std::string p_filePath);
 
     std::shared_ptr<Mesh> getMesh(std::string p_label) const;
 
@@ -40,7 +42,17 @@ private:
                      const aiScene * p_scene, 
                      std::vector<std::shared_ptr<Mesh>>& p_meshes);
 
+    void loadTextures(std::shared_ptr<Mesh>& p_prefabMesh, aiMesh * p_mesh, const aiScene * p_scene);
+
+    void setVertexArrayForMesh(std::shared_ptr<Mesh>& p_mesh);
+
+    void fillMeshValues(std::shared_ptr<Mesh>& p_prefabMesh, aiMesh * p_mesh);
+
+    void fillIndicies(std::shared_ptr<Mesh>& p_prefabMesh, aiMesh * p_mesh);
+
     std::shared_ptr<Mesh> processMesh(aiMesh * p_mesh, const aiScene * p_scene);
+
+    void addMeshesToMap(std::vector<std::shared_ptr<Mesh>>& p_meshes);
 
     PrefabManager() = default;
     ~PrefabManager() = default;

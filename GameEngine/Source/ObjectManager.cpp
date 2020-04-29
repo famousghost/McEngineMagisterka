@@ -26,20 +26,6 @@ void ObjectManager::addObject(const Object& p_object, std::string p_objName)
     m_objects.push_back(std::make_pair(p_object, p_objName));
 }
 
-void ObjectManager::addDefaultObject(std::string p_objectName, 
-                                     DefaultObjectType p_defaultObjectType,
-                                     std::string p_shaderLabel)
-{
-    std::unique_ptr<ObjectBuilder> l_objectBuilder;
-    if (p_defaultObjectType == DefaultObjectType::CUBE)
-    {
-        l_objectBuilder = std::make_unique<Meshes::CubeBuilder>();
-        l_objectBuilder->addShaderProgram(p_shaderLabel).addMesh();
-    }
-
-    addObject(l_objectBuilder->getObject(), p_objectName);
-}
-
 void ObjectManager::addCustomObject(std::string p_objectLabel,
                                     std::string p_objectName,
                                     std::string p_shaderLabel)
@@ -84,26 +70,27 @@ void ObjectManager::addCustomObject(std::string p_objectLabel,
     addObject(l_objectBuilder->getObject(), p_objectLabel);
 }
 
-void ObjectManager::processObject(Object& p_object)
+void ObjectManager::update(Object& p_object)
 {
-    auto& textureManager = Textures::TextureManager::getInstance();
+    setMaterialForObjectObject(p_object);
 
-    setObjectPropertiesUniform(p_object);
+    setModelMatrixForObject(p_object);
 
+    activeTextures(p_object);
+}
+
+void ObjectManager::setModelMatrixForObject(Object& p_object)
+{
     glm::mat4 l_model;
     l_model = glm::translate(l_model, p_object.m_position);
     l_model = glm::rotate(l_model, glm::radians(p_object.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
     l_model = glm::rotate(l_model, glm::radians(p_object.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));
     l_model = glm::rotate(l_model, glm::radians(p_object.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
     l_model = glm::scale(l_model, p_object.m_scale);
-
-    textureManager.setTextureIdInShader("textureShader");
-    textureManager.activeTexture(GL_TEXTURE0, p_object.m_currentAvaiableTexture);
-
     p_object.m_shaderProgram->uniformMatrix4(l_model, "model");
 }
 
-void ObjectManager::setObjectPropertiesUniform(Object& p_object)
+void ObjectManager::setMaterialForObjectObject(Object& p_object)
 {
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_ambientLight, "material.ambient");
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_diffuseLight, "material.diffuse");
@@ -117,9 +104,11 @@ void ObjectManager::setTexture(Mesh& p_mesh,
     p_mesh.m_textures.push_back(p_texture);
 }
 
-void ObjectManager::activeTextures()
+void ObjectManager::activeTextures(Object& p_object)
 {
-    
+    auto& textureManager = Textures::TextureManager::getInstance();
+    textureManager.setTextureIdInShader("textureShader");
+    textureManager.activeTexture(GL_TEXTURE0, p_object.m_currentAvaiableTexture);
 }
 
 void ObjectManager::deleteObject(std::string p_objName)

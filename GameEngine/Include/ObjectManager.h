@@ -21,27 +21,24 @@ class ObjectManager
 public:
     void addObject(const Object& p_object, std::string p_objName);
 
-    void addDefaultObject(std::string p_objectName, 
-                          DefaultObjectType p_defaultObjectType, 
-                          std::string p_shaderLabel);
-
     void addCustomObject(std::string p_objectLabel, 
                          std::string p_objectName, 
                          std::string p_shaderLabel);
 
     void deleteObject(std::string p_objName);
 
-    void processObject(Object & object);
-
-    void setObjectPropertiesUniform(Object & p_object);
+    void update(Object & object);
 
     void setTexture(Mesh & p_mesh, const Texture & p_texture);
 
-    void activeTextures();
+    void activeTextures(Object& p_object);
 
     std::vector<std::pair<Object, std::string>>& getObjects();
 private:
     std::vector<std::pair<Object, std::string>> m_objects;
+
+    void setMaterialForObjectObject(Object & p_object);
+    void setModelMatrixForObject(Object & p_object);
 
 };
 

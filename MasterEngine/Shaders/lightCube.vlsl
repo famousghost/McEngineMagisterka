@@ -1,7 +1,7 @@
 #version 330 core
 
 layout(location = 0) in vec3 vertexCoords;
-layout(location = 3) in vec3 normalCoords;
+layout(location = 1) in vec3 normalCoords;
 
 uniform mat4 model;
 uniform mat4 view;

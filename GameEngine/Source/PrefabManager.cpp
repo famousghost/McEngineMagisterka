@@ -1,7 +1,5 @@
 #include "PrefabManager.h"
 #include "TextureLoader.h"
-#include <matrix_transform.hpp>
-#include <type_ptr.hpp>
 
 namespace McEngine
 {
@@ -35,24 +33,40 @@ void PrefabManager::addDefaultMesh()
     loadMeshFromFile("Objects/Torus.fbx");
 }
 
-void PrefabManager::loadMeshFromFile(std::string p_pathFile)
+void PrefabManager::loadMeshFromFile(std::string p_filePath)
 {
-    auto l_fromLastSlash = p_pathFile.find_last_of("/");
-    m_objectName = p_pathFile.substr(l_fromLastSlash + 1);
-    auto l_findElem = m_objectName.find_first_of(".");
-    m_objectName = m_objectName.substr(0, l_findElem);
-    auto l_meshes = loadMesh(p_pathFile);
-    if (l_meshes.size() == 1)
+    m_objectName = fetchObjectName(p_filePath);
+    auto l_meshes = loadMesh(p_filePath);
+    if (l_meshes.empty())
     {
-        m_prefabMeshes.insert(std::make_pair(m_objectName, l_meshes[0]));
+        LOG("Cannot load object from file", LogType::ERR);
+        return;
+    }
+
+    addMeshesToMap(l_meshes);
+}
+
+std::string PrefabManager::fetchObjectName(std::string p_filePath)
+{
+    auto l_fromLastSlash = p_filePath.find_last_of("/");
+    std::string l_objectName = p_filePath.substr(l_fromLastSlash + 1);
+    auto l_findElem = l_objectName.find_first_of(".");
+    return l_objectName.substr(0, l_findElem);
+}
+
+void PrefabManager::addMeshesToMap(std::vector<std::shared_ptr<Mesh>>& p_meshes)
+{
+    if (p_meshes.size() == 1)
+    {
+        m_prefabMeshes.insert(std::make_pair(m_objectName, p_meshes[0]));
         LOG("Correct mesh addition", LogType::INF);
         LOG("Mesh Map size: " + std::to_string(m_prefabMeshes.size()), LogType::DBG);
         return;
     }
-    for(std::size_t i = 0; i < l_meshes.size(); ++i)
+    for (std::size_t i = 0; i < p_meshes.size(); ++i)
     {
         std::string l_label = m_objectName + "_element_" + std::to_string(i);
-        m_prefabMeshes.insert(std::make_pair(l_label, l_meshes[i]));
+        m_prefabMeshes.insert(std::make_pair(l_label, p_meshes[i]));
     }
     LOG("Correct mesh addition", LogType::INF);
     LOG("Mesh Map size: " + std::to_string(m_prefabMeshes.size()), LogType::DBG);
@@ -90,6 +104,7 @@ std::vector<std::shared_ptr<Mesh>> PrefabManager::loadMesh(std::string p_filePat
         std::string errString = l_import.GetErrorString();
         std::string errMsg = "ERROR::ASSIMP::" + errString;
         LOG(errMsg, LogType::ERR);
+        return std::vector<std::shared_ptr<Mesh>>{};
     }
 
     m_directory = p_filePath.substr(0, p_filePath.find_last_of('/'));
@@ -114,91 +129,92 @@ void PrefabManager::processNode(aiNode* p_node,
     }
 }
 
-std::shared_ptr<Mesh> PrefabManager::processMesh(aiMesh* p_mesh, const aiScene* p_scene)
+void PrefabManager::loadTextures(std::shared_ptr<Mesh>& p_prefabMesh, 
+                                 aiMesh* p_mesh, 
+                                 const aiScene* p_scene)
 {
-    std::shared_ptr<Mesh> l_mesh = std::make_shared<Mesh>();
-
-    for(unsigned int i = 0; i < p_mesh->mNumVertices; ++i)
-    {
-        l_mesh->m_vertexCoords.emplace_back(p_mesh->mVertices[i].x,
-                                            p_mesh->mVertices[i].y,
-                                            p_mesh->mVertices[i].z);
-
-        l_mesh->m_normalCoords.emplace_back(p_mesh->mNormals[i].x, 
-                                            p_mesh->mNormals[i].y, 
-                                            p_mesh->mNormals[i].z);
-
-        if (p_mesh->mTextureCoords[0])
-        {
-
-            l_mesh->m_textureCoords.emplace_back(p_mesh->mTextureCoords[0][i].x, 
-                                                 p_mesh->mTextureCoords[0][i].y);
-        }
-        else
-        {
-            l_mesh->m_textureCoords.emplace_back(0.0f, 0.0f);
-        }
-    }
-
-    for (unsigned int i = 0; i < p_mesh->mNumFaces; ++i)
-    {
-        aiFace l_face = p_mesh->mFaces[i];
-        for (unsigned int j = 0; j < l_face.mNumIndices; ++j)
-        {
-            l_mesh->m_indicies.push_back(l_face.mIndices[j]);
-        }
-    }
-
     Textures::TextureLoader l_textureLoader;
 
     aiMaterial* l_material = p_scene->mMaterials[p_mesh->mMaterialIndex];
 
     std::vector<Texture> l_diffuseMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_DIFFUSE, "texture_diffuse", m_directory, m_objectName);
-    l_mesh->m_textures.insert(l_mesh->m_textures.end(), l_diffuseMaps.begin(), l_diffuseMaps.end());
+    p_prefabMesh->m_textures.insert(p_prefabMesh->m_textures.end(), l_diffuseMaps.begin(), l_diffuseMaps.end());
 
     std::vector<Texture> l_specularMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_SPECULAR, "texture_specular", m_directory, m_objectName);
-    l_mesh->m_textures.insert(l_mesh->m_textures.end(), l_specularMaps.begin(), l_specularMaps.end());
+    p_prefabMesh->m_textures.insert(p_prefabMesh->m_textures.end(), l_specularMaps.begin(), l_specularMaps.end());
 
     std::vector<Texture> l_normalMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_HEIGHT, "texture_normal", m_directory, m_objectName);
-    l_mesh->m_textures.insert(l_mesh->m_textures.end(), l_normalMaps.begin(), l_normalMaps.end());
+    p_prefabMesh->m_textures.insert(p_prefabMesh->m_textures.end(), l_normalMaps.begin(), l_normalMaps.end());
 
     std::vector<Texture> l_heightMaps = l_textureLoader.loadMaterialTexture(l_material, aiTextureType_AMBIENT, "texture_height", m_directory, m_objectName);
-    l_mesh->m_textures.insert(l_mesh->m_textures.end(), l_heightMaps.begin(), l_heightMaps.end());
+    p_prefabMesh->m_textures.insert(p_prefabMesh->m_textures.end(), l_heightMaps.begin(), l_heightMaps.end());
+}
 
-    auto& l_vertexArray = l_mesh->m_vertexArray;
+void PrefabManager::setVertexArrayForMesh(std::shared_ptr<Mesh>& p_mesh)
+{
 
-    l_vertexArray.createVao();
-    l_vertexArray.createVbo();
-    l_vertexArray.createEbo();
+    auto& l_vertexArray = p_mesh->m_vertexArray;
 
     l_vertexArray.bindVao();
-    if (l_mesh->m_vertexCoords.size())
+
+    l_vertexArray.addValuesToAttribPointer(p_mesh->m_verticies);
+
+    if (p_mesh->m_indicies.size())
     {
-        l_vertexArray.addValuesToAttribPointer(0, l_mesh->m_vertexCoords);
+        l_vertexArray.addIndicies(p_mesh->m_indicies);
     }
 
-    if (l_mesh->m_colorValues.size())
-    {
-        l_vertexArray.addValuesToAttribPointer(1, l_mesh->m_colorValues);
-    }
-
-    if (l_mesh->m_textureCoords.size())
-    {
-        l_vertexArray.addValuesToAttribPointer(2, l_mesh->m_textureCoords);
-    }
-
-    if (l_mesh->m_normalCoords.size())
-    {
-        l_vertexArray.addValuesToAttribPointer(3, l_mesh->m_normalCoords);
-    }
-
-    if (l_mesh->m_indicies.size())
-    {
-        l_vertexArray.addIndicies(l_mesh->m_indicies);
-    }
     l_vertexArray.unbindVao();
+}
 
-    return l_mesh;
+void PrefabManager::fillMeshValues(std::shared_ptr<Mesh>& p_prefabMesh, aiMesh* p_mesh)
+{
+    p_prefabMesh->m_verticies = std::vector<Vertex>(p_mesh->mNumVertices);
+    for (unsigned int i = 0; i < p_mesh->mNumVertices; ++i)
+    {
+
+        auto& l_vertex = p_prefabMesh->m_verticies.at(i);
+        l_vertex.m_position = glm::vec3(p_mesh->mVertices[i].x,
+                                        p_mesh->mVertices[i].y,
+                                        p_mesh->mVertices[i].z);
+
+        l_vertex.m_normalCoords = glm::vec3(p_mesh->mNormals[i].x,
+                                            p_mesh->mNormals[i].y,
+                                            p_mesh->mNormals[i].z);
+        if (p_mesh->mTextureCoords[0])
+        {
+            l_vertex.m_textureCoords = glm::vec2(p_mesh->mTextureCoords[0][i].x,
+                                                 p_mesh->mTextureCoords[0][i].y);
+        }
+        else
+        {
+            l_vertex.m_textureCoords = glm::vec2(0.0f, 0.0f);
+        }
+    }
+}
+
+void PrefabManager::fillIndicies(std::shared_ptr<Mesh>& p_prefabMesh, aiMesh* p_mesh)
+{
+    for (unsigned int i = 0; i < p_mesh->mNumFaces; ++i)
+    {
+        aiFace l_face = p_mesh->mFaces[i];
+        for (unsigned int j = 0; j < l_face.mNumIndices; ++j)
+        {
+            p_prefabMesh->m_indicies.push_back(l_face.mIndices[j]);
+        }
+    }
+}
+
+std::shared_ptr<Mesh> PrefabManager::processMesh(aiMesh* p_mesh, const aiScene* p_scene)
+{
+    std::shared_ptr<Mesh> l_prefabMesh = std::make_shared<Mesh>();
+
+    fillMeshValues(l_prefabMesh, p_mesh);
+    fillIndicies(l_prefabMesh, p_mesh);
+    loadTextures(l_prefabMesh, p_mesh, p_scene);
+    setVertexArrayForMesh(l_prefabMesh);
+
+    return l_prefabMesh;
 }
 
 }//Meshes
