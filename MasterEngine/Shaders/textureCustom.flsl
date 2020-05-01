@@ -27,7 +27,7 @@ struct Material
 uniform vec3 cameraPos;
 
 vec4 lightPosition = vec4(0.0, 10.0, 0.0, 1.0);
-float shinness = 64.0;
+float shinness = 128.0;
 
 uniform Material material;
 uniform TextureMaterial textureMaterial;
@@ -55,5 +55,10 @@ void main()
 	vec4 tex_specular1 = texture(textureMaterial.texture_specular1, texturesCoords);
 	vec4 tex_specular2 = texture(textureMaterial.texture_specular2, texturesCoords);
 	
-	fragColor = (tex_diffuse1 + tex_diffuse2 + tex_diffuse3 + tex_specular1 + tex_specular2) * vec4(ambientLight + diffuseLight + specularLight, 1.0);
+	vec4 resultTexture = mix(tex_diffuse1, tex_diffuse2, 0.5);
+	resultTexture = mix(resultTexture, tex_diffuse3, 0.5);
+	resultTexture = mix(resultTexture, tex_specular1, 0.5);
+	resultTexture = mix(resultTexture, tex_specular2, 0.5);
+	
+	fragColor = resultTexture * vec4(ambientLight + diffuseLight + specularLight, 1.0);
 }

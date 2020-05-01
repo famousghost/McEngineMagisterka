@@ -11,7 +11,7 @@ namespace Cameras
 namespace
 {
     constexpr float SPEED = 0.01f;
-    constexpr float SENSITIVITY = 0.001f;
+    constexpr float SENSITIVITY = 0.1f;
 }
 
 Camera::Camera()
@@ -55,22 +55,57 @@ void Camera::rotateCamera()
     l_inputManager.s_cameraRotateSpeedOnAxisY = 0.0f;
     l_inputManager.s_cameraRotateSpeedOnAxisX = 0.0f;
 
-    glm::vec3 l_newFront;
-    l_newFront.x = std::cos(m_pitch) * std::cos(m_yaw);
-    l_newFront.y = std::sin(m_pitch);
-    l_newFront.z = std::cos(m_pitch) * std::sin(m_yaw);
+    if (m_pitch >= 89.0f)
+    {
+        m_pitch = 89.0f;
+    }
+    else if (m_pitch <= -89.0f)
+    {
+        m_pitch = -89.0f;
+    }
 
-    m_cameraFront = l_newFront;
+    glm::vec3 l_newFront;
+    l_newFront.x = std::cos(glm::radians(m_pitch)) * std::cos(glm::radians(m_yaw));
+    l_newFront.y = std::sin(glm::radians(m_pitch));
+    l_newFront.z = std::cos(glm::radians(m_pitch)) * std::sin(glm::radians(m_yaw));
+
+    m_cameraFront = glm::normalize(l_newFront);
+}
+
+void Camera::setProjectionMatrix(float p_fov,
+                                 float p_near,
+                                 float p_far,
+                                 Shaders::Shader& p_shaderProgram,
+                                 const std::string& p_projectionMatrixUniform)
+{
+    auto& l_window = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getWindow();
+    int l_width;
+    int l_height;
+    glfwGetWindowSize(l_window.getGlfwWindow(), &l_width, &l_height);
+
+    m_projectionMatrix = glm::perspective(glm::radians(p_fov),
+                                          static_cast<float>(l_width) / static_cast<float>(l_height),
+                                          p_near,
+                                          p_far);
+
+    p_shaderProgram.uniformMatrix4(m_projectionMatrix, p_projectionMatrixUniform);
 }
 
 void Camera::update(Shaders::Shader& p_shaderProgram, 
-                    std::string p_cameraPostionUniform,
-                    std::string p_viewMatrixUniform)
+                    const std::string& p_cameraPostionUniform,
+                    const std::string& p_viewMatrixUniform,
+                    const std::string& p_projectionMatrixUniform)
 {
     rotateCamera();
     moveCamera();
     p_shaderProgram.uniformVec3(m_cameraPosition, p_cameraPostionUniform);
     p_shaderProgram.uniformMatrix4(m_view, p_viewMatrixUniform);
+    setProjectionMatrix(45.0f, 0.1f, 100.0f, p_shaderProgram, p_projectionMatrixUniform);
+}
+
+glm::mat4 Camera::getProjectionMatrix() const
+{
+    return m_projectionMatrix;
 }
 
 glm::vec3 Camera::getCameraPosition() const

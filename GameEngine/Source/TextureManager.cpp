@@ -23,9 +23,9 @@ void TextureManager::createTexture(std::string p_texturePath,
 
 void TextureManager::start()
 {
-    createTexture("Textures/wall.jpg", GL_REPEAT, GL_LINEAR, "texture");
-    createTexture("Textures/awesomeface.png", GL_REPEAT, GL_LINEAR, "texture2");
-    createTexture("Textures/Face_Side1.jpg", GL_REPEAT, GL_LINEAR, "texture3");
+    createTexture("Textures/wall.jpg", GL_REPEAT, GL_LINEAR, "Wall");
+    createTexture("Textures/awesomeface.png", GL_REPEAT, GL_LINEAR, "Awsomeface");
+    createTexture("Textures/Face_Side1.jpg", GL_REPEAT, GL_LINEAR, "Face_Side1");
 }
 
 void TextureManager::setTextureIdInShader(const std::string& p_shaderLabel)

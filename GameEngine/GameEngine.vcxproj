@@ -156,6 +156,7 @@
     <ClCompile Include="Source\CubeBuilder.cpp" />
     <ClCompile Include="Source\CylinderBuilder.cpp" />
     <ClCompile Include="Source\MonkeyHeadBuilder.cpp" />
+    <ClCompile Include="Source\MouseRay.cpp" />
     <ClCompile Include="Source\NanoSuitBuilder.cpp" />
     <ClCompile Include="Source\EditorManager.cpp" />
     <ClCompile Include="Source\FileManager.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Include\CubeBuilder.h" />
     <ClInclude Include="Include\CylinderBuilder.h" />
     <ClInclude Include="Include\MonkeyHeadBuilder.h" />
+    <ClInclude Include="Include\MouseRay.h" />
     <ClInclude Include="Include\NanoSuitBuilder.h" />
     <ClInclude Include="Include\Defines.h" />
     <ClInclude Include="Include\EditorManager.h" />

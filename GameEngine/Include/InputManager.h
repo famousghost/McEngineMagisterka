@@ -38,6 +38,8 @@ public:
 private:
     static void keyCallBack(GLFWwindow * p_window, int p_key, int p_scancode, int p_state, int p_mods);
 
+    static void mouse_button_callback(GLFWwindow * window, int button, int action, int mods);
+
     static void mouseCallBack(GLFWwindow * p_window, double p_xPos, double p_yPos);
 
     static void scrollCallBack(GLFWwindow * p_window, double p_xOffset, double p_yOffset);

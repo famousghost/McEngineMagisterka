@@ -15,7 +15,7 @@ void GuiManager::start()
     m_currentShader = "defaultShader";
     m_currentObject = "";
     m_currentObjectToAdd = "cube";
-    m_currentTexture = "texture";
+    m_currentTexture = "Wall";
     m_objectElementSize = 0;
     m_elementNumber = 0;
     initImGui();
@@ -52,7 +52,7 @@ void GuiManager::meshGui()
 
     static std::vector<std::string> items;
     static std::vector<std::string> shadersItems = {"defaultShader", "colorShader", "diffuseShader", "textureShader", "customObjectShader"};
-    static std::vector<std::string> textureItems = {"texture", "texture2", "texture3"};
+    static std::vector<std::string> textureItems = {"Wall", "Awsomeface", "Face_Side1"};
     static std::vector<std::string> objectsToAdd = { "cube", "sphere", "cylinder", "cone", "torus", "monkeyhead", "nanosuit" };
     objectChoosingComboBox(items);
     choosingObjectToAddComboBox(objectsToAdd);

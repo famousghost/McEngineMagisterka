@@ -2,6 +2,7 @@
 #include "ScenesManager.h"
 #include "GuiManager.h"
 #include "TextureManager.h"
+#include "MouseRay.h"
 
 namespace McEngine
 {
@@ -54,13 +55,21 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene)
         l_shaderProgram.bindShaderProgram();
 
         l_objectManager.update(l_object);
-        l_camera->update(l_shaderProgram, "cameraPos", "view");
-        setProjectionMatrix(45.0f, 0.1f, 100.0f, l_shaderProgram);
+        l_camera->update(l_shaderProgram, "cameraPos", "view", "projection");
 
         drawMeshes(l_object);
 
         l_shaderProgram.unbindShaderProgram();
     }
+    Inputs::MouseRay l_mouseRay;
+
+    auto l_mousePosInWorldSpace = l_mouseRay.getMousePosition();
+
+    //Debug onlive
+    /*std::cout << "x: " << l_mousePosInWorldSpace.x
+              << " y: " << l_mousePosInWorldSpace.y
+              << " z: " << l_mousePosInWorldSpace.z
+              << std::endl;*/
 }
 
 void RenderManager::drawMeshes(Meshes::Object& p_object)
@@ -72,24 +81,6 @@ void RenderManager::drawMeshes(Meshes::Object& p_object)
         glDrawElements(GL_TRIANGLES, mesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
         mesh->m_vertexArray.unbindVao();
     }
-}
-
-void RenderManager::setProjectionMatrix(float p_fov, 
-                                        float p_near, 
-                                        float p_far,
-                                        Shaders::Shader& p_shaderProgram)
-{
-    auto& l_window = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getWindow();
-    int l_width;
-    int l_height;
-    glfwGetWindowSize(l_window.getGlfwWindow(), &l_width, &l_height);
-
-    glm::mat4 l_projection;
-    l_projection = glm::perspective(glm::radians(p_fov), 
-                                    static_cast<float>(l_width) / static_cast<float>(l_height), 
-                                    p_near, 
-                                    p_far);
-    p_shaderProgram.uniformMatrix4(l_projection, "projection");
 }
 
 RenderManager & RenderManager::getInstance()

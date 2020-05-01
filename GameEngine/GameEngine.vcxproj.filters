@@ -186,6 +186,9 @@
     <ClCompile Include="Source\TorusBuilder.cpp">
       <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MouseRay.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Defines.h">
@@ -313,6 +316,9 @@
     </ClInclude>
     <ClInclude Include="Include\ConeBuilder.h">
       <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MouseRay.h">
+      <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

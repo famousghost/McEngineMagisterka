@@ -66,6 +66,27 @@ void InputManager::keyCallBack(GLFWwindow * p_window, int p_key, int p_scancode,
     }
 }
 
+void InputManager::mouse_button_callback(GLFWwindow* p_window, int p_button, int p_action, int p_mods)
+{
+    auto& l_scene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
+    if (p_action == GLFW_PRESS)
+    {
+        if (p_button == GLFW_MOUSE_BUTTON_MIDDLE)
+        {
+            glfwSetInputMode(l_scene->getWindow().getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            s_canRotateCamera = true;
+        }
+    }
+    if (p_action == GLFW_RELEASE)
+    {
+        if (p_button == GLFW_MOUSE_BUTTON_MIDDLE)
+        {
+            glfwSetInputMode(l_scene->getWindow().getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            s_canRotateCamera = false;
+        }
+    }
+}
+
 void InputManager::mouseCallBack(GLFWwindow * p_window, double p_xPos, double p_yPos)
 {
     static bool l_firstTimeSetCamera = true;
@@ -109,6 +130,7 @@ void InputManager::start()
     glfwSetKeyCallback(l_scene->getWindow().getGlfwWindow(), keyCallBack);
     glfwSetCursorPosCallback(l_scene->getWindow().getGlfwWindow(), mouseCallBack);
     glfwSetScrollCallback(l_scene->getWindow().getGlfwWindow(), scrollCallBack);
+    glfwSetMouseButtonCallback(l_scene->getWindow().getGlfwWindow(), mouse_button_callback);
 }
 
 void InputManager::shutdown()
