@@ -1,4 +1,5 @@
 #include "ShaderManager.h"
+#include "WindowManager.h"
 #include <algorithm>
 #include "Logger.h"
 
@@ -20,6 +21,8 @@ void ShaderManager::start()
     addShader("diffuseShader", "Shaders/lightCube.vlsl", "Shaders/lightCube.flsl");
     addShader("textureShader", "Shaders/textureCube.vlsl", "Shaders/textureCube.flsl");
     addShader("customObjectShader", "Shaders/textureCustom.vlsl", "Shaders/textureCustom.flsl");
+    addShader("windowShader", "Shaders/windowShader.vlsl", "Shaders/windowShader.flsl");
+    GameWindow::WindowManager::getInstance().createWindowPlane();
 }
 
 void ShaderManager::shutdown()

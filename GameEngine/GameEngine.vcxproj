@@ -167,9 +167,11 @@
     <ClCompile Include="Source\Logger.cpp" />
     <ClCompile Include="Source\ObjectManager.cpp" />
     <ClCompile Include="Source\PhysicsManager.cpp" />
+    <ClCompile Include="Source\PlaneBuilder.cpp" />
     <ClCompile Include="Source\RenderManager.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\ScenesManager.cpp" />
+    <ClCompile Include="Source\ScreenQuadBuilder.cpp" />
     <ClCompile Include="Source\Shader.cpp" />
     <ClCompile Include="Source\ShaderLoader.cpp" />
     <ClCompile Include="Source\ShaderManager.cpp" />
@@ -180,6 +182,7 @@
     <ClCompile Include="Source\TorusBuilder.cpp" />
     <ClCompile Include="Source\VertexArray.cpp" />
     <ClCompile Include="Source\Window.cpp" />
+    <ClCompile Include="Source\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libs\ImGUI\imconfig.h" />
@@ -210,9 +213,11 @@
     <ClInclude Include="Include\ObjectBuilder.h" />
     <ClInclude Include="Include\ObjectManager.h" />
     <ClInclude Include="Include\PhysicsManager.h" />
+    <ClInclude Include="Include\PlaneBuilder.h" />
     <ClInclude Include="Include\RenderManager.h" />
     <ClInclude Include="Include\Scene.h" />
     <ClInclude Include="Include\ScenesManager.h" />
+    <ClInclude Include="Include\ScreenQuadBuilder.h" />
     <ClInclude Include="Include\Shader.h" />
     <ClInclude Include="Include\ShaderLoader.h" />
     <ClInclude Include="Include\ShaderManager.h" />
@@ -225,6 +230,7 @@
     <ClInclude Include="Include\TorusBuilder.h" />
     <ClInclude Include="Include\VertexArray.h" />
     <ClInclude Include="Include\Window.h" />
+    <ClInclude Include="Include\WindowManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

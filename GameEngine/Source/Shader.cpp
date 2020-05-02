@@ -105,6 +105,12 @@ void Shader::uniform1I(GLuint p_textureUniformId, const std::string & p_uniformN
     glUniform1i(l_uniformLocationId, p_textureUniformId);
 }
 
+void Shader::uniform1f(float p_value, const std::string & p_uniformName)
+{
+    GLuint l_uniformLocationId = glGetUniformLocation(m_shaderProgramId, p_uniformName.c_str());
+    glUniform1f(l_uniformLocationId, p_value);
+}
+
 }//Shaders
 }//GameEngine
 

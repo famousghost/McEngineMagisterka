@@ -22,6 +22,7 @@ public:
     void uniformVec4(const glm::vec4 & p_vec, const std::string& p_uniformName);
     void uniformVec3(const glm::vec3 & p_vec, const std::string& p_uniformName);
     void uniform1I(GLuint p_textureUniformId, const std::string& p_uniformName);
+    void uniform1f(float p_value, const std::string& p_uniformName);
 private:
     std::string m_vertexShader;
     std::string m_fragmentShader;

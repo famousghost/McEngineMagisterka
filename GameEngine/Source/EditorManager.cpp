@@ -7,6 +7,7 @@
 #include "ScenesManager.h"
 #include "RenderManager.h"
 #include "GuiManager.h"
+#include "WindowManager.h"
 
 namespace McEngine
 {
@@ -33,15 +34,16 @@ void EditorManager::editorLoop()
     LOG("Application start", McEngine::LogType::INF);
 
     auto& scene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
+    auto& l_window = GameWindow::WindowManager::getInstance().getWindow();
 
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
-
-    while (scene->getWindow().isOpen())
+    auto& l_windowManager = GameWindow::WindowManager::getInstance();
+    auto& l_renderManager = Renderer::RenderManager::getInstance();
+    while (l_window.isOpen())
     {
         Gui::GuiManager::getInstance().meshGui();
-
-        Renderer::RenderManager::getInstance().draw(*scene);
+        l_renderManager.draw(*scene);
     }
 
     LOG("Application end", McEngine::LogType::INF);

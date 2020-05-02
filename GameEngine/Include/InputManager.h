@@ -1,5 +1,6 @@
 #pragma once
 #include "ScenesManager.h"
+#include "WindowManager.h"
 namespace McEngine
 {
 namespace Inputs

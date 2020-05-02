@@ -14,6 +14,10 @@ public:
     void shutdown();
     void draw(Scenes::Scene& p_scene);
 
+    void showMesh();
+
+    void fillMesh();
+
     static RenderManager& getInstance();
 private:
     RenderManager() = default;
@@ -21,9 +25,17 @@ private:
 
     void drawMeshes(Meshes::Object& p_object);
 
-    void drawObjects(Scenes::Scene& p_scene);
+    void drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras::Camera>& p_camera);
+
+    void drawEditorWindow();
+
+    void drawGameWindow();
+
+    void drawScene();
 
     void initGlad();
+
+    bool m_fillMesh;
 };
 
 }//Renderer

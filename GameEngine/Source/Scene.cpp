@@ -11,20 +11,27 @@ namespace
     constexpr uint32_t HEIGHT = 1080;
 }
 
-void Scene::prepareScene()
+Scene::Scene()
 {
-    m_backgroundColor = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
-    m_window.createWindow("McEngine", WIDTH, HEIGHT);
-}
-
-GameWindow::Window& Scene::getWindow()
-{
-    return m_window;
+    m_cameras.emplace_back(new Cameras::Camera);
+    m_editorCamera = m_cameras.at(0);
+    m_cameras.emplace_back(new Cameras::Camera);
+    m_gameMainCamera = m_cameras.at(1);
 }
 
 Meshes::ObjectManager& Scene::getObjectManager()
 {
     return m_objectManager;
+}
+
+std::shared_ptr<Cameras::Camera>& Scene::getEditorCamera()
+{
+    return m_editorCamera;
+}
+
+std::shared_ptr<Cameras::Camera>& Scene::getGameMainCamera()
+{
+    return m_gameMainCamera;
 }
 
 }//Scenes

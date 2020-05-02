@@ -7,6 +7,7 @@
 #include "TorusBuilder.h"
 #include "CylinderBuilder.h"
 #include "MonkeyHeadBuilder.h"
+#include "PlaneBuilder.h"
 #include <algorithm>
 
 namespace McEngine
@@ -64,6 +65,11 @@ void ObjectManager::addCustomObject(std::string p_objectLabel,
     else if (p_objectName == "cylinder")
     {
         l_objectBuilder = std::make_unique<CylinderBuilder>();
+        l_objectBuilder->addShaderProgram(p_shaderLabel).addMesh();
+    }
+    else if (p_objectName == "plane")
+    {
+        l_objectBuilder = std::make_unique<PlaneBuilder>();
         l_objectBuilder->addShaderProgram(p_shaderLabel).addMesh();
     }
 

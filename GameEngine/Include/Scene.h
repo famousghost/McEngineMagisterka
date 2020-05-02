@@ -1,5 +1,5 @@
 #pragma once
-#include "Window.h"
+#include "Camera.h"
 #include "ObjectBuilder.h"
 #include "ObjectManager.h"
 
@@ -11,16 +11,21 @@ namespace Scenes
 class Scene
 {
 public:
-    void prepareScene();
-
-    GameWindow::Window& getWindow();
+    Scene();
 
     Meshes::ObjectManager& getObjectManager();
 
     glm::vec4 m_backgroundColor;
+
+    std::shared_ptr<Cameras::Camera>& getEditorCamera();
+
+    std::shared_ptr<Cameras::Camera>& getGameMainCamera();
 private:
-    GameWindow::Window m_window;
     Meshes::ObjectManager m_objectManager;
+    
+    std::shared_ptr<Cameras::Camera> m_editorCamera;
+    std::shared_ptr<Cameras::Camera> m_gameMainCamera;
+    std::vector<std::shared_ptr<Cameras::Camera>> m_cameras;
 };
 }//Scenes
 }//McEngine

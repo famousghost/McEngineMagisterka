@@ -22,6 +22,10 @@ public:
 
     void addDefaultMesh();
 
+    void createScreenMesh();
+
+    std::shared_ptr<Mesh> getScreenQuadMesh() const;
+
     void loadMeshFromFile(std::string p_filePath);
 
     std::string fetchObjectName(std::string p_filePath);
@@ -35,6 +39,7 @@ private:
     std::string m_objectName;
 
     std::map<std::string, std::shared_ptr<Mesh>> m_prefabMeshes;
+    std::shared_ptr<Mesh> m_screenQuadMesh;
 
     std::vector<std::shared_ptr<Mesh>> loadMesh(std::string p_filePath);
 

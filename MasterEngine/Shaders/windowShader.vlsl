@@ -1,0 +1,13 @@
+#version 330 core
+layout(location = 0) in vec3 g_position;
+layout(location = 2) in vec2 g_textureCoords;
+
+out vec2 textCoords;
+
+uniform float screenPositionOffset;
+
+void main()
+{
+	gl_Position = vec4(g_position.x, g_position.y - screenPositionOffset, g_position.z, 1.0);
+	textCoords = g_textureCoords;
+}

@@ -2,6 +2,8 @@
 #include "ScenesManager.h"
 #include "ShaderManager.h"
 #include "TextureManager.h"
+#include "WindowManager.h"
+#include "RenderManager.h"
 #include <algorithm>
 #include "Logger.h"
 
@@ -35,7 +37,8 @@ void GuiManager::initImGui()
 
     ImGui::StyleColorsDark();
     auto& scene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
-    ImGui_ImplGlfw_InitForOpenGL(scene->getWindow().getGlfwWindow(), true);
+    auto* l_window = GameWindow::WindowManager::getInstance().getWindow().getGlfwWindow();
+    ImGui_ImplGlfw_InitForOpenGL(l_window, true);
     ImGui_ImplOpenGL3_Init(l_glsl_version);
 }
 
@@ -51,9 +54,9 @@ void GuiManager::meshGui()
     ImGui::Text("Simple game engine");
 
     static std::vector<std::string> items;
-    static std::vector<std::string> shadersItems = {"defaultShader", "colorShader", "diffuseShader", "textureShader", "customObjectShader"};
+    static std::vector<std::string> shadersItems = {"defaultShader", "colorShader", "diffuseShader", "textureShader", "customObjectShader", "windowShader"};
     static std::vector<std::string> textureItems = {"Wall", "Awsomeface", "Face_Side1"};
-    static std::vector<std::string> objectsToAdd = { "cube", "sphere", "cylinder", "cone", "torus", "monkeyhead", "nanosuit" };
+    static std::vector<std::string> objectsToAdd = { "cube", "sphere", "cylinder", "cone", "torus", "monkeyhead", "nanosuit", "plane"};
     objectChoosingComboBox(items);
     choosingObjectToAddComboBox(objectsToAdd);
     updateShaderComboBox(shadersItems);
@@ -61,22 +64,23 @@ void GuiManager::meshGui()
     objectMoveOperations();
     setObjectProperties();
 
-    auto& scene =
-        Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
-    ImGui::ColorEdit3("Change Color", (float*)&scene->m_backgroundColor);
+    auto l_backgroundColor = GameWindow::WindowManager::getInstance().getBackgroundColor();
+    ImGui::ColorEdit3("Change Color", (float*)&l_backgroundColor);
 
     addObject(items);
     deleteObject(items);
     updateObjectShader();
     updateObjectTetxture();
 
+    auto& l_renderManager = Renderer::RenderManager::getInstance();
+
     if (ImGui::Button("Show Raw Mesh"))
     {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        l_renderManager.showMesh();
     }
     if (ImGui::Button("Fill Mesh"))
     {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        l_renderManager.fillMesh();
     }
 
     ImGui::SameLine();

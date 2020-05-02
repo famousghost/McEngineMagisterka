@@ -25,12 +25,61 @@ void PrefabManager::shutdown()
 
 void PrefabManager::addDefaultMesh()
 {
+    createScreenMesh();
     loadMeshFromFile("Objects/Cube.obj");
+    loadMeshFromFile("Objects/Plane.obj");
     loadMeshFromFile("Objects/Cone.fbx");
     loadMeshFromFile("Objects/Cylinder.fbx");
     loadMeshFromFile("Objects/MonkeyHead.fbx");
     loadMeshFromFile("Objects/Sphere.fbx");
     loadMeshFromFile("Objects/Torus.fbx");
+}
+
+void PrefabManager::createScreenMesh()
+{
+    m_screenQuadMesh = std::make_shared<Mesh>();
+
+    std::vector<glm::vec3> l_verticies = std::vector<glm::vec3>
+    {
+        glm::vec3(-0.99f,  0.99f, 0.0f),
+        glm::vec3(-0.99f, 0.01f, 0.0f),
+        glm::vec3(0.0f, 0.01f, 0.0f),
+        glm::vec3(-0.99f,  0.99f, 0.0f),
+        glm::vec3(0.0f, 0.01f, 0.0f),
+        glm::vec3(0.0f,  0.99f, 0.0f)
+    };
+
+    std::vector<glm::vec2> l_textureCoords = std::vector<glm::vec2>
+    {
+        glm::vec2(0.0f, 1.0f),
+        glm::vec2(0.0f, 0.0f),
+        glm::vec2(1.0f, 0.0f),
+        glm::vec2(0.0f, 1.0f),
+        glm::vec2(1.0f, 0.0f),
+        glm::vec2(1.0f, 1.0f)
+    };
+
+    for (std::size_t i = 0; i < l_verticies.size(); ++i)
+    {
+        Vertex l_vertex;
+        l_vertex.m_position = l_verticies.at(i);
+        l_vertex.m_normalCoords = glm::vec3(0.0f, 0.0f, 0.0f);
+        l_vertex.m_textureCoords = l_textureCoords.at(i);
+        m_screenQuadMesh->m_verticies.push_back(l_vertex);
+    }
+
+    auto& l_vertexArray = m_screenQuadMesh->m_vertexArray;
+
+    l_vertexArray.bindVao();
+
+    l_vertexArray.addValuesToAttribPointer(m_screenQuadMesh->m_verticies);
+
+    l_vertexArray.unbindVao();
+}
+
+std::shared_ptr<Mesh> PrefabManager::getScreenQuadMesh() const
+{
+    return m_screenQuadMesh;
 }
 
 void PrefabManager::loadMeshFromFile(std::string p_filePath)
@@ -152,7 +201,6 @@ void PrefabManager::loadTextures(std::shared_ptr<Mesh>& p_prefabMesh,
 
 void PrefabManager::setVertexArrayForMesh(std::shared_ptr<Mesh>& p_mesh)
 {
-
     auto& l_vertexArray = p_mesh->m_vertexArray;
 
     l_vertexArray.bindVao();

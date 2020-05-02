@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "InputManager.h"
+#include "WindowManager.h"
 #include <math.h>
 #include "Logger.h"
 
@@ -78,10 +79,10 @@ void Camera::setProjectionMatrix(float p_fov,
                                  Shaders::Shader& p_shaderProgram,
                                  const std::string& p_projectionMatrixUniform)
 {
-    auto& l_window = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getWindow();
+    auto* l_window = GameWindow::WindowManager::getInstance().getWindow().getGlfwWindow();
     int l_width;
     int l_height;
-    glfwGetWindowSize(l_window.getGlfwWindow(), &l_width, &l_height);
+    glfwGetWindowSize(l_window, &l_width, &l_height);
 
     m_projectionMatrix = glm::perspective(glm::radians(p_fov),
                                           static_cast<float>(l_width) / static_cast<float>(l_height),

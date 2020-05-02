@@ -1,6 +1,5 @@
 #include "InputManager.h"
 
-
 namespace McEngine
 {
 namespace Inputs
@@ -35,7 +34,7 @@ InputManager & InputManager::getInstance()
 
 void InputManager::keyCallBack(GLFWwindow * p_window, int p_key, int p_scancode, int p_state, int p_mods)
 {
-    auto& l_scene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
+    auto* l_window = GameWindow::WindowManager::getInstance().getWindow().getGlfwWindow();
     if (p_state == GLFW_PRESS)
     {
         if (p_key == GLFW_KEY_ESCAPE)
@@ -48,7 +47,7 @@ void InputManager::keyCallBack(GLFWwindow * p_window, int p_key, int p_scancode,
         }
         if (p_key == GLFW_KEY_LEFT_ALT)
         {
-            glfwSetInputMode(l_scene->getWindow().getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            glfwSetInputMode(l_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             s_canRotateCamera = true;
         }
     }
@@ -60,7 +59,7 @@ void InputManager::keyCallBack(GLFWwindow * p_window, int p_key, int p_scancode,
         }
         if (p_key == GLFW_KEY_LEFT_ALT)
         {
-            glfwSetInputMode(l_scene->getWindow().getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            glfwSetInputMode(l_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             s_canRotateCamera = false;
         }
     }
@@ -68,12 +67,12 @@ void InputManager::keyCallBack(GLFWwindow * p_window, int p_key, int p_scancode,
 
 void InputManager::mouse_button_callback(GLFWwindow* p_window, int p_button, int p_action, int p_mods)
 {
-    auto& l_scene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
+    auto* l_window = GameWindow::WindowManager::getInstance().getWindow().getGlfwWindow();
     if (p_action == GLFW_PRESS)
     {
         if (p_button == GLFW_MOUSE_BUTTON_MIDDLE)
         {
-            glfwSetInputMode(l_scene->getWindow().getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            glfwSetInputMode(l_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             s_canRotateCamera = true;
         }
     }
@@ -81,7 +80,7 @@ void InputManager::mouse_button_callback(GLFWwindow* p_window, int p_button, int
     {
         if (p_button == GLFW_MOUSE_BUTTON_MIDDLE)
         {
-            glfwSetInputMode(l_scene->getWindow().getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            glfwSetInputMode(l_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             s_canRotateCamera = false;
         }
     }
@@ -125,12 +124,12 @@ void InputManager::scrollCallBack(GLFWwindow * p_window, double p_xOffset, doubl
 
 void InputManager::start()
 {
-    auto& l_scene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
-    glfwSetInputMode(l_scene->getWindow().getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    glfwSetKeyCallback(l_scene->getWindow().getGlfwWindow(), keyCallBack);
-    glfwSetCursorPosCallback(l_scene->getWindow().getGlfwWindow(), mouseCallBack);
-    glfwSetScrollCallback(l_scene->getWindow().getGlfwWindow(), scrollCallBack);
-    glfwSetMouseButtonCallback(l_scene->getWindow().getGlfwWindow(), mouse_button_callback);
+    auto* l_currentWindow = GameWindow::WindowManager::getInstance().getWindow().getGlfwWindow();
+    glfwSetInputMode(l_currentWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetKeyCallback(l_currentWindow, keyCallBack);
+    glfwSetCursorPosCallback(l_currentWindow, mouseCallBack);
+    glfwSetScrollCallback(l_currentWindow, scrollCallBack);
+    glfwSetMouseButtonCallback(l_currentWindow, mouse_button_callback);
 }
 
 void InputManager::shutdown()
