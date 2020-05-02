@@ -1,6 +1,7 @@
 #include "Camera.h"
 #include "InputManager.h"
 #include "WindowManager.h"
+#include "TimeManager.h"
 #include <math.h>
 #include "Logger.h"
 
@@ -11,8 +12,9 @@ namespace Cameras
 
 namespace
 {
-    constexpr float SPEED = 0.01f;
-    constexpr float SENSITIVITY = 0.1f;
+    constexpr float SPEED_AXIS_Z = 120.0f;
+    constexpr float SPEED_AXIS_X_Y = 20.0f;
+    constexpr float SENSITIVITY = 80.0f;
 }
 
 Camera::Camera()
@@ -33,12 +35,13 @@ Camera::~Camera()
 void Camera::moveCamera()
 {
     auto& l_inputManager = Inputs::InputManager::getInstance();
+    float l_deltaTime = Time::TimeManager::getInstance().getDeltaTime();
 
-    m_cameraPosition += l_inputManager.s_cameraMoveSpeedOnAxisZ * m_cameraFront;
+    m_cameraPosition += m_cameraFront * l_inputManager.s_cameraMoveSpeedOnAxisZ * SPEED_AXIS_Z * l_deltaTime;
     glm::vec3 l_newCameraRight = glm::normalize(glm::cross(m_cameraFront, m_cameraUp));
     glm::vec3 l_newCameraUp = glm::normalize(glm::cross(l_newCameraRight, m_cameraFront));
-    m_cameraPosition += l_newCameraRight * l_inputManager.s_cameraMoveSpeedOnAxisX * SPEED;
-    m_cameraPosition += l_newCameraUp * l_inputManager.s_cameraMoveSpeedOnAxisY * SPEED;
+    m_cameraPosition += l_newCameraRight * l_inputManager.s_cameraMoveSpeedOnAxisX * SPEED_AXIS_X_Y * l_deltaTime;
+    m_cameraPosition += l_newCameraUp * l_inputManager.s_cameraMoveSpeedOnAxisY * SPEED_AXIS_X_Y * l_deltaTime;
     l_inputManager.s_cameraMoveSpeedOnAxisZ = 0.0f;
     l_inputManager.s_cameraMoveSpeedOnAxisX = 0.0f;
     l_inputManager.s_cameraMoveSpeedOnAxisY = 0.0f;
@@ -50,8 +53,9 @@ void Camera::rotateCamera()
 {
     auto& l_inputManager = Inputs::InputManager::getInstance();
 
-    m_yaw += l_inputManager.s_cameraRotateSpeedOnAxisX * SENSITIVITY;
-    m_pitch += l_inputManager.s_cameraRotateSpeedOnAxisY * SENSITIVITY;
+    float l_deltaTime = Time::TimeManager::getInstance().getDeltaTime();
+    m_yaw += l_inputManager.s_cameraRotateSpeedOnAxisX * SENSITIVITY * l_deltaTime;
+    m_pitch += l_inputManager.s_cameraRotateSpeedOnAxisY * SENSITIVITY * l_deltaTime;
 
     l_inputManager.s_cameraRotateSpeedOnAxisY = 0.0f;
     l_inputManager.s_cameraRotateSpeedOnAxisX = 0.0f;

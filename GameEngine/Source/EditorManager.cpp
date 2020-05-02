@@ -8,6 +8,7 @@
 #include "RenderManager.h"
 #include "GuiManager.h"
 #include "WindowManager.h"
+#include "TimeManager.h"
 
 namespace McEngine
 {
@@ -40,8 +41,13 @@ void EditorManager::editorLoop()
     glEnable(GL_DEPTH_TEST);
     auto& l_windowManager = GameWindow::WindowManager::getInstance();
     auto& l_renderManager = Renderer::RenderManager::getInstance();
+    double l_currentTime = 0.0;
     while (l_window.isOpen())
     {
+        double l_previousTime = l_currentTime;
+        l_currentTime = glfwGetTime();
+        Time::TimeManager::getInstance().setDeltaTime(l_currentTime - l_previousTime);
+        std::cout << Time::TimeManager::getInstance().getDeltaTime() << std::endl;
         Gui::GuiManager::getInstance().meshGui();
         l_renderManager.draw(*scene);
     }

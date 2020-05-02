@@ -5,8 +5,8 @@ namespace McEngine
 namespace Inputs
 {
 
-float InputManager::s_lastX = 400.0f;
-float InputManager::s_lastY = 300.0f;
+float InputManager::s_lastX = 0.0f;
+float InputManager::s_lastY = 0.0f;
 float InputManager::s_xOffset = 0.0f;
 float InputManager::s_yOffset = 0.0f;
 

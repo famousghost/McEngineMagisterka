@@ -10,10 +10,12 @@
 #include "FileManager.h"
 #include "InputManager.h"
 #include "WindowManager.h"
+#include "TimeManager.h"
 
 int main()
 {
     SET_LOG_TYPE(McEngine::LogType::DBG);
+    McEngine::Time::TimeManager::getInstance().start();
     McEngine::Files::FileManager::getInstance().start();
     McEngine::Editor::EditorManager::getInstance().start();
     McEngine::GameWindow::WindowManager::getInstance().start();
@@ -43,6 +45,7 @@ int main()
     McEngine::GameWindow::WindowManager::getInstance().shutdown();
     McEngine::Editor::EditorManager::getInstance().shutdown();
     McEngine::Files::FileManager::getInstance().shutdown();
+    McEngine::Time::TimeManager::getInstance().shutdown();
 
     return 0;
 }

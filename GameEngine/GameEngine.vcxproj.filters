@@ -195,6 +195,9 @@
     <ClCompile Include="Source\ScreenQuadBuilder.cpp">
       <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TimeManager.cpp">
+      <Filter>Pliki źródłowe\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Defines.h">
@@ -334,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="Include\ScreenQuadBuilder.h">
       <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TimeManager.h">
+      <Filter>Pliki nagłówkowe\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

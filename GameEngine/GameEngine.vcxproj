@@ -179,6 +179,7 @@
     <ClCompile Include="Source\TextureLoader.cpp" />
     <ClCompile Include="Source\TextureManager.cpp" />
     <ClCompile Include="Source\PrefabManager.cpp" />
+    <ClCompile Include="Source\TimeManager.cpp" />
     <ClCompile Include="Source\TorusBuilder.cpp" />
     <ClCompile Include="Source\VertexArray.cpp" />
     <ClCompile Include="Source\Window.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="Include\TextureLoader.h" />
     <ClInclude Include="Include\TextureManager.h" />
     <ClInclude Include="Include\PrefabManager.h" />
+    <ClInclude Include="Include\TimeManager.h" />
     <ClInclude Include="Include\TorusBuilder.h" />
     <ClInclude Include="Include\VertexArray.h" />
     <ClInclude Include="Include\Window.h" />

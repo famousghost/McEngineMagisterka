@@ -22,7 +22,6 @@ void RenderManager::shutdown()
 
 void RenderManager::draw(Scenes::Scene & p_scene)
 {
-    glDisable(GL_CULL_FACE);
     auto& l_currentAvaiableScene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
     auto& l_editorCamera = l_currentAvaiableScene->getEditorCamera();
     auto& l_gameCamera = l_currentAvaiableScene->getGameMainCamera();
