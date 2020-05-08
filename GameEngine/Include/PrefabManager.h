@@ -28,8 +28,6 @@ public:
 
     void loadMeshFromFile(std::string p_filePath);
 
-    std::string fetchObjectName(std::string p_filePath);
-
     std::shared_ptr<Mesh> getMesh(std::string p_label) const;
 
     std::vector<std::shared_ptr<Mesh>> getMeshes(std::string p_label) const;

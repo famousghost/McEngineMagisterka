@@ -79,6 +79,12 @@
     <Filter Include="Pliki źródłowe\Shaders">
       <UniqueIdentifier>{106343f7-001a-4c17-a0c2-4eb7bd29f39c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki nagłówkowe\Utility">
+      <UniqueIdentifier>{2d882dd7-ccc3-4a78-89bc-27edfc79c31a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\Utility">
+      <UniqueIdentifier>{18108930-4dfe-485e-90fa-e01ab081d1ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\glad.c">
@@ -110,9 +116,6 @@
     </ClCompile>
     <ClCompile Include="..\Libs\ImGUI\imgui_impl_opengl3.cpp">
       <Filter>Pliki źródłowe\GUI\IMGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CubeBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene.cpp">
       <Filter>Pliki źródłowe</Filter>
@@ -156,12 +159,6 @@
     <ClCompile Include="Source\PrefabManager.cpp">
       <Filter>Pliki źródłowe\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\NanoSuitBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SphereBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Camera.cpp">
       <Filter>Pliki źródłowe\Camera</Filter>
     </ClCompile>
@@ -171,32 +168,23 @@
     <ClCompile Include="Source\ShaderLoader.cpp">
       <Filter>Pliki źródłowe\Loaders</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ConeBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CylinderBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MonkeyHeadBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\TorusBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MouseRay.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="Source\WindowManager.cpp">
       <Filter>Pliki źródłowe\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PlaneBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ScreenQuadBuilder.cpp">
       <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
     </ClCompile>
     <ClCompile Include="Source\TimeManager.cpp">
       <Filter>Pliki źródłowe\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadedObjectBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FilePathParser.cpp">
+      <Filter>Pliki źródłowe\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -222,9 +210,6 @@
       <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
     </ClInclude>
     <ClInclude Include="Include\ObjectBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\CubeBuilder.h">
       <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
     </ClInclude>
     <ClInclude Include="..\Libs\ImGUI\imconfig.h">
@@ -299,12 +284,6 @@
     <ClInclude Include="Include\PrefabManager.h">
       <Filter>Pliki nagłówkowe\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Include\NanoSuitBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\SphereBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Camera.h">
       <Filter>Pliki nagłówkowe\Camera</Filter>
     </ClInclude>
@@ -314,32 +293,23 @@
     <ClInclude Include="Include\TextureLoader.h">
       <Filter>Pliki nagłówkowe\Loaders</Filter>
     </ClInclude>
-    <ClInclude Include="Include\TorusBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\MonkeyHeadBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\CylinderBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\ConeBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
     <ClInclude Include="Include\MouseRay.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="Include\WindowManager.h">
       <Filter>Pliki nagłówkowe\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Include\PlaneBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
     <ClInclude Include="Include\ScreenQuadBuilder.h">
       <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
     </ClInclude>
     <ClInclude Include="Include\TimeManager.h">
       <Filter>Pliki nagłówkowe\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LoadedObjectBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\FilePathParser.h">
+      <Filter>Pliki nagłówkowe\Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -36,6 +36,7 @@ private:
     std::string m_currentObjectToAdd;
     std::string m_currentShader;
     std::string m_currentTexture;
+    std::string m_newObjectPath;
     std::size_t m_elementNumber;
 
     void addObject(std::vector<std::string>& p_items);
@@ -46,6 +47,7 @@ private:
     void choosingObjectToAddComboBox(std::vector<std::string>& p_shaderItems);
     void updateTextureComboBox(std::vector<std::string>& p_textureItems);
     void objectChoosingComboBox(std::vector<std::string>& p_items);
+    void updateListOfObjects(std::vector<std::string>& p_shaderItems);
     void updateObjectShader();
 };
 }//Gui

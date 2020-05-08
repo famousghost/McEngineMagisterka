@@ -1,14 +1,13 @@
 #include "EditorManager.h"
 #include "Logger.h"
-#include <vector>
 #include "Shader.h"
-#include "CubeBuilder.h"
 #include "ObjectManager.h"
 #include "ScenesManager.h"
 #include "RenderManager.h"
 #include "GuiManager.h"
 #include "WindowManager.h"
 #include "TimeManager.h"
+#include <vector>
 
 namespace McEngine
 {
@@ -47,7 +46,6 @@ void EditorManager::editorLoop()
         double l_previousTime = l_currentTime;
         l_currentTime = glfwGetTime();
         Time::TimeManager::getInstance().setDeltaTime(l_currentTime - l_previousTime);
-        std::cout << Time::TimeManager::getInstance().getDeltaTime() << std::endl;
         Gui::GuiManager::getInstance().meshGui();
         l_renderManager.draw(*scene);
     }

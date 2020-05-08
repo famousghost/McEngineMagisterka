@@ -1,9 +1,11 @@
 #include "GuiManager.h"
 #include "ScenesManager.h"
+#include "PrefabManager.h"
 #include "ShaderManager.h"
 #include "TextureManager.h"
 #include "WindowManager.h"
 #include "RenderManager.h"
+#include "FilePathParser.h"
 #include <algorithm>
 #include "Logger.h"
 
@@ -16,7 +18,7 @@ void GuiManager::start()
 {
     m_currentShader = "defaultShader";
     m_currentObject = "";
-    m_currentObjectToAdd = "cube";
+    m_currentObjectToAdd = "Cube";
     m_currentTexture = "Wall";
     m_objectElementSize = 0;
     m_elementNumber = 0;
@@ -54,9 +56,25 @@ void GuiManager::meshGui()
     ImGui::Text("Simple game engine");
 
     static std::vector<std::string> items;
-    static std::vector<std::string> shadersItems = {"defaultShader", "colorShader", "diffuseShader", "textureShader", "customObjectShader", "windowShader"};
-    static std::vector<std::string> textureItems = {"Wall", "Awsomeface", "Face_Side1"};
-    static std::vector<std::string> objectsToAdd = { "cube", "sphere", "cylinder", "cone", "torus", "monkeyhead", "nanosuit", "plane"};
+    static std::vector<std::string> shadersItems = {"defaultShader", 
+                                                    "colorShader", 
+                                                    "diffuseShader", 
+                                                    "textureShader", 
+                                                    "customObjectShader", 
+                                                    "windowShader"};
+
+    static std::vector<std::string> textureItems = {"Wall", 
+                                                    "Awsomeface", 
+                                                    "Face_Side1"};
+
+    static std::vector<std::string> objectsToAdd = { "Cube", 
+                                                     "Sphere", 
+                                                     "Cylinder", 
+                                                     "Cone", 
+                                                     "Torus", 
+                                                     "Monkeyhead", 
+                                                     "Nanosuit", 
+                                                     "Plane"};
     objectChoosingComboBox(items);
     choosingObjectToAddComboBox(objectsToAdd);
     updateShaderComboBox(shadersItems);
@@ -71,6 +89,7 @@ void GuiManager::meshGui()
     deleteObject(items);
     updateObjectShader();
     updateObjectTetxture();
+    updateListOfObjects(objectsToAdd);
 
     auto& l_renderManager = Renderer::RenderManager::getInstance();
 
@@ -89,6 +108,24 @@ void GuiManager::meshGui()
 
     ImGui::End();
     ImGui::Render();
+}
+
+void GuiManager::updateListOfObjects(std::vector<std::string>& p_objectsToAdd)
+{
+    static char l_filePath[1000];
+    ImGui::InputText("##Chatbox", l_filePath, 20, ImGuiInputTextFlags_EnterReturnsTrue);
+    if (ImGui::Button("Add Object To List"))
+    {
+        auto l_objectName = Utility::FilePathParser::fetchObjectName(l_filePath);
+        auto& l_prefabManager = Meshes::PrefabManager::getInstance();
+        if (l_prefabManager.getMesh(l_objectName))
+        {
+            return;
+        }
+        l_prefabManager.loadMeshFromFile(l_filePath);
+        p_objectsToAdd.push_back(l_objectName);
+        strcpy(l_filePath, "");
+    }
 }
 
 void GuiManager::updateObjectTetxture()

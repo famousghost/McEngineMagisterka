@@ -1,5 +1,6 @@
 #include "PrefabManager.h"
 #include "TextureLoader.h"
+#include "FilePathParser.h"
 
 namespace McEngine
 {
@@ -15,7 +16,6 @@ PrefabManager& PrefabManager::getInstance()
 void PrefabManager::start()
 {
     addDefaultMesh();
-    loadMeshFromFile("Objects/nanosuit.obj");
 }
 
 void PrefabManager::shutdown()
@@ -30,9 +30,10 @@ void PrefabManager::addDefaultMesh()
     loadMeshFromFile("Objects/Plane.obj");
     loadMeshFromFile("Objects/Cone.fbx");
     loadMeshFromFile("Objects/Cylinder.fbx");
-    loadMeshFromFile("Objects/MonkeyHead.fbx");
+    loadMeshFromFile("Objects/Monkeyhead.fbx");
     loadMeshFromFile("Objects/Sphere.fbx");
     loadMeshFromFile("Objects/Torus.fbx");
+    loadMeshFromFile("Objects/Nanosuit.obj");
 }
 
 void PrefabManager::createScreenMesh()
@@ -84,7 +85,7 @@ std::shared_ptr<Mesh> PrefabManager::getScreenQuadMesh() const
 
 void PrefabManager::loadMeshFromFile(std::string p_filePath)
 {
-    m_objectName = fetchObjectName(p_filePath);
+    m_objectName = Utility::FilePathParser::fetchObjectName(p_filePath);
     auto l_meshes = loadMesh(p_filePath);
     if (l_meshes.empty())
     {
@@ -95,16 +96,10 @@ void PrefabManager::loadMeshFromFile(std::string p_filePath)
     addMeshesToMap(l_meshes);
 }
 
-std::string PrefabManager::fetchObjectName(std::string p_filePath)
-{
-    auto l_fromLastSlash = p_filePath.find_last_of("/");
-    std::string l_objectName = p_filePath.substr(l_fromLastSlash + 1);
-    auto l_findElem = l_objectName.find_first_of(".");
-    return l_objectName.substr(0, l_findElem);
-}
-
 void PrefabManager::addMeshesToMap(std::vector<std::shared_ptr<Mesh>>& p_meshes)
 {
+    std::string msg = "Map object name: " + m_objectName;
+    LOG(msg, LogType::DBG);
     if (p_meshes.size() == 1)
     {
         m_prefabMeshes.insert(std::make_pair(m_objectName, p_meshes[0]));
@@ -123,7 +118,15 @@ void PrefabManager::addMeshesToMap(std::vector<std::shared_ptr<Mesh>>& p_meshes)
 
 std::shared_ptr<Mesh> PrefabManager::getMesh(std::string p_label) const
 {
-    return m_prefabMeshes.at(p_label);
+    try
+    {
+        return m_prefabMeshes.at(p_label);
+    }
+    catch (std::exception& ex)
+    {
+        LOG("Cannot add the same object", LogType::WARN);
+        return nullptr;
+    }
 }
 
 std::vector<std::shared_ptr<Mesh>> PrefabManager::getMeshes(std::string p_label) const
