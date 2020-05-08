@@ -186,6 +186,12 @@
     <ClCompile Include="Source\FilePathParser.cpp">
       <Filter>Pliki źródłowe\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CubeColiderBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ColiderBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Defines.h">
@@ -310,6 +316,12 @@
     </ClInclude>
     <ClInclude Include="Include\FilePathParser.h">
       <Filter>Pliki nagłówkowe\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CubeColiderBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ColiderBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

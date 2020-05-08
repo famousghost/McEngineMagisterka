@@ -1,6 +1,7 @@
 #include "PrefabManager.h"
 #include "TextureLoader.h"
 #include "FilePathParser.h"
+#include "CubeColiderBuilder.h"
 
 namespace McEngine
 {
@@ -26,6 +27,7 @@ void PrefabManager::shutdown()
 void PrefabManager::addDefaultMesh()
 {
     createScreenMesh();
+    createCubeColiderMesh();
     loadMeshFromFile("Objects/Cube.obj");
     loadMeshFromFile("Objects/Plane.obj");
     loadMeshFromFile("Objects/Cone.fbx");
@@ -74,6 +76,25 @@ void PrefabManager::createScreenMesh()
     l_vertexArray.bindVao();
 
     l_vertexArray.addValuesToAttribPointer(m_screenQuadMesh->m_verticies);
+
+    l_vertexArray.unbindVao();
+}
+
+void PrefabManager::createCubeColiderMesh()
+{
+    m_cubeColiderMesh = std::make_shared<Mesh>();
+
+    CubeColiderBuilder l_cubeColiderBuilder;
+
+    l_cubeColiderBuilder.buildVerticies();
+
+    m_cubeColiderMesh = l_cubeColiderBuilder.getMesh();
+
+    auto& l_vertexArray = m_cubeColiderMesh->m_vertexArray;
+
+    l_vertexArray.bindVao();
+
+    l_vertexArray.addValuesToAttribPointer(m_cubeColiderMesh->m_verticies);
 
     l_vertexArray.unbindVao();
 }
