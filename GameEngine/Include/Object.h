@@ -46,11 +46,20 @@ struct Colider
     glm::vec3 m_position;
     glm::vec3 m_scale;
     glm::vec4 m_firstVertex;
+    glm::vec4 m_rawFirstVertex;
+    glm::vec3 m_coliderColor;
+    float m_width;
+    float m_heigth;
+    float m_length;
 
     Colider()
     {
         m_position = glm::vec3(0.0f, 0.0f, 0.0f);
         m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
+        m_coliderColor = glm::vec3(0.0f, 1.0f ,0.0f);
+        m_width = 2.0f;
+        m_heigth = 2.0f;
+        m_length = 2.0f;
         m_modelMatrix = glm::mat4();
     }
 };

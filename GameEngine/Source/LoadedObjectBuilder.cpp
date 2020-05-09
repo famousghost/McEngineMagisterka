@@ -21,6 +21,7 @@ ObjectBuilder & LoadedObjectBuilder::addMesh()
         m_object.m_meshes.insert(m_object.m_meshes.begin(), l_objectMeshes.begin(), l_objectMeshes.end());
         m_object.m_colider.m_meshes.push_back(l_prefabManager.getColiderMesh());
         m_object.m_colider.m_firstVertex = glm::vec4(m_object.m_colider.m_meshes.at(0)->m_verticies.at(0).m_position, 1.0f);
+        m_object.m_colider.m_rawFirstVertex = m_object.m_colider.m_firstVertex;
     }
     catch (std::exception& ex)
     {

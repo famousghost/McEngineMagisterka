@@ -17,6 +17,7 @@ int main()
     SET_LOG_TYPE(McEngine::LogType::DBG);
     McEngine::Time::TimeManager::getInstance().start();
     McEngine::Files::FileManager::getInstance().start();
+    McEngine::Physics::PhysicsManager::getInstance().start();
     McEngine::Editor::EditorManager::getInstance().start();
     McEngine::GameWindow::WindowManager::getInstance().start();
     McEngine::Scenes::ScenesManager::getInstace().start();
@@ -44,6 +45,7 @@ int main()
     McEngine::Scenes::ScenesManager::getInstace().shutdown();
     McEngine::GameWindow::WindowManager::getInstance().shutdown();
     McEngine::Editor::EditorManager::getInstance().shutdown();
+    McEngine::Physics::PhysicsManager::getInstance().shutdown();
     McEngine::Files::FileManager::getInstance().shutdown();
     McEngine::Time::TimeManager::getInstance().shutdown();
 

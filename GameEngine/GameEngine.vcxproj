@@ -153,7 +153,6 @@
     <ClCompile Include="..\Libs\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\ColiderBuilder.cpp" />
-    <ClCompile Include="Source\CollisionDetection.cpp" />
     <ClCompile Include="Source\CubeColiderBuilder.cpp" />
     <ClCompile Include="Source\FilePathParser.cpp" />
     <ClCompile Include="Source\LoadedObjectBuilder.cpp" />
@@ -193,7 +192,6 @@
     <ClInclude Include="..\Libs\ImGUI\imstb_truetype.h" />
     <ClInclude Include="Include\Camera.h" />
     <ClInclude Include="Include\ColiderBuilder.h" />
-    <ClInclude Include="Include\CollisionDetection.h" />
     <ClInclude Include="Include\CubeColiderBuilder.h" />
     <ClInclude Include="Include\FilePathParser.h" />
     <ClInclude Include="Include\LoadedObjectBuilder.h" />
