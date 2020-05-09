@@ -28,6 +28,8 @@ public:
 
     std::shared_ptr<Mesh> getScreenQuadMesh() const;
 
+    std::shared_ptr<Mesh> getColiderMesh() const;
+
     void loadMeshFromFile(std::string p_filePath);
 
     std::shared_ptr<Mesh> getMesh(std::string p_label) const;

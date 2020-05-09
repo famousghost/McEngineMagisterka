@@ -25,6 +25,19 @@ struct Material
     glm::vec3 m_objectColor;
 };
 
+struct Transform
+{
+    Transform()
+    {
+        m_position = glm::vec3(0.0f, 0.0f, 0.0f);
+        m_rotatione = glm::vec3(0.0f, 0.0f, 0.0f);
+        m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
+    }
+    glm::vec3 m_position;
+    glm::vec3 m_rotatione;
+    glm::vec3 m_scale;
+};
+
 struct Colider
 {
     std::vector<std::shared_ptr<Mesh>> m_meshes;
@@ -32,6 +45,7 @@ struct Colider
     glm::mat4 m_modelMatrix;
     glm::vec3 m_position;
     glm::vec3 m_scale;
+    glm::vec4 m_firstVertex;
 
     Colider()
     {
@@ -49,15 +63,10 @@ struct Object
     std::string m_currentAvaiableTexture;
     Material m_material;
     glm::mat4 m_modelMatrix;
-    glm::vec3 m_position;
-    glm::vec3 m_rotatione;
-    glm::vec3 m_scale;
+    Transform m_transform;
 
     Object()
     {
-        m_position = glm::vec3(0.0f, 0.0f, 0.0f);
-        m_rotatione = glm::vec3(0.0f, 0.0f, 0.0f);
-        m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
         m_modelMatrix = glm::mat4();
         m_currentAvaiableTexture = "texture";
     }

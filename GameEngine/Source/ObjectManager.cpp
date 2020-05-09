@@ -33,20 +33,19 @@ void ObjectManager::addCustomObject(std::string p_objectLabel,
 void ObjectManager::update(Object& p_object)
 {
     setMaterialForObjectObject(p_object);
-
     setModelMatrixForObject(p_object);
-
     activeTextures(p_object);
 }
 
 void ObjectManager::setModelMatrixForObject(Object& p_object)
 {
     glm::mat4 l_model;
-    l_model = glm::translate(l_model, p_object.m_position);
-    l_model = glm::rotate(l_model, glm::radians(p_object.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    l_model = glm::rotate(l_model, glm::radians(p_object.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    l_model = glm::rotate(l_model, glm::radians(p_object.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    l_model = glm::scale(l_model, p_object.m_scale);
+    auto& l_transform = p_object.m_transform;
+    l_model = glm::translate(l_model, l_transform.m_position);
+    l_model = glm::scale(l_model, l_transform.m_scale);
+    l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
     p_object.m_shaderProgram->uniformMatrix4(l_model, "model");
 }
 

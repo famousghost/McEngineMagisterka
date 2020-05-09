@@ -116,6 +116,7 @@ void RenderManager::fillMesh()
 void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras::Camera>& p_camera)
 {
     auto& l_objectManager = p_scene.getObjectManager();
+
     for (auto& object : l_objectManager.getObjects())
     {
         auto& l_object = object.first;
@@ -129,7 +130,31 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
         drawMeshes(l_object);
 
         l_shaderProgram.unbindShaderProgram();
+
+        auto& l_coliderMesh = object.first.m_colider.m_meshes.at(0);
+        auto& l_colider = object.first.m_colider;
+        l_colider.m_shaderProgram->bindShaderProgram();
+        glm::vec3 l_coliderColor = glm::vec3(0.0f, 1.0f, 0.0f);
+        l_colider.m_shaderProgram->uniformVec3(l_coliderColor, "coliderColor");
+        glm::mat4 l_coliderModel;
+        l_coliderModel = glm::scale(l_colider.m_modelMatrix, glm::vec3(2.0f, 1.0, 1.0f));
+        l_colider.m_firstVertex = l_coliderModel * l_colider.m_firstVertex;
+        std::cout << l_colider.m_firstVertex.x << std::endl;
+        l_coliderModel = glm::translate(l_colider.m_modelMatrix, object.first.m_transform.m_position);
+        l_colider.m_shaderProgram->uniformMatrix4(l_coliderModel, "model");
+        p_camera->update(*l_colider.m_shaderProgram, "cameraPos", "view", "projection");
+        glDisable(GL_CULL_FACE);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+        l_coliderMesh->m_vertexArray.bindVao();
+        glDrawElements(GL_TRIANGLES, l_coliderMesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
+        l_coliderMesh->m_vertexArray.unbindVao();
+
+        l_colider.m_shaderProgram->unbindShaderProgram();
+        glEnable(GL_CULL_FACE);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
+
     Inputs::MouseRay l_mouseRay;
 
     auto l_mousePosInWorldSpace = l_mouseRay.getMousePosition();

@@ -27,17 +27,22 @@ void CubeColiderBuilder::buildVerticies()
     std::vector<GLuint> l_indicies = 
     {
         0, 1, 2,
-        0, 3, 2,// Front
-        4, 5, 1,
-        4, 0, 1,// Left
+        3, 0, 2,// Front
+
         4, 5, 6,
-        4, 7, 6,// Back
-        7, 6, 2,
-        7, 3, 2,//Prawa
-        0, 4, 7,
-        0, 3, 7, //Gora
+        7, 6, 4,// Back
+
+        5, 4, 6,
+        0, 4, 1,// Left
+
+        3, 2, 6,
+        7, 3, 6,//Prawa
+
+        7, 3, 6,
+        4, 3, 0, //Gora
+
         1, 5, 6,
-        1, 2, 6 // Dó³
+        2, 1, 6 // Dó³
     };
 
     for (std::size_t i = 0; i < l_verticies.size(); ++i)

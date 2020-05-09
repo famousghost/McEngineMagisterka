@@ -1,4 +1,6 @@
 #pragma once
+#include "Object.h"
+
 namespace McEngine
 {
 namespace Physics
@@ -6,12 +8,13 @@ namespace Physics
 class PhysicsManager
 {
 public:
-    PhysicsManager() = default;
-    ~PhysicsManager() = default;
-
     void start();
 
     void shutdown();
+
+    static PhysicsManager& getInstance();
+
+    bool checkCollision(const Meshes::Colider & p_coliderA, const Meshes::Colider & p_coliderB);
 };
 }//Physics
 }//McEngine

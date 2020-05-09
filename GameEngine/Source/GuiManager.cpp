@@ -189,9 +189,10 @@ void GuiManager::objectMoveOperations()
 
     if (objIt != l_objects.end())
     {
-        ImGui::SliderFloat3("Translation", &objIt->first.m_position.x, -10.0f, 10.0f);
-        ImGui::SliderFloat3("Rotatione", &objIt->first.m_rotatione.x, -360.0f, 360.0f);
-        ImGui::SliderFloat3("Scale", &objIt->first.m_scale.x, -10.0f, 10.0f);
+        auto& l_transform = objIt->first.m_transform;
+        ImGui::SliderFloat3("Translation", &l_transform.m_position.x, -10.0f, 10.0f);
+        ImGui::SliderFloat3("Rotatione", &l_transform.m_rotatione.x, -360.0f, 360.0f);
+        ImGui::SliderFloat3("Scale", &l_transform.m_scale.x, -10.0f, 10.0f);
     }
 }
 
@@ -207,10 +208,11 @@ void GuiManager::setObjectProperties()
 
     if (objIt != l_objects.end())
     {
-        ImGui::SliderFloat3("AmbientLight", &objIt->first.m_material.m_ambientLight.x, 0.0f, 1.0f);
-        ImGui::SliderFloat3("DiffuseLight", &objIt->first.m_material.m_diffuseLight.x, 0.0f, 1.0f);
-        ImGui::SliderFloat3("SpecularLight", &objIt->first.m_material.m_specularLight.x, 0.0f, 1.0f);
-        ImGui::SliderFloat3("ObjectColor", &objIt->first.m_material.m_objectColor.x, 0.0f, 1.0f);
+        auto& l_material = objIt->first.m_material;
+        ImGui::SliderFloat3("AmbientLight", &l_material.m_ambientLight.x, 0.0f, 1.0f);
+        ImGui::SliderFloat3("DiffuseLight", &l_material.m_diffuseLight.x, 0.0f, 1.0f);
+        ImGui::SliderFloat3("SpecularLight", &l_material.m_specularLight.x, 0.0f, 1.0f);
+        ImGui::SliderFloat3("ObjectColor", &l_material.m_objectColor.x, 0.0f, 1.0f);
     }
 }
 

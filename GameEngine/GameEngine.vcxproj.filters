@@ -85,6 +85,12 @@
     <Filter Include="Pliki źródłowe\Utility">
       <UniqueIdentifier>{18108930-4dfe-485e-90fa-e01ab081d1ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki nagłówkowe\Physics">
+      <UniqueIdentifier>{371081fd-c70c-4d6f-9543-31f20eb358a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\Physics">
+      <UniqueIdentifier>{19a496ad-54da-40d0-a5ab-4c19a350d377}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\glad.c">
@@ -191,6 +197,9 @@
     </ClCompile>
     <ClCompile Include="Source\ColiderBuilder.cpp">
       <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CollisionDetection.cpp">
+      <Filter>Pliki źródłowe\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="Include\ColiderBuilder.h">
       <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CollisionDetection.h">
+      <Filter>Pliki nagłówkowe\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

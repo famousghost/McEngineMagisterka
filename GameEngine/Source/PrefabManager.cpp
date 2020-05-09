@@ -96,12 +96,19 @@ void PrefabManager::createCubeColiderMesh()
 
     l_vertexArray.addValuesToAttribPointer(m_cubeColiderMesh->m_verticies);
 
+    l_vertexArray.addIndicies(m_cubeColiderMesh->m_indicies);
+
     l_vertexArray.unbindVao();
 }
 
 std::shared_ptr<Mesh> PrefabManager::getScreenQuadMesh() const
 {
     return m_screenQuadMesh;
+}
+
+std::shared_ptr<Mesh> PrefabManager::getColiderMesh() const
+{
+    return m_cubeColiderMesh;
 }
 
 void PrefabManager::loadMeshFromFile(std::string p_filePath)

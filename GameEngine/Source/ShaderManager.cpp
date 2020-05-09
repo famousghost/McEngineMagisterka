@@ -22,6 +22,7 @@ void ShaderManager::start()
     addShader("textureShader", "Shaders/textureCube.vlsl", "Shaders/textureCube.flsl");
     addShader("customObjectShader", "Shaders/textureCustom.vlsl", "Shaders/textureCustom.flsl");
     addShader("windowShader", "Shaders/windowShader.vlsl", "Shaders/windowShader.flsl");
+    addShader("coliderShader", "Shaders/colider.vlsl", "Shaders/colider.flsl");
     GameWindow::WindowManager::getInstance().createWindowPlane();
 }
 
@@ -47,6 +48,9 @@ void ShaderManager::resetShaders()
     addShader("diffuseShader", "Shaders/lightCube.vlsl", "Shaders/lightCube.flsl");
     addShader("textureShader", "Shaders/textureCube.vlsl", "Shaders/textureCube.flsl");
     addShader("customObjectShader", "Shaders/textureCustom.vlsl", "Shaders/textureCustom.flsl");
+    addShader("windowShader", "Shaders/windowShader.vlsl", "Shaders/windowShader.flsl");
+    addShader("coliderShader", "Shaders/colider.vlsl", "Shaders/colider.flsl");
+    GameWindow::WindowManager::getInstance().createWindowPlane();
 }
 
 std::shared_ptr<Shader>& ShaderManager::getShader(const std::string& p_label)
