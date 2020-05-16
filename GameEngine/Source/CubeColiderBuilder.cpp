@@ -10,7 +10,7 @@ CubeColiderBuilder::CubeColiderBuilder()
     m_mesh = std::make_shared<Mesh>();
 }
 
-void CubeColiderBuilder::buildVerticies()
+ModelBuilder& CubeColiderBuilder::buildVerticies()
 {
     std::vector<glm::vec3> l_verticies =
     {
@@ -58,6 +58,7 @@ void CubeColiderBuilder::buildVerticies()
     {
         m_mesh->m_indicies.push_back(l_indicies[i]);
     }
+    return *this;
 }
 
 std::shared_ptr<Mesh> CubeColiderBuilder::getMesh() const

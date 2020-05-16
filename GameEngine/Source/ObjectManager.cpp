@@ -1,6 +1,8 @@
 #include "ObjectManager.h"
 #include "TextureManager.h"
 #include "LoadedObjectBuilder.h"
+#include "PhysicsManager.h"
+#include "ColiderObserver.h"
 #include <algorithm>
 
 namespace McEngine
@@ -18,16 +20,18 @@ void ObjectManager::addObject(const Object& p_object, std::string p_objName)
     }
 
     m_objects.push_back(std::make_pair(p_object, p_objName));
+    ColiderObserver* l_coliderObserver = new ColiderObserver(m_objects.back().first);
+    m_coliderObserver.push_back(l_coliderObserver);
 }
 
 void ObjectManager::addCustomObject(std::string p_objectLabel,
                                     std::string p_objectName,
                                     std::string p_shaderLabel)
 {
-    LoadedObjectBuilder l_loadedObjectBuilder(p_objectName);
+    LoadedObjectBuilder l_loadedObjectBuilder(p_objectName, p_objectLabel);
     l_loadedObjectBuilder.addShaderProgram(p_shaderLabel).addMesh();
-
-    addObject(l_loadedObjectBuilder.getObject(), p_objectLabel);
+    auto l_object = l_loadedObjectBuilder.getObject();
+    addObject(l_object, p_objectLabel);
 }
 
 void ObjectManager::update(Object& p_object)
@@ -39,6 +43,7 @@ void ObjectManager::update(Object& p_object)
 
 void ObjectManager::setModelMatrixForObject(Object& p_object)
 {
+    auto& l_physcis = Physics::PhysicsManager::getInstance();
     glm::mat4 l_model;
     auto& l_transform = p_object.m_transform;
     l_model = glm::translate(l_model, l_transform.m_position);
@@ -46,6 +51,8 @@ void ObjectManager::setModelMatrixForObject(Object& p_object)
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    p_object.updateTransformation(l_transform);
+    l_physcis.checkCollisions(p_object, m_objects);
     p_object.m_shaderProgram->uniformMatrix4(l_model, "model");
 }
 

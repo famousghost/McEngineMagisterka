@@ -91,6 +91,12 @@
     <Filter Include="Pliki źródłowe\Physics">
       <UniqueIdentifier>{19a496ad-54da-40d0-a5ab-4c19a350d377}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki nagłówkowe\Observers">
+      <UniqueIdentifier>{ac9d12ee-2449-41dd-814c-e4e63c31a71d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\Observers">
+      <UniqueIdentifier>{5b5537bb-ce37-4fa7-b147-b6daac95a1f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\glad.c">
@@ -197,6 +203,12 @@
     </ClCompile>
     <ClCompile Include="Source\ColiderBuilder.cpp">
       <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ScreenQuadMeshBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ColiderObserver.cpp">
+      <Filter>Pliki źródłowe\Observers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +340,21 @@
     </ClInclude>
     <ClInclude Include="Include\ColiderBuilder.h">
       <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ScreenQuadMeshBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\IColiderObserver.h">
+      <Filter>Pliki nagłówkowe\Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ColiderObserver.h">
+      <Filter>Pliki nagłówkowe\Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ColiderStates.h">
+      <Filter>Pliki nagłówkowe\DEFINES</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Transform.h">
+      <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

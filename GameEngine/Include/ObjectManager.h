@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "IColiderObserver.h"
 #include <vector>
 #include <utility>
 
@@ -39,6 +40,7 @@ private:
 
     void setMaterialForObjectObject(Object & p_object);
     void setModelMatrixForObject(Object & p_object);
+    std::vector<IColiderObserver*> m_coliderObserver;
 
 };
 

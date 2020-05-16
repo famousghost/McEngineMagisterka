@@ -121,29 +121,9 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
     auto& l_objectManager = p_scene.getObjectManager();
 
     auto& l_objects = l_objectManager.getObjects();
-    auto& l_physcis = Physics::PhysicsManager::getInstance();
+    auto& l_physicsManager = Physics::PhysicsManager::getInstance();
 
-    for (std::size_t i = 0; i < l_objects.size(); ++i)
-    {
-        bool isColliding = false;
-        auto& l_object = l_objects[i].first;
-        for(std::size_t j = i+1; j < l_objects.size(); ++j)
-        {
-            bool l_checkCollsion = l_physcis.checkCollision(l_object.m_colider, l_objects[j].first.m_colider);
-            std::cout << l_checkCollsion << std::endl;
-            if (l_checkCollsion)
-            {
-                l_object.m_colider.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
-                isColliding = true;
-            }
-        }
-        if (not isColliding)
-        {
-            l_object.m_colider.m_coliderColor = glm::vec3(0.0f, 1.0f, 0.0f);
-        }
-    }
-
-    for (auto& object : l_objectManager.getObjects())
+    for (auto& object : l_objects)
     {
         auto& l_object = object.first;
         auto& l_shaderProgram = *l_object.m_shaderProgram;

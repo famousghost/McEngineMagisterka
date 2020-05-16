@@ -12,7 +12,7 @@ class ModelBuilder
 {
 public:
     virtual ~ModelBuilder() {}
-    virtual void buildVerticies() = 0;
+    virtual ModelBuilder& buildVerticies() = 0;
 
     virtual std::shared_ptr<Mesh> getMesh() const = 0;
 };

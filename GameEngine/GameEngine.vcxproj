@@ -153,6 +153,7 @@
     <ClCompile Include="..\Libs\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\ColiderBuilder.cpp" />
+    <ClCompile Include="Source\ColiderObserver.cpp" />
     <ClCompile Include="Source\CubeColiderBuilder.cpp" />
     <ClCompile Include="Source\FilePathParser.cpp" />
     <ClCompile Include="Source\LoadedObjectBuilder.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\ScenesManager.cpp" />
     <ClCompile Include="Source\ScreenQuadBuilder.cpp" />
+    <ClCompile Include="Source\ScreenQuadMeshBuilder.cpp" />
     <ClCompile Include="Source\Shader.cpp" />
     <ClCompile Include="Source\ShaderLoader.cpp" />
     <ClCompile Include="Source\ShaderManager.cpp" />
@@ -192,8 +194,11 @@
     <ClInclude Include="..\Libs\ImGUI\imstb_truetype.h" />
     <ClInclude Include="Include\Camera.h" />
     <ClInclude Include="Include\ColiderBuilder.h" />
+    <ClInclude Include="Include\ColiderStates.h" />
+    <ClInclude Include="Include\IColiderObserver.h" />
     <ClInclude Include="Include\CubeColiderBuilder.h" />
     <ClInclude Include="Include\FilePathParser.h" />
+    <ClInclude Include="Include\ColiderObserver.h" />
     <ClInclude Include="Include\LoadedObjectBuilder.h" />
     <ClInclude Include="Include\MouseRay.h" />
     <ClInclude Include="Include\Defines.h" />
@@ -213,6 +218,7 @@
     <ClInclude Include="Include\Scene.h" />
     <ClInclude Include="Include\ScenesManager.h" />
     <ClInclude Include="Include\ScreenQuadBuilder.h" />
+    <ClInclude Include="Include\ScreenQuadMeshBuilder.h" />
     <ClInclude Include="Include\Shader.h" />
     <ClInclude Include="Include\ShaderLoader.h" />
     <ClInclude Include="Include\ShaderManager.h" />
@@ -222,6 +228,7 @@
     <ClInclude Include="Include\TextureManager.h" />
     <ClInclude Include="Include\PrefabManager.h" />
     <ClInclude Include="Include\TimeManager.h" />
+    <ClInclude Include="Include\Transform.h" />
     <ClInclude Include="Include\VertexArray.h" />
     <ClInclude Include="Include\Window.h" />
     <ClInclude Include="Include\WindowManager.h" />

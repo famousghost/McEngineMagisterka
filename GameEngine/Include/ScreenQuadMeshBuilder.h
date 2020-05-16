@@ -5,14 +5,13 @@ namespace McEngine
 {
 namespace Meshes
 {
-
-class CubeColiderBuilder : public ModelBuilder
+class ScreenQuadMeshBuilder : public ModelBuilder
 {
 public:
-    CubeColiderBuilder();
     ModelBuilder& buildVerticies() override;
 
     std::shared_ptr<Mesh> getMesh() const override;
+
 private:
     std::shared_ptr<Mesh> m_mesh;
 };

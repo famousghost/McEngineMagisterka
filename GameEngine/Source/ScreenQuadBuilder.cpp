@@ -28,7 +28,7 @@ ObjectBuilder& ScreenQuadBuilder::addShaderProgram(std::string p_shaderLabel)
     return *this;
 }
 
-Object ScreenQuadBuilder::getObject() const
+Object ScreenQuadBuilder::getObject()
 {
     return m_object;
 }

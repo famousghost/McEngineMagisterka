@@ -13,7 +13,7 @@ class ObjectBuilder
         virtual ObjectBuilder& addMesh() = 0;
         virtual ObjectBuilder& addShaderProgram(std::string p_shaderLabel) = 0;
 
-        virtual Object getObject() const = 0;
+        virtual Object getObject() = 0;
 };
 
 }//Meshes

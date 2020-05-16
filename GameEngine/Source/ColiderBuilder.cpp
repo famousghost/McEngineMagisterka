@@ -34,7 +34,7 @@ ObjectBuilder & ColiderBuilder::addShaderProgram(std::string p_shaderLabel)
     }
     return *this;
 }
-Object ColiderBuilder::getObject() const
+Object ColiderBuilder::getObject()
 {
     return m_object;
 }

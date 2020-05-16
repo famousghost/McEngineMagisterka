@@ -11,7 +11,7 @@ public:
     ObjectBuilder& addMesh() override;
     ObjectBuilder& addShaderProgram(std::string p_shaderLabel) override;
 
-    Object getObject() const override;
+    Object getObject() override;
 private:
     Object m_object;
 };
