@@ -13,9 +13,9 @@ public:
     static float s_xOffset;
     static float s_yOffset;
 
-
     static bool s_canMoveCamera;
     static bool s_canRotateCamera;
+    static bool s_onClickMouse;
 
     static GLfloat s_cameraMoveSpeedOnAxisZ;
     static GLfloat s_cameraMoveSpeedOnAxisX;

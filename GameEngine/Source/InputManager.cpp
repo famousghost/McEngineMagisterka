@@ -13,6 +13,7 @@ float InputManager::s_yOffset = 0.0f;
 
 bool InputManager::s_canMoveCamera = false;
 bool InputManager::s_canRotateCamera = false;
+bool InputManager::s_onClickMouse = false;
 
 GLfloat InputManager::s_cameraMoveSpeedOnAxisZ = 0.0f;
 GLfloat InputManager::s_cameraMoveSpeedOnAxisX = 0.0f;
@@ -75,6 +76,10 @@ void InputManager::mouse_button_callback(GLFWwindow* p_window, int p_button, int
             glfwSetInputMode(l_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             s_canRotateCamera = true;
         }
+        if (p_button == GLFW_MOUSE_BUTTON_LEFT)
+        {
+            s_onClickMouse = true;
+        }
     }
     if (p_action == GLFW_RELEASE)
     {
@@ -82,6 +87,10 @@ void InputManager::mouse_button_callback(GLFWwindow* p_window, int p_button, int
         {
             glfwSetInputMode(l_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             s_canRotateCamera = false;
+        }
+        if (p_button == GLFW_MOUSE_BUTTON_LEFT)
+        {
+            s_onClickMouse = false;
         }
     }
 }

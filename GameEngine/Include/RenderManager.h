@@ -18,6 +18,8 @@ public:
 
     void fillMesh();
 
+    void drawColliders(Meshes::Object & p_object, Cameras::Camera & p_camera);
+
     static RenderManager& getInstance();
 private:
     RenderManager() = default;

@@ -29,6 +29,47 @@ glm::vec3 MouseRay::getMousePosition()
     return l_worldSpace;
 }
 
+bool MouseRay::checkIntersectionWithCube(glm::vec3 p_min, glm::vec3 p_max)
+{
+    auto l_rayOrigin = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getEditorCamera()->getCameraPosition();
+    auto l_rayDirection = getMousePosition();
+    
+    float tmin = (p_min.x - l_rayOrigin.x) / l_rayDirection.x;
+    float tmax = (p_max.x - l_rayOrigin.x) / l_rayDirection.x;
+
+    if (tmin > tmax) std::swap(tmin, tmax);
+
+    float tymin = (p_min.y - l_rayOrigin.y) / l_rayDirection.y;
+    float tymax = (p_max.y - l_rayOrigin.y) / l_rayDirection.y;
+
+    if (tymin > tymax) std::swap(tymin, tymax);
+
+    if ((tmin > tymax) || (tymin > tmax))
+        return false;
+
+    if (tymin > tmin)
+        tmin = tymin;
+
+    if (tymax < tmax)
+        tmax = tymax;
+
+    float tzmin = (p_min.z - l_rayOrigin.z) / l_rayDirection.z;
+    float tzmax = (p_max.z - l_rayOrigin.z) / l_rayDirection.z;
+
+    if (tzmin > tzmax) std::swap(tzmin, tzmax);
+
+    if ((tmin > tzmax) || (tzmin > tmax))
+        return false;
+
+    if (tzmin > tmin)
+        tmin = tzmin;
+
+    if (tzmax < tmax)
+        tmax = tzmax;
+
+    return true;
+}
+
 glm::vec3 MouseRay::convertToWorldSpace(const glm::vec4 p_viewSpace)
 {
     auto& l_currentCamera = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getEditorCamera();
