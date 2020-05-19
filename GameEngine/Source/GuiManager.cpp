@@ -153,6 +153,11 @@ void GuiManager::updateObjectTetxture()
     }
 }
 
+void GuiManager::chooseObjectViaMouse(std::string p_objectLabel)
+{
+    m_currentObject = p_objectLabel;
+}
+
 void GuiManager::addObject(std::vector<std::string>& p_items)
 {
     auto& l_objects =

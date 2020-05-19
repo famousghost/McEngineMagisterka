@@ -4,6 +4,8 @@
 #include "TextureManager.h"
 #include "WindowManager.h"
 #include "PhysicsManager.h"
+#include "MouseRay.h"
+#include "InputManager.h"
 
 namespace McEngine
 {
@@ -165,6 +167,28 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
         if (m_fillMesh)
         {
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
+
+        if (Inputs::InputManager::getInstance().s_onClickMouse)
+        {
+            auto& l_colider = l_object.m_colider;
+            glm::mat4 l_coliderModel;
+            glm::vec4 l_min = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
+            glm::vec4 l_max = glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);
+            l_coliderModel = glm::translate(l_colider.m_modelMatrix, l_object.m_transform.m_position);
+            l_min = l_coliderModel * l_min;
+            l_max = l_coliderModel * l_max;
+            Inputs::MouseRay l_mouseRay;
+
+            if (l_mouseRay.checkIntersectionWithCube(glm::vec3(l_min), glm::vec3(l_max)))
+            {
+                Gui::GuiManager::getInstance().chooseObjectViaMouse(l_object.m_objectName);
+                l_object.m_material.m_objectColor = glm::vec3(0.0f, 1.0f, 0.0f);
+            }
+            else
+            {
+                l_object.m_material.m_objectColor = glm::vec3(1.0f, 1.0f, 1.0f);
+            }
         }
     }
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

@@ -82,8 +82,8 @@ glm::vec4 MouseRay::convertToViewSpace(const glm::vec4& p_clipSpace)
 {
     auto& l_currentCamera = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getEditorCamera();
     glm::vec4 l_viewSpace = glm::inverse(l_currentCamera->getProjectionMatrix()) * p_clipSpace;
-    l_viewSpace = glm::vec4(l_viewSpace.x, l_viewSpace.y, -1.0f, 1.0f);
-    return l_viewSpace;
+    l_viewSpace = glm::vec4(l_viewSpace.x, l_viewSpace.y, -1.0f, 0.0f);
+    return glm::normalize(l_viewSpace);
 }
 
 glm::vec2 MouseRay::convertToNDC(double p_mouseXPosition, double p_mouseYPosition)
@@ -92,8 +92,8 @@ glm::vec2 MouseRay::convertToNDC(double p_mouseXPosition, double p_mouseYPositio
     int l_width;
     int l_height;
     glfwGetWindowSize(l_currentWindow, &l_width, &l_height);
-    float x = (2.0f * p_mouseXPosition) / l_width - 1.0f;
-    float y = 1.0f - (2.0f * p_mouseYPosition) / l_height;
+    float x = (2.0f * p_mouseXPosition) / (l_width/2) - 1.0f;
+    float y = 1.0f - (2.0f * p_mouseYPosition) / (l_height/2);
     return glm::vec2(x, y);
 }
 

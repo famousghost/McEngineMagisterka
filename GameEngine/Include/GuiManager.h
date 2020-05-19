@@ -21,6 +21,8 @@ public:
 
     void updateObjectTetxture();
 
+    void chooseObjectViaMouse(std::string p_objectLabel);
+
     static GuiManager& getInstance()
     {
         static GuiManager guiManager;

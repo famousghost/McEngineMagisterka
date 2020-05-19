@@ -4,7 +4,6 @@
 #include "PhysicsManager.h"
 #include "ColiderObserver.h"
 #include "InputManager.h"
-#include "MouseRay.h"
 #include <algorithm>
 #include <iostream>
 
@@ -54,33 +53,8 @@ void ObjectManager::setModelMatrixForObject(Object& p_object)
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    auto& l_colider = p_object.m_colider;
-    glm::mat4 l_coliderModel;
-    l_colider.m_firstVertex = l_colider.m_rawFirstVertex;
-    l_coliderModel = glm::translate(l_colider.m_modelMatrix, p_object.m_transform.m_position);
-    l_colider.m_firstVertex = l_coliderModel * l_colider.m_rawFirstVertex;
     p_object.updateTransformation(l_transform);
     l_physcis.checkCollisions(p_object, m_objects);
-
-    if(Inputs::InputManager::getInstance().s_onClickMouse)
-    {
-        Inputs::MouseRay l_mouseRay;
-        glm::vec3 l_min = glm::vec3(l_colider.m_firstVertex.x, 
-                                    l_colider.m_firstVertex.y - l_colider.m_heigth,
-                                    l_colider.m_firstVertex.z);
-
-        glm::vec3 l_max = glm::vec3(l_colider.m_firstVertex.x + l_colider.m_width,
-                                    l_colider.m_firstVertex.y,
-                                    l_colider.m_firstVertex.z - l_colider.m_length);
-
-        std::cout << l_min.x << ", " << l_mouseRay.getMousePosition().x << std::endl;
-
-        if (l_mouseRay.checkIntersectionWithCube(l_min, l_max))
-        {
-            p_object.m_material.m_objectColor = glm::vec3(0.0f, 1.0f, 0.0f);
-        }
-    }
-
     p_object.m_shaderProgram->uniformMatrix4(l_model, "model");
 }
 
