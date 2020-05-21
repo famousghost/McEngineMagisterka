@@ -35,6 +35,7 @@ public:
     void activeTextures(Object& p_object);
 
     std::vector<std::pair<Object, std::string>>& getObjects();
+    glm::vec3 m_lightPosition;
 private:
     std::vector<std::pair<Object, std::string>> m_objects;
 

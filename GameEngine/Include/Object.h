@@ -52,6 +52,20 @@ struct Colider
     }
 };
 
+struct Light
+{
+    std::vector<std::shared_ptr<Mesh>> m_meshes;
+    std::shared_ptr<Shaders::Shader> m_shaderProgram;
+    glm::mat4 m_modelMatrix;
+    glm::vec3 m_position;
+
+    Light()
+    {
+        m_position = glm::vec3(0.0f, 0.0f, 0.0f);
+        m_modelMatrix = glm::mat4();
+    }
+};
+
 struct Object
 {
     std::vector<std::shared_ptr<Mesh>> m_meshes;

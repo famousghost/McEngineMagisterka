@@ -162,7 +162,10 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
 
         l_shaderProgram.unbindShaderProgram();
 
-        drawColliders(l_object, *p_camera);
+        if(Gui::GuiManager::getInstance().getColliderVisiblity())
+        {
+            drawColliders(l_object, *p_camera);
+        }
 
         if (m_fillMesh)
         {

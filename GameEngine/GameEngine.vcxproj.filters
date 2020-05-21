@@ -210,6 +210,9 @@
     <ClCompile Include="Source\ColiderObserver.cpp">
       <Filter>Pliki źródłowe\Observers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LightBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Defines.h">
@@ -355,6 +358,9 @@
     </ClInclude>
     <ClInclude Include="Include\Transform.h">
       <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LightBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

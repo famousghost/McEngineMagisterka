@@ -156,6 +156,7 @@
     <ClCompile Include="Source\ColiderObserver.cpp" />
     <ClCompile Include="Source\CubeColiderBuilder.cpp" />
     <ClCompile Include="Source\FilePathParser.cpp" />
+    <ClCompile Include="Source\LightBuilder.cpp" />
     <ClCompile Include="Source\LoadedObjectBuilder.cpp" />
     <ClCompile Include="Source\MouseRay.cpp" />
     <ClCompile Include="Source\EditorManager.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Include\CubeColiderBuilder.h" />
     <ClInclude Include="Include\FilePathParser.h" />
     <ClInclude Include="Include\ColiderObserver.h" />
+    <ClInclude Include="Include\LightBuilder.h" />
     <ClInclude Include="Include\LoadedObjectBuilder.h" />
     <ClInclude Include="Include\MouseRay.h" />
     <ClInclude Include="Include\Defines.h" />

@@ -23,6 +23,8 @@ public:
 
     void chooseObjectViaMouse(std::string p_objectLabel);
 
+    bool getColliderVisiblity() const;
+
     static GuiManager& getInstance()
     {
         static GuiManager guiManager;
@@ -40,6 +42,7 @@ private:
     std::string m_currentTexture;
     std::string m_newObjectPath;
     std::size_t m_elementNumber;
+    bool m_colidersVisiblity;
 
     void addObject(std::vector<std::string>& p_items);
     void objectMoveOperations();

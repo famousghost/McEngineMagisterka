@@ -17,8 +17,8 @@ struct Material
 };
 
 uniform vec3 cameraPos;
-
-vec4 lightPosition = vec4(0.0, 10.0, 0.0, 1.0);
+uniform vec3 lightPosition;
+//vec4 lightPosition = vec4(0.0, 10.0, 0.0, 1.0);
 //vec4 cameraPos = vec4(0.0, 0.0, -3.0, 1.0);
 
 uniform Material material;
@@ -28,7 +28,7 @@ void main()
 	vec3 ambientLight = material.ambient * material.objectColor;
 	vec3 diffuseLight = material.diffuse;
 	vec3 specularLight = material.specular;
-	vec4 lightPos = lightPosition - wPos;
+	vec4 lightPos = vec4(lightPosition, 1.0) - wPos;
 	float lightColor = max(dot(vec3(lightPos), normCoords), 0.0);
 	
 	diffuseLight *= lightColor * material.objectColor;

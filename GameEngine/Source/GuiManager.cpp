@@ -22,6 +22,7 @@ void GuiManager::start()
     m_currentTexture = "Wall";
     m_objectElementSize = 0;
     m_elementNumber = 0;
+    m_colidersVisiblity = false;
     initImGui();
 }
 
@@ -60,8 +61,7 @@ void GuiManager::meshGui()
                                                     "colorShader", 
                                                     "diffuseShader", 
                                                     "textureShader", 
-                                                    "customObjectShader", 
-                                                    "windowShader"};
+                                                    "customObjectShader"};
 
     static std::vector<std::string> textureItems = {"Wall", 
                                                     "Awsomeface", 
@@ -91,6 +91,21 @@ void GuiManager::meshGui()
     updateObjectTetxture();
     updateListOfObjects(objectsToAdd);
 
+    static std::string buttonName = "show collider";
+    if (ImGui::Button(buttonName.c_str()))
+    {
+        if(buttonName == "show collider")
+        {
+            m_colidersVisiblity = true;
+            buttonName = "hide collider";
+        }
+        else
+        {
+            buttonName = "show collider";
+            m_colidersVisiblity = false;
+        }
+    }
+
     auto& l_renderManager = Renderer::RenderManager::getInstance();
 
     if (ImGui::Button("Show Raw Mesh"))
@@ -101,6 +116,14 @@ void GuiManager::meshGui()
     {
         l_renderManager.fillMesh();
     }
+
+    if (ImGui::Button("Reload Shaders"))
+    {
+        Shaders::ShaderManager::getInstance().resetShaders();
+    }
+
+    
+    ImGui::SliderFloat3("LightPosition", &l_objectManager.m_lightPosition.x, -10.0f, 10.0f);
 
     ImGui::SameLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -156,6 +179,11 @@ void GuiManager::updateObjectTetxture()
 void GuiManager::chooseObjectViaMouse(std::string p_objectLabel)
 {
     m_currentObject = p_objectLabel;
+}
+
+bool GuiManager::getColliderVisiblity() const
+{
+    return m_colidersVisiblity;
 }
 
 void GuiManager::addObject(std::vector<std::string>& p_items)

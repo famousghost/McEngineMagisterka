@@ -23,6 +23,7 @@ void ShaderManager::start()
     addShader("customObjectShader", "Shaders/textureCustom.vlsl", "Shaders/textureCustom.flsl");
     addShader("windowShader", "Shaders/windowShader.vlsl", "Shaders/windowShader.flsl");
     addShader("coliderShader", "Shaders/colider.vlsl", "Shaders/colider.flsl");
+    addShader("lightShader", "Shaders/light.vlsl", "Shaders/light.flsl");
     GameWindow::WindowManager::getInstance().createWindowPlane();
 }
 
@@ -50,6 +51,7 @@ void ShaderManager::resetShaders()
     addShader("customObjectShader", "Shaders/textureCustom.vlsl", "Shaders/textureCustom.flsl");
     addShader("windowShader", "Shaders/windowShader.vlsl", "Shaders/windowShader.flsl");
     addShader("coliderShader", "Shaders/colider.vlsl", "Shaders/colider.flsl");
+    addShader("lightShader", "Shaders/light.vlsl", "Shaders/light.flsl");
     GameWindow::WindowManager::getInstance().createWindowPlane();
 }
 

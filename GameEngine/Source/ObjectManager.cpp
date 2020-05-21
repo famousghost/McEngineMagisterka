@@ -60,6 +60,7 @@ void ObjectManager::setModelMatrixForObject(Object& p_object)
 
 void ObjectManager::setMaterialForObjectObject(Object& p_object)
 {
+    p_object.m_shaderProgram->uniformVec3(m_lightPosition, "lightPosition");
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_ambientLight, "material.ambient");
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_diffuseLight, "material.diffuse");
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_specularLight, "material.specular");
