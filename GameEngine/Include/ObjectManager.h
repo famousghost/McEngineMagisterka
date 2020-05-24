@@ -3,6 +3,7 @@
 #include "IColiderObserver.h"
 #include <vector>
 #include <utility>
+#include "Camera.h"
 
 namespace McEngine
 {
@@ -29,6 +30,10 @@ public:
     void deleteObject(std::string p_objName);
 
     void update(Object & object);
+
+    void updateCollider(Object & p_object, Cameras::Camera & p_camera);
+
+    void transformCollider(Colider & p_collider, const glm::mat4 & p_colliderModel);
 
     void setTexture(Mesh & p_mesh, const Texture & p_texture);
 

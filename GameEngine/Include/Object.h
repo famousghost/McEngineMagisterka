@@ -26,15 +26,23 @@ struct Material
     glm::vec3 m_objectColor;
 };
 
+struct Section
+{
+    glm::vec4 min;
+    glm::vec4 max;
+};
+
 struct Colider
 {
     std::vector<std::shared_ptr<Mesh>> m_meshes;
     std::shared_ptr<Shaders::Shader> m_shaderProgram;
-    glm::mat4 m_modelMatrix;
     glm::vec3 m_position;
     glm::vec3 m_scale;
-    glm::vec4 m_firstVertex;
-    glm::vec4 m_rawFirstVertex;
+    glm::vec4 m_minVertex;
+    glm::vec4 m_maxVertex;
+    Section m_xSection;
+    Section m_ySection;
+    Section m_zSection;
     glm::vec3 m_coliderColor;
     float m_width;
     float m_heigth;
@@ -45,10 +53,35 @@ struct Colider
         m_position = glm::vec3(0.0f, 0.0f, 0.0f);
         m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
         m_coliderColor = glm::vec3(0.0f, 1.0f ,0.0f);
+        m_minVertex = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
+        m_maxVertex = glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);
         m_width = 2.0f;
         m_heigth = 2.0f;
         m_length = 2.0f;
-        m_modelMatrix = glm::mat4();
+
+        m_xSection.min = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
+        m_xSection.max = glm::vec4(1.0f, -1.0f, 1.0f, 1.0f);
+
+        m_ySection.min = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
+        m_ySection.max = glm::vec4(-1.0f, 1.0f, 1.0f, 1.0f);
+
+        m_zSection.min = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
+        m_zSection.max = glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f);
+    }
+
+    void reset()
+    {
+        m_minVertex = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
+        m_maxVertex = glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);
+
+        m_xSection.min = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
+        m_xSection.max = glm::vec4(1.0f, -1.0f, 1.0f, 1.0f);
+
+        m_ySection.min = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
+        m_ySection.max = glm::vec4(-1.0f, 1.0f, 1.0f, 1.0f);
+
+        m_zSection.min = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
+        m_zSection.max = glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f);
     }
 };
 
@@ -56,13 +89,11 @@ struct Light
 {
     std::vector<std::shared_ptr<Mesh>> m_meshes;
     std::shared_ptr<Shaders::Shader> m_shaderProgram;
-    glm::mat4 m_modelMatrix;
     glm::vec3 m_position;
 
     Light()
     {
         m_position = glm::vec3(0.0f, 0.0f, 0.0f);
-        m_modelMatrix = glm::mat4();
     }
 };
 
@@ -74,7 +105,6 @@ struct Object
     Colider m_colider;
     std::string m_currentAvaiableTexture;
     Material m_material;
-    glm::mat4 m_modelMatrix;
     Transform m_transform;
     std::string m_objectName;
 
@@ -98,7 +128,6 @@ struct Object
 
     Object()
     {
-        m_modelMatrix = glm::mat4();
         m_currentAvaiableTexture = "texture";
     }
 };

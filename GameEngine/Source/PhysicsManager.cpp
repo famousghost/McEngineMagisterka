@@ -24,20 +24,12 @@ PhysicsManager & PhysicsManager::getInstance()
 bool PhysicsManager::checkCollision(const Meshes::Colider& p_coliderA, 
                                     const Meshes::Colider& p_coliderB)
 {
-    auto l_coliderAMaxValueX = p_coliderA.m_firstVertex.x + p_coliderA.m_width;
-    auto l_coliderAMaxValueY = p_coliderA.m_firstVertex.y + p_coliderA.m_heigth;
-    auto l_coliderAMaxValueZ = p_coliderA.m_firstVertex.z + p_coliderA.m_length;
-
-    auto l_coliderBMaxValueX = p_coliderB.m_firstVertex.x + p_coliderB.m_width;
-    auto l_coliderBMaxValueY = p_coliderB.m_firstVertex.y + p_coliderB.m_heigth;
-    auto l_coliderBMaxValueZ = p_coliderB.m_firstVertex.z + p_coliderB.m_length;
-
-    return (p_coliderA.m_firstVertex.x <= l_coliderBMaxValueX
-           and l_coliderAMaxValueX >= p_coliderB.m_firstVertex.x)
-           and (p_coliderA.m_firstVertex.y <= l_coliderBMaxValueY
-           and l_coliderAMaxValueY >= p_coliderB.m_firstVertex.y)
-           and (p_coliderA.m_firstVertex.z <= l_coliderBMaxValueZ
-           and l_coliderAMaxValueZ >= p_coliderB.m_firstVertex.z);
+    return (p_coliderA.m_xSection.min.x <= p_coliderB.m_xSection.max.x
+           and p_coliderA.m_xSection.max.x >= p_coliderB.m_xSection.min.x)
+           and (p_coliderA.m_ySection.min.y <= p_coliderB.m_ySection.max.y
+           and p_coliderA.m_ySection.max.y >= p_coliderB.m_ySection.min.y)
+           and (p_coliderA.m_zSection.min.z >= p_coliderB.m_zSection.max.z
+           and p_coliderA.m_zSection.max.z <= p_coliderB.m_zSection.min.z);
 }
 
 bool PhysicsManager::getShouldCheckCollsion() const

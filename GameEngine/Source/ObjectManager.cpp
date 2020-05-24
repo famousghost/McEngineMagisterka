@@ -43,6 +43,35 @@ void ObjectManager::update(Object& p_object)
     activeTextures(p_object);
 }
 
+void ObjectManager::updateCollider(Object& p_object, 
+                                   Cameras::Camera& p_camera)
+{
+    auto& l_collider = p_object.m_colider;
+    l_collider.m_shaderProgram->uniformVec3(l_collider.m_coliderColor, "coliderColor");
+    glm::mat4 l_colliderModel;
+    l_colliderModel = glm::translate(l_colliderModel, p_object.m_transform.m_position);
+    l_colliderModel = glm::scale(l_colliderModel, p_object.m_transform.m_scale);
+    transformCollider(l_collider, l_colliderModel);
+    l_collider.m_shaderProgram->uniformMatrix4(l_colliderModel, "model");
+    p_camera.update(*l_collider.m_shaderProgram, "cameraPos", "view", "projection");
+}
+
+void ObjectManager::transformCollider(Colider& p_collider, const glm::mat4& p_colliderModel)
+{
+    p_collider.reset();
+    p_collider.m_minVertex = p_colliderModel * p_collider.m_minVertex;
+    p_collider.m_maxVertex = p_colliderModel * p_collider.m_maxVertex;
+
+    p_collider.m_xSection.min = p_colliderModel * p_collider.m_xSection.min;
+    p_collider.m_xSection.max = p_colliderModel * p_collider.m_xSection.max;
+
+    p_collider.m_ySection.min = p_colliderModel * p_collider.m_ySection.min;
+    p_collider.m_ySection.max = p_colliderModel * p_collider.m_ySection.max;
+
+    p_collider.m_zSection.min = p_colliderModel * p_collider.m_zSection.min;
+    p_collider.m_zSection.max = p_colliderModel * p_collider.m_zSection.max;
+}
+
 void ObjectManager::setModelMatrixForObject(Object& p_object)
 {
     auto& l_physcis = Physics::PhysicsManager::getInstance();

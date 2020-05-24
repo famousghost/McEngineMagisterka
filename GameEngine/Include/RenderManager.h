@@ -18,7 +18,7 @@ public:
 
     void fillMesh();
 
-    void drawColliders(Meshes::Object & p_object, Cameras::Camera & p_camera);
+    void drawColliders(Meshes::Object & p_object, Cameras::Camera & p_camera, Meshes::ObjectManager & p_objectManager);
 
     static RenderManager& getInstance();
 private:

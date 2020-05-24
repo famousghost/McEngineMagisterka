@@ -116,28 +116,23 @@ void RenderManager::fillMesh()
 }
 
 void RenderManager::drawColliders(Meshes::Object& p_object,
-                                  Cameras::Camera& p_camera)
+                                  Cameras::Camera& p_camera,
+                                  Meshes::ObjectManager& p_objectManager)
 {
     auto& l_object = p_object;
-    auto& l_coliderMesh = l_object.m_colider.m_meshes.at(0);
-    auto& l_colider = l_object.m_colider;
-    l_colider.m_shaderProgram->bindShaderProgram();
+    auto& l_collider = l_object.m_colider;
+    l_collider.m_shaderProgram->bindShaderProgram();
+    p_objectManager.updateCollider(p_object, p_camera);
 
-    l_object.m_colider.m_shaderProgram->uniformVec3(l_colider.m_coliderColor, "coliderColor");
-    glm::mat4 l_coliderModel;
-    l_colider.m_firstVertex = l_colider.m_rawFirstVertex;
-    l_coliderModel = glm::translate(l_colider.m_modelMatrix, l_object.m_transform.m_position);
-    l_colider.m_firstVertex = l_coliderModel * l_colider.m_rawFirstVertex;
-    l_colider.m_shaderProgram->uniformMatrix4(l_coliderModel, "model");
-    p_camera.update(*l_colider.m_shaderProgram, "cameraPos", "view", "projection");
     glDisable(GL_CULL_FACE);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    auto& l_coliderMesh = l_object.m_colider.m_meshes.at(0);
     l_coliderMesh->m_vertexArray.bindVao();
     glDrawElements(GL_TRIANGLES, l_coliderMesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
     l_coliderMesh->m_vertexArray.unbindVao();
 
-    l_colider.m_shaderProgram->unbindShaderProgram();
+    l_collider.m_shaderProgram->unbindShaderProgram();
     glEnable(GL_CULL_FACE);
 }
 
@@ -164,7 +159,7 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
 
         if(Gui::GuiManager::getInstance().getColliderVisiblity())
         {
-            drawColliders(l_object, *p_camera);
+            drawColliders(l_object, *p_camera, l_objectManager);
         }
 
         if (m_fillMesh)
@@ -175,15 +170,11 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
         if (Inputs::InputManager::getInstance().s_onClickMouse)
         {
             auto& l_colider = l_object.m_colider;
-            glm::mat4 l_coliderModel;
-            glm::vec4 l_min = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
-            glm::vec4 l_max = glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);
-            l_coliderModel = glm::translate(l_colider.m_modelMatrix, l_object.m_transform.m_position);
-            l_min = l_coliderModel * l_min;
-            l_max = l_coliderModel * l_max;
+        
             Inputs::MouseRay l_mouseRay;
 
-            if (l_mouseRay.checkIntersectionWithCube(glm::vec3(l_min), glm::vec3(l_max)))
+            if (l_mouseRay.checkIntersectionWithCube(glm::vec3(l_colider.m_minVertex), 
+                                                     glm::vec3(l_colider.m_maxVertex)))
             {
                 Gui::GuiManager::getInstance().chooseObjectViaMouse(l_object.m_objectName);
                 l_object.m_material.m_objectColor = glm::vec3(0.0f, 1.0f, 0.0f);
