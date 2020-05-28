@@ -21,7 +21,7 @@ PhysicsManager & PhysicsManager::getInstance()
     return l_physicsManager;
 }
 
-bool PhysicsManager::checkCollision(const Meshes::Colider& p_coliderA, 
+bool PhysicsManager::checkCollisionAABB(const Meshes::Colider& p_coliderA, 
                                     const Meshes::Colider& p_coliderB)
 {
     return (p_coliderA.m_xSection.min.x <= p_coliderB.m_xSection.max.x
@@ -30,6 +30,12 @@ bool PhysicsManager::checkCollision(const Meshes::Colider& p_coliderA,
            and p_coliderA.m_ySection.max.y >= p_coliderB.m_ySection.min.y)
            and (p_coliderA.m_zSection.min.z >= p_coliderB.m_zSection.max.z
            and p_coliderA.m_zSection.max.z <= p_coliderB.m_zSection.min.z);
+}
+
+bool PhysicsManager::checkCollisionOBB(const Meshes::Colider & p_coliderA, 
+                                       const Meshes::Colider & p_coliderB)
+{
+    return true;
 }
 
 bool PhysicsManager::getShouldCheckCollsion() const
@@ -42,17 +48,48 @@ void PhysicsManager::setShouldCheckCollision(bool p_shouldCheckCollision)
     m_shouldCheckCollsion = p_shouldCheckCollision;
 }
 
-void PhysicsManager::checkCollisions(Meshes::Object& p_object, 
-                                     std::vector<std::pair<Meshes::Object, std::string>>& p_objects)
+void PhysicsManager::checkCollisionDetectionAABB(Meshes::Object& p_object, 
+                                                 std::vector<std::pair<Meshes::Object, std::string>>& p_objects)
 {
     if(m_shouldCheckCollsion)
     {
-        std::cout << p_object.m_objectName << "Check collision" << std::endl;
-        collisionChecker(p_object, p_objects);
+        collisionCheckerAABB(p_object, p_objects);
     }
 }
 
-void PhysicsManager::collisionChecker(Meshes::Object& p_object,
+void PhysicsManager::checkCollisionDetectionOBB(Meshes::Object & p_object, 
+                                                std::vector<std::pair<Meshes::Object, std::string>>& p_objects)
+{
+    if (m_shouldCheckCollsion)
+    {
+        collisionCheckerOBB(p_object, p_objects);
+    }
+}
+
+void PhysicsManager::collisionCheckerOBB(Meshes::Object& p_object,
+                                         std::vector<std::pair<Meshes::Object, std::string>>& p_objects)
+{
+    bool isColliding = false;
+    for (std::size_t j = 0; j < p_objects.size(); ++j)
+    {
+        if (p_object.m_objectName == p_objects[j].first.m_objectName)
+        {
+            continue;
+        }
+
+        if (checkCollisionOBB(p_object.m_colider, p_objects[j].first.m_colider))
+        {
+            p_object.m_colider.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
+            isColliding = true;
+        }
+    }
+    if (not isColliding)
+    {
+        p_object.m_colider.m_coliderColor = glm::vec3(0.0f, 1.0f, 0.0f);
+    }
+}
+
+void PhysicsManager::collisionCheckerAABB(Meshes::Object& p_object,
                                       std::vector<std::pair<Meshes::Object, std::string>>& p_objects)
 {
     bool isColliding = false;
@@ -63,12 +100,11 @@ void PhysicsManager::collisionChecker(Meshes::Object& p_object,
             continue;
         }
 
-        if (checkCollision(p_object.m_colider, p_objects[j].first.m_colider))
+        if (checkCollisionAABB(p_object.m_colider, p_objects[j].first.m_colider))
         {
             p_object.m_colider.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
             isColliding = true;
         }
-        
     }
     if (not isColliding)
     {

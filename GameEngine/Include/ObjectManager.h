@@ -43,6 +43,11 @@ public:
     glm::vec3 m_lightPosition;
 private:
     std::vector<std::pair<Object, std::string>> m_objects;
+    void print(const glm::vec4 & p_vec);
+    //TODO rid of this variables, created only for debuging
+    glm::vec4 m_x;
+    glm::vec4 m_y;
+    glm::vec4 m_z;
 
     void setMaterialForObjectObject(Object & p_object);
     void setModelMatrixForObject(Object & p_object);

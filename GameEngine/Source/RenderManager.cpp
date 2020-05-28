@@ -124,16 +124,19 @@ void RenderManager::drawColliders(Meshes::Object& p_object,
     l_collider.m_shaderProgram->bindShaderProgram();
     p_objectManager.updateCollider(p_object, p_camera);
 
-    glDisable(GL_CULL_FACE);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (Gui::GuiManager::getInstance().getColliderVisiblity())
+    {
+        glDisable(GL_CULL_FACE);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    auto& l_coliderMesh = l_object.m_colider.m_meshes.at(0);
-    l_coliderMesh->m_vertexArray.bindVao();
-    glDrawElements(GL_TRIANGLES, l_coliderMesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
-    l_coliderMesh->m_vertexArray.unbindVao();
+        auto& l_coliderMesh = l_object.m_colider.m_meshes.at(0);
+        l_coliderMesh->m_vertexArray.bindVao();
+        glDrawElements(GL_TRIANGLES, l_coliderMesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
+        l_coliderMesh->m_vertexArray.unbindVao();
 
-    l_collider.m_shaderProgram->unbindShaderProgram();
-    glEnable(GL_CULL_FACE);
+        l_collider.m_shaderProgram->unbindShaderProgram();
+        glEnable(GL_CULL_FACE);
+    }
 }
 
 void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras::Camera>& p_camera)
@@ -157,10 +160,7 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
 
         l_shaderProgram.unbindShaderProgram();
 
-        if(Gui::GuiManager::getInstance().getColliderVisiblity())
-        {
-            drawColliders(l_object, *p_camera, l_objectManager);
-        }
+        drawColliders(l_object, *p_camera, l_objectManager);
 
         if (m_fillMesh)
         {
