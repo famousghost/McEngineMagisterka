@@ -43,6 +43,7 @@ struct Colider
 {
     std::vector<std::shared_ptr<Mesh>> m_meshes;
     std::shared_ptr<Shaders::Shader> m_shaderProgram;
+    std::vector<glm::vec4> m_verticies;
     glm::vec3 m_position;
     glm::vec3 m_scale;
     glm::vec4 m_minVertex;
@@ -78,10 +79,36 @@ struct Colider
 
         m_zSection.min = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
         m_zSection.max = glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f);
+
+        std::vector<glm::vec4> l_verticies =
+        {
+            glm::vec4{-1.0f, 1.0f, 1.0f, 1.0f},
+            glm::vec4{-1.0f, -1.0f, 1.0f, 1.0f},
+            glm::vec4{1.0f, -1.0f, 1.0f, 1.0f},
+            glm::vec4{1.0f, 1.0f, 1.0f, 1.0f},
+            glm::vec4{-1.0f, 1.0f, -1.0f, 1.0f},
+            glm::vec4{-1.0f, -1.0f, -1.0f, 1.0f},
+            glm::vec4{1.0f, -1.0f, -1.0f, 1.0f},
+            glm::vec4{1.0f, 1.0f, -1.0f, 1.0f}
+        };
+        m_verticies = l_verticies;
     }
 
     void reset()
     {
+        std::vector<glm::vec4> l_verticies =
+        {
+            glm::vec4{-1.0f, 1.0f, 1.0f, 1.0f},
+            glm::vec4{-1.0f, -1.0f, 1.0f, 1.0f},
+            glm::vec4{1.0f, -1.0f, 1.0f, 1.0f},
+            glm::vec4{1.0f, 1.0f, 1.0f, 1.0f},
+            glm::vec4{-1.0f, 1.0f, -1.0f, 1.0f},
+            glm::vec4{-1.0f, -1.0f, -1.0f, 1.0f},
+            glm::vec4{1.0f, -1.0f, -1.0f, 1.0f},
+            glm::vec4{1.0f, 1.0f, -1.0f, 1.0f}
+        };
+        m_verticies = l_verticies;
+
         m_minVertex = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
         m_maxVertex = glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);
 

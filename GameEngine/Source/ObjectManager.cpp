@@ -63,21 +63,6 @@ void ObjectManager::updateCollider(Object& p_object,
     l_collider.m_normals.y = l_normalsRotationeModel * l_collider.m_normals.y;
     l_collider.m_normals.z = l_normalsRotationeModel * l_collider.m_normals.z;
 
-    //TODO rid of this part, created only for debuging
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    if (m_x != l_collider.m_normals.x || m_y != l_collider.m_normals.y || m_z != l_collider.m_normals.z)
-    {
-        std::cout << "x: ";
-        print(l_collider.m_normals.x);
-        std::cout << std::endl << "y: ";
-        print(l_collider.m_normals.y);
-        std::cout << std::endl << "z: ";
-        print(l_collider.m_normals.z);
-    }
-    m_x = l_collider.m_normals.x;
-    m_y = l_collider.m_normals.y;
-    m_z = l_collider.m_normals.z;
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     transformCollider(l_collider, l_colliderModel);
     l_collider.m_shaderProgram->uniformMatrix4(l_colliderModel, "model");
     p_camera.update(*l_collider.m_shaderProgram, "cameraPos", "view", "projection");
@@ -97,12 +82,11 @@ void ObjectManager::transformCollider(Colider& p_collider, const glm::mat4& p_co
 
     p_collider.m_zSection.min = p_colliderModel * p_collider.m_zSection.min;
     p_collider.m_zSection.max = p_colliderModel * p_collider.m_zSection.max;
-}
 
-void ObjectManager::print(const glm::vec4& p_vec)
-{
-    //TODO Rid of this function, created only for debuging
-    std::cout << "(" << p_vec.x << ", " << p_vec.y << ", " << p_vec.z << ")" << std::endl;
+    for (auto& elem : p_collider.m_verticies)
+    {
+        elem = p_colliderModel * elem;
+    }
 }
 
 void ObjectManager::setModelMatrixForObject(Object& p_object)
@@ -116,7 +100,7 @@ void ObjectManager::setModelMatrixForObject(Object& p_object)
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
     p_object.updateTransformation(l_transform);
-    l_physcis.checkCollisionDetectionAABB(p_object, m_objects);
+    l_physcis.checkCollisionDetectionOBB(p_object, m_objects);
     p_object.m_shaderProgram->uniformMatrix4(l_model, "model");
 }
 
