@@ -45,7 +45,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -76,12 +76,19 @@
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\include;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Libs\ImGUI;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(SolutionDir)Libs\glfw-3.2.1.bin.WIN32\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Libs\assimp-5.0.1\lib;$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\lib-vc2017;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Libs\assimp-5.0.1\include;$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\include;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(SolutionDir)Libs\ImGUI;$(IncludePath)</IncludePath>
     <SourcePath>$(SolutionDir)Libs\ImGUI;$(SourcePath)</SourcePath>
+    <ExecutablePath />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(SolutionDir)Libs\assimp-5.0.1\include;$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\include;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(SolutionDir)Libs\ImGUI;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Libs\assimp-5.0.1\lib;$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\lib-vc2017;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SolutionDir)Libs\ImGUI;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ExecutablePath />
     <IncludePath>$(SolutionDir)Libs\assimp-5.0.1\include;$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\include;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(SolutionDir)Libs\ImGUI;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libs\assimp-5.0.1\lib;$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\lib-vc2017;$(LibraryPath)</LibraryPath>
     <SourcePath>$(SolutionDir)Libs\ImGUI;$(SourcePath)</SourcePath>
@@ -118,7 +125,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libs\ImGUI;$(SolutionDir)Libs\KHR;$(SolutionDir)Libs\glad;$(ProjectDir)Include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Include;$(SolutionDir)Libs\glad;$(SolutionDir)Libs\KHR;$(SolutionDir)Libs\ImGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -138,6 +145,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Include;$(SolutionDir)Libs\glad;$(SolutionDir)Libs\KHR;$(SolutionDir)Libs\ImGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

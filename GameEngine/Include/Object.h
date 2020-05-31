@@ -34,9 +34,9 @@ struct Section
 
 struct Normals
 {
-    glm::vec4 x;
-    glm::vec4 y;
-    glm::vec4 z;
+    glm::vec3 x;
+    glm::vec3 y;
+    glm::vec3 z;
 };
 
 struct Colider
@@ -64,9 +64,9 @@ struct Colider
         m_coliderColor = glm::vec3(0.0f, 1.0f ,0.0f);
         m_minVertex = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
         m_maxVertex = glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);
-        m_normals.x  = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-        m_normals.y = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-        m_normals.z = glm::vec4(0.0f, 0.0f, -1.0f, 1.0f);
+        m_normals.x  = glm::vec3(1.0f, 0.0f, 0.0f);
+        m_normals.y = glm::vec3(0.0f, 1.0f, 0.0f);
+        m_normals.z = glm::vec3(0.0f, 0.0f, 1.0f);
         m_width = 2.0f;
         m_heigth = 2.0f;
         m_length = 2.0f;
@@ -96,19 +96,6 @@ struct Colider
 
     void reset()
     {
-        std::vector<glm::vec4> l_verticies =
-        {
-            glm::vec4{-1.0f, 1.0f, 1.0f, 1.0f},
-            glm::vec4{-1.0f, -1.0f, 1.0f, 1.0f},
-            glm::vec4{1.0f, -1.0f, 1.0f, 1.0f},
-            glm::vec4{1.0f, 1.0f, 1.0f, 1.0f},
-            glm::vec4{-1.0f, 1.0f, -1.0f, 1.0f},
-            glm::vec4{-1.0f, -1.0f, -1.0f, 1.0f},
-            glm::vec4{1.0f, -1.0f, -1.0f, 1.0f},
-            glm::vec4{1.0f, 1.0f, -1.0f, 1.0f}
-        };
-        m_verticies = l_verticies;
-
         m_minVertex = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
         m_maxVertex = glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);
 
@@ -121,9 +108,22 @@ struct Colider
         m_zSection.min = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
         m_zSection.max = glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f);
 
-        m_normals.x = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-        m_normals.y = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-        m_normals.z = glm::vec4(0.0f, 0.0f, -1.0f, 1.0f);
+        m_normals.x = glm::vec3(1.0f, 0.0f, 0.0f);
+        m_normals.y = glm::vec3(0.0f, 1.0f, 0.0f);
+        m_normals.z = glm::vec3(0.0f, 0.0f, 1.0f);
+
+        std::vector<glm::vec4> l_verticies =
+        {
+            glm::vec4{-1.0f, 1.0f, 1.0f, 1.0f},
+            glm::vec4{-1.0f, -1.0f, 1.0f, 1.0f},
+            glm::vec4{1.0f, -1.0f, 1.0f, 1.0f},
+            glm::vec4{1.0f, 1.0f, 1.0f, 1.0f},
+            glm::vec4{-1.0f, 1.0f, -1.0f, 1.0f},
+            glm::vec4{-1.0f, -1.0f, -1.0f, 1.0f},
+            glm::vec4{1.0f, -1.0f, -1.0f, 1.0f},
+            glm::vec4{1.0f, 1.0f, -1.0f, 1.0f}
+        };
+        m_verticies = l_verticies;
     }
 };
 

@@ -136,6 +136,7 @@ void RenderManager::drawColliders(Meshes::Object& p_object,
 
         l_collider.m_shaderProgram->unbindShaderProgram();
         glEnable(GL_CULL_FACE);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 }
 
@@ -151,6 +152,8 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
         auto& l_object = object.first;
         auto& l_shaderProgram = *l_object.m_shaderProgram;
 
+        drawColliders(l_object, *p_camera, l_objectManager);
+
         l_shaderProgram.bindShaderProgram();
 
         l_objectManager.update(l_object);
@@ -159,8 +162,6 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
         drawMeshes(l_object);
 
         l_shaderProgram.unbindShaderProgram();
-
-        drawColliders(l_object, *p_camera, l_objectManager);
 
         if (m_fillMesh)
         {
