@@ -12,9 +12,9 @@ namespace Cameras
 
 namespace
 {
-    constexpr float SPEED_AXIS_Z = 120.0f;
-    constexpr float SPEED_AXIS_X_Y = 20.0f;
-    constexpr float SENSITIVITY = 80.0f;
+    constexpr float SPEED_AXIS_Z = 50.0f;
+    constexpr float SPEED_AXIS_X_Y = 5.0f;
+    constexpr float SENSITIVITY = 40.0f;
 }
 
 Camera::Camera()

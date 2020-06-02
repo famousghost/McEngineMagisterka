@@ -39,7 +39,7 @@ std::vector<double> PhysicsManager::getProjectedPointsToAxis(const std::vector<g
     std::vector<double> l_result;
     for (const auto& vec : p_listOfVec)
     {
-        auto value = glm::dot(glm::vec3(vec), p_normals);
+        auto value = glm::dot(glm::vec3(vec), glm::normalize(p_normals));
 
         l_result.push_back(value);
     }
@@ -54,9 +54,9 @@ bool PhysicsManager::checkCollisionForAxis(const std::vector<double>& p_projecte
     auto minB = std::min_element(p_projectedColliderB.begin(), p_projectedColliderB.end());
     auto maxB = std::max_element(p_projectedColliderB.begin(), p_projectedColliderB.end());
     
-    auto l_longSpan = std::max(*maxA, *maxB) - std::min(*minA, *minB);
-    auto l_sumSpan = *maxA - *minA + *maxB - *minB;
-    return l_longSpan <= l_sumSpan;
+    auto l_longSpan = std::abs(std::max(*maxA, *maxB) - std::min(*minA, *minB));
+    auto l_sumSpan = std::abs(*maxA - *minA + *maxB - *minB);
+    return l_longSpan < l_sumSpan;
 }
 
 bool PhysicsManager::checkCollisionForNormalAxis(const std::vector<double>& p_projectedColliderAX,
@@ -82,26 +82,26 @@ bool PhysicsManager::checkCollisionForNormalAxis(const std::vector<double>& p_pr
     auto maxBY = std::max_element(p_projectedColliderBY.begin(), p_projectedColliderBY.end());
     auto maxBZ = std::min_element(p_projectedColliderBZ.begin(), p_projectedColliderBZ.end());
 
-    auto l_longSpan = std::max(*maxAX, *maxBX) - std::min(*minAX, *minBX);
-    auto l_sumSpan = *maxAX - *minAX + *maxBX - *minBX;
+    auto l_longSpan = std::abs(std::max(*maxAX, *maxBX) - std::min(*minAX, *minBX));
+    auto l_sumSpan = std::abs(*maxAX - *minAX + *maxBX - *minBX);
 
-    if (l_longSpan > l_sumSpan)
+    if (l_longSpan >= l_sumSpan)
     {
         return false;
     }
 
-    l_longSpan = std::max(*maxAY, *maxBY) - std::min(*minAY, *minBY);
-    l_sumSpan = *maxAY - *minAY + *maxBY - *minBY;
+    l_longSpan = std::abs(std::max(*maxAY, *maxBY) - std::min(*minAY, *minBY));
+    l_sumSpan = std::abs(*maxAY - *minAY + *maxBY - *minBY);
 
-    if (l_longSpan > l_sumSpan)
+    if (l_longSpan >= l_sumSpan)
     {
         return false;
     }
 
-    l_longSpan = std::min(*maxAZ, *maxBZ) - std::max(*minAZ, *minBZ);
-    l_sumSpan = *minAZ - *maxAZ + *minBZ - *maxBZ;
+    l_longSpan = std::abs(std::min(*maxAZ, *maxBZ) - std::max(*minAZ, *minBZ));
+    l_sumSpan = std::abs(*minAZ - *maxAZ + *minBZ - *maxBZ);
 
-    if (l_longSpan > l_sumSpan)
+    if (l_longSpan >= l_sumSpan)
     {
         return false;
     }
@@ -211,10 +211,10 @@ void PhysicsManager::checkCollisionDetectionAABB(Meshes::Object& p_object,
 void PhysicsManager::checkCollisionDetectionOBB(Meshes::Object & p_object, 
                                                 std::vector<std::pair<Meshes::Object, std::string>>& p_objects)
 {
-   // if (m_shouldCheckCollsion)
-   // {
+    if (m_shouldCheckCollsion)
+    {
         collisionCheckerOBB(p_object, p_objects);
-   // }
+    }
 }
 
 void PhysicsManager::collisionCheckerOBB(Meshes::Object& p_object,

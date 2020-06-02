@@ -79,7 +79,6 @@
     <LibraryPath>$(SolutionDir)Libs\assimp-5.0.1\lib;$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\lib-vc2017;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)Libs\assimp-5.0.1\include;$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\include;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(SolutionDir)Libs\ImGUI;$(IncludePath)</IncludePath>
     <SourcePath>$(SolutionDir)Libs\ImGUI;$(SourcePath)</SourcePath>
-    <ExecutablePath />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
@@ -88,7 +87,6 @@
     <SourcePath>$(SolutionDir)Libs\ImGUI;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ExecutablePath />
     <IncludePath>$(SolutionDir)Libs\assimp-5.0.1\include;$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\include;$(SolutionDir)Libs\glm-0.9.6.3\glm\glm\gtc;$(SolutionDir)Libs\ImGUI;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libs\assimp-5.0.1\lib;$(SolutionDir)Libs\glfw-3.3.2.bin.WIN64\lib-vc2017;$(LibraryPath)</LibraryPath>
     <SourcePath>$(SolutionDir)Libs\ImGUI;$(SourcePath)</SourcePath>
