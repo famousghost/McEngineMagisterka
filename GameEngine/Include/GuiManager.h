@@ -53,7 +53,9 @@ private:
     void updateTextureComboBox(std::vector<std::string>& p_textureItems);
     void objectChoosingComboBox(std::vector<std::string>& p_items);
     void updateListOfObjects(std::vector<std::string>& p_shaderItems);
+    void updateListOfShaders(std::vector<std::string>& p_shadersToAdd);
     void updateObjectShader();
+    void refreshShader();
 };
 }//Gui
 }//McEngine

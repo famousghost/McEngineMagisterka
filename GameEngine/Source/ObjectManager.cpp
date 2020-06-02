@@ -62,9 +62,9 @@ void ObjectManager::updateCollider(Object& p_object,
     p_camera.update(*l_collider.m_shaderProgram, "cameraPos", "view", "projection");
 }
 
-void ObjectManager::transformCollider(Colider& p_collider, const glm::mat4& p_colliderModel)
+void ObjectManager::transformCollider(Collider& p_collider, const glm::mat4& p_colliderModel)
 {
-    p_collider.reset();
+    p_collider.setDefaultValues();
     p_collider.m_minVertex = p_colliderModel * p_collider.m_minVertex;
     p_collider.m_maxVertex = p_colliderModel * p_collider.m_maxVertex;
 
@@ -121,6 +121,7 @@ void ObjectManager::setTexture(Mesh& p_mesh,
 void ObjectManager::activeTextures(Object& p_object)
 {
     auto& textureManager = Textures::TextureManager::getInstance();
+    textureManager.deactiveTexture();
     textureManager.setTextureIdInShader("textureShader");
     textureManager.activeTexture(GL_TEXTURE0, p_object.m_currentAvaiableTexture);
 }

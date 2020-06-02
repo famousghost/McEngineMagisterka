@@ -30,7 +30,7 @@ void TextureManager::start()
 
 void TextureManager::setTextureIdInShader(const std::string& p_shaderLabel)
 {
-    auto& l_shader = Shaders::ShaderManager::getInstance().getShader(p_shaderLabel);
+    auto l_shader = Shaders::ShaderManager::getInstance().getShader(p_shaderLabel);
 
     l_shader->uniform1I(0, "texture1");
 }

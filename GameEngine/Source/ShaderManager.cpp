@@ -55,9 +55,17 @@ void ShaderManager::resetShaders()
     GameWindow::WindowManager::getInstance().createWindowPlane();
 }
 
-std::shared_ptr<Shader>& ShaderManager::getShader(const std::string& p_label)
+std::shared_ptr<Shader> ShaderManager::getShader(const std::string& p_label)
 {
-    return m_shaders.at(p_label);
+    try
+    {
+        return m_shaders.at(p_label);
+    }
+    catch (std::exception& ex)
+    {
+        LOG("Cannot find shader program", LogType::ERR);
+        return nullptr;
+    }
 }
 
 }//Shaders

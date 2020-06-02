@@ -9,46 +9,48 @@ namespace Shaders
 
 Shader::~Shader()
 {
+    glDeleteShader(m_vertexShaderId);
+    glDeleteShader(m_fragmentShaderId);
     glDeleteProgram(m_shaderProgramId);
 }
 
-GLuint Shader::createShader(std::string p_shaderPath, GLenum p_shaderType)
+void Shader::compileShader(GLuint p_shaderId, const std::string& p_shaderPath)
 {
     ShaderLoader l_shaderLoader;
     std::string l_shaderSource = l_shaderLoader.loadShaderFromFile(p_shaderPath);
-    GLuint l_shaderId = glCreateShader(p_shaderType);
     const char * l_source = l_shaderSource.c_str();
-    glShaderSource(l_shaderId, 1, &l_source, NULL);
+    glShaderSource(p_shaderId, 1, &l_source, NULL);
 
-    glCompileShader(l_shaderId);
+    glCompileShader(p_shaderId);
+}
 
+void Shader::getShaderCompileStatus(GLuint p_shaderId)
+{
     char l_errBuffer[512];
     int l_success;
 
-    glGetShaderiv(l_shaderId, GL_COMPILE_STATUS, &l_success);
+    glGetShaderiv(p_shaderId, GL_COMPILE_STATUS, &l_success);
 
     if (not l_success)
     {
-        glGetShaderInfoLog(l_shaderId, 512, NULL, l_errBuffer);
+        glGetShaderInfoLog(p_shaderId, 512, NULL, l_errBuffer);
         std::string l_errMessage = l_errBuffer;
         LOG("Cannot compile shader:" + l_errMessage, LogType::WARN);
     }
+}
+
+GLuint Shader::createShader(const std::string& p_shaderPath, GLenum p_shaderType)
+{
+    GLuint l_shaderId = glCreateShader(p_shaderType);
+
+    compileShader(l_shaderId, p_shaderPath);
+    getShaderCompileStatus(l_shaderId);
 
     return l_shaderId;
 }
 
-void Shader::createProgram(std::string p_vertexShaderPath, std::string p_fragmentShaderPath)
+void Shader::getProgramLinkStatus()
 {
-    GLuint l_vertexShaderId = createShader(p_vertexShaderPath, GL_VERTEX_SHADER);
-    GLuint l_fragmentShaderId = createShader(p_fragmentShaderPath, GL_FRAGMENT_SHADER);
-
-    m_shaderProgramId = glCreateProgram();
-
-    glAttachShader(m_shaderProgramId, l_vertexShaderId);
-    glAttachShader(m_shaderProgramId, l_fragmentShaderId);
-
-    glLinkProgram(m_shaderProgramId);
-
     char l_errBuffer[512];
     int l_success;
 
@@ -60,9 +62,28 @@ void Shader::createProgram(std::string p_vertexShaderPath, std::string p_fragmen
         std::string l_errMessage = l_errBuffer;
         LOG("Cannot link shader program:" + l_errMessage, LogType::WARN);
     }
+}
 
-    glDeleteShader(l_vertexShaderId);
-    glDeleteShader(l_fragmentShaderId);
+void Shader::attachShadersToProgram()
+{
+    glAttachShader(m_shaderProgramId, m_vertexShaderId);
+    glAttachShader(m_shaderProgramId, m_fragmentShaderId);
+
+    glLinkProgram(m_shaderProgramId);
+}
+
+void Shader::createProgram(const std::string& p_vertexShaderPath, const std::string& p_fragmentShaderPath)
+{
+    m_vertexShaderPath = p_vertexShaderPath;
+    m_fragmentShaderPath = p_fragmentShaderPath;
+
+    m_vertexShaderId = createShader(m_vertexShaderPath, GL_VERTEX_SHADER);
+    m_fragmentShaderId = createShader(m_fragmentShaderPath, GL_FRAGMENT_SHADER);
+
+    m_shaderProgramId = glCreateProgram();
+
+    attachShadersToProgram();
+    getProgramLinkStatus();
 }
 
 void Shader::bindShaderProgram()
@@ -109,6 +130,16 @@ void Shader::uniform1f(float p_value, const std::string & p_uniformName)
 {
     GLuint l_uniformLocationId = glGetUniformLocation(m_shaderProgramId, p_uniformName.c_str());
     glUniform1f(l_uniformLocationId, p_value);
+}
+
+void Shader::refresh()
+{
+    compileShader(m_vertexShaderId, m_vertexShaderPath);
+    getShaderCompileStatus(m_vertexShaderId);
+    compileShader(m_fragmentShaderId, m_fragmentShaderPath);
+    getShaderCompileStatus(m_fragmentShaderId);
+    attachShadersToProgram();
+    getProgramLinkStatus();
 }
 
 }//Shaders

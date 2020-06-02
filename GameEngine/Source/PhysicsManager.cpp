@@ -22,8 +22,8 @@ PhysicsManager & PhysicsManager::getInstance()
     return l_physicsManager;
 }
 
-bool PhysicsManager::checkCollisionAABB(const Meshes::Colider& p_coliderA, 
-                                        const Meshes::Colider& p_coliderB)
+bool PhysicsManager::checkCollisionAABB(const Meshes::Collider& p_coliderA, 
+                                        const Meshes::Collider& p_coliderB)
 {
     return (p_coliderA.m_xSection.min.x <= p_coliderB.m_xSection.max.x
            and p_coliderA.m_xSection.max.x >= p_coliderB.m_xSection.min.x)
@@ -109,8 +109,8 @@ bool PhysicsManager::checkCollisionForNormalAxis(const std::vector<double>& p_pr
     return true;
 }
 
-bool PhysicsManager::checkCollisionOBB(const Meshes::Colider & p_coliderA, 
-                                       const Meshes::Colider & p_coliderB)
+bool PhysicsManager::checkCollisionOBB(const Meshes::Collider & p_coliderA, 
+                                       const Meshes::Collider & p_coliderB)
 {
     std::vector<glm::vec3> l_colliderAEdges;
     std::vector<glm::vec3> l_colliderBEdges;

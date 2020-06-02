@@ -90,6 +90,7 @@ void GuiManager::meshGui()
     updateObjectShader();
     updateObjectTetxture();
     updateListOfObjects(objectsToAdd);
+    updateListOfShaders(shadersItems);
 
     static std::string buttonName = "show collider";
     if (ImGui::Button(buttonName.c_str()))
@@ -117,11 +118,7 @@ void GuiManager::meshGui()
         l_renderManager.fillMesh();
     }
 
-    if (ImGui::Button("Reload Shaders"))
-    {
-        Shaders::ShaderManager::getInstance().resetShaders();
-    }
-
+    refreshShader();
     
     ImGui::SliderFloat3("LightPosition", &l_objectManager.m_lightPosition.x, -10.0f, 10.0f);
 
@@ -135,7 +132,7 @@ void GuiManager::meshGui()
 void GuiManager::updateListOfObjects(std::vector<std::string>& p_objectsToAdd)
 {
     static char l_filePath[1000];
-    ImGui::InputText("##Chatbox", l_filePath, 20, ImGuiInputTextFlags_EnterReturnsTrue);
+    ImGui::InputText("##ObjectChatbox", l_filePath, 20, ImGuiInputTextFlags_EnterReturnsTrue);
     if (ImGui::Button("Add Object To List"))
     {
         auto l_objectName = Utility::FilePathParser::fetchObjectName(l_filePath);
@@ -144,8 +141,32 @@ void GuiManager::updateListOfObjects(std::vector<std::string>& p_objectsToAdd)
         {
             return;
         }
-        l_prefabManager.loadMeshFromFile(l_filePath);
+        std::string l_objectPath = "Objects/";
+        l_prefabManager.loadMeshFromFile(l_objectPath + l_filePath);
         p_objectsToAdd.push_back(l_objectName);
+        strcpy(l_filePath, "");
+    }
+}
+
+void GuiManager::updateListOfShaders(std::vector<std::string>& p_shadersToAdd)
+{
+    static char l_filePath[1000];
+    ImGui::InputText("##ShaderChatBox", l_filePath, 20, ImGuiInputTextFlags_EnterReturnsTrue);
+    if (ImGui::Button("Add Shader To List"))
+    {
+        auto l_shaderName = Utility::FilePathParser::fetchObjectName(l_filePath);
+        auto& l_shaderManager = Shaders::ShaderManager::getInstance();
+        if (l_shaderManager.getShader(l_shaderName))
+        {
+            return;
+        }
+        std::string l_shaderPath = "Shaders/";
+        std::string l_vlsl = ".vlsl";
+        std::string l_flsl = ".flsl";
+        l_shaderManager.addShader(l_shaderName, 
+                                  l_shaderPath + l_shaderName + l_vlsl, 
+                                  l_shaderPath + l_shaderName + l_flsl);
+        p_shadersToAdd.push_back(l_shaderName);
         strcpy(l_filePath, "");
     }
 }
@@ -285,7 +306,7 @@ void GuiManager::deleteObject(std::vector<std::string>& p_items)
 
 void GuiManager::updateShaderComboBox(std::vector<std::string>& p_shaderItems)
 {
-    if (ImGui::BeginCombo("##shaderCombo", m_currentShader.c_str()))
+    if (ImGui::BeginCombo("##shaderRefresh", m_currentShader.c_str()))
     {
         for (int i = 0; i < p_shaderItems.size(); i++)
         {
@@ -377,6 +398,21 @@ void GuiManager::updateObjectShader()
             {
                 LOG("Cannot find shader, there is no shader with this name", LogType::ERR);
             }
+        }
+    }
+}
+
+void GuiManager::refreshShader()
+{
+    if (ImGui::Button("Refresh Shader"))
+    {
+        try
+        {
+            Shaders::ShaderManager::getInstance().getShader(m_currentShader)->refresh();
+        }
+        catch (std::exception& ex)
+        {
+            LOG("Cannot find shader, there is no shader with this name", LogType::ERR);
         }
     }
 }

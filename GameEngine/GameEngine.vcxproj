@@ -203,10 +203,12 @@
     <ClInclude Include="Include\Camera.h" />
     <ClInclude Include="Include\ColiderBuilder.h" />
     <ClInclude Include="Include\ColiderStates.h" />
+    <ClInclude Include="Include\Collider.h" />
     <ClInclude Include="Include\IColiderObserver.h" />
     <ClInclude Include="Include\CubeColiderBuilder.h" />
     <ClInclude Include="Include\FilePathParser.h" />
     <ClInclude Include="Include\ColiderObserver.h" />
+    <ClInclude Include="Include\Light.h" />
     <ClInclude Include="Include\LightBuilder.h" />
     <ClInclude Include="Include\LoadedObjectBuilder.h" />
     <ClInclude Include="Include\MouseRay.h" />
@@ -238,6 +240,7 @@
     <ClInclude Include="Include\PrefabManager.h" />
     <ClInclude Include="Include\TimeManager.h" />
     <ClInclude Include="Include\Transform.h" />
+    <ClInclude Include="Include\Utilities.h" />
     <ClInclude Include="Include\VertexArray.h" />
     <ClInclude Include="Include\Window.h" />
     <ClInclude Include="Include\WindowManager.h" />
