@@ -41,6 +41,7 @@ private:
     std::string m_currentShader;
     std::string m_currentTexture;
     std::string m_newObjectPath;
+    std::string m_logsInformation;
     std::size_t m_elementNumber;
     bool m_colidersVisiblity;
 

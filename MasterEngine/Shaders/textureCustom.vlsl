@@ -8,7 +8,7 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-out vec4 wPos;
+out vec3 wPos;
 out vec3 normCoords;
 out vec2 texturesCoords;
 
@@ -16,7 +16,7 @@ void main()
 {
 	vec4 worldPos = model * vec4(vertexCoords, 1.0);
 	normCoords = normalize(mat3(transpose(inverse(model))) * normalCoords);
-	wPos = worldPos;
+	wPos = vec3(worldPos);
 	vec4 vertPos = projection * view * worldPos;
 	texturesCoords = textureCoords;
 	gl_Position = vertPos;

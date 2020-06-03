@@ -103,6 +103,17 @@ void Camera::update(Shaders::Shader& p_shaderProgram,
 {
     rotateCamera();
     moveCamera();
+    updateShaderProgram(p_shaderProgram, 
+                        p_cameraPostionUniform, 
+                        p_viewMatrixUniform, 
+                        p_projectionMatrixUniform);
+}
+
+void Camera::updateShaderProgram(Shaders::Shader& p_shaderProgram,
+                                 const std::string& p_cameraPostionUniform,
+                                 const std::string& p_viewMatrixUniform,
+                                 const std::string& p_projectionMatrixUniform)
+{
     p_shaderProgram.uniformVec3(m_cameraPosition, p_cameraPostionUniform);
     p_shaderProgram.uniformMatrix4(m_view, p_viewMatrixUniform);
     setProjectionMatrix(45.0f, 0.1f, 100.0f, p_shaderProgram, p_projectionMatrixUniform);

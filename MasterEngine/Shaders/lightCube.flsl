@@ -1,31 +1,56 @@
 #version 330 core
 
-in vec3 normCoords;
-in vec4 wPos;
-
 out vec4 fragColor;
 
-vec4 lightPosition = vec4(1.0, 2.0, 2.0, 1.0);
-vec4 cameraPos = vec4(0.0, 0.0, -3.0, 1.0);
+struct Material
+{
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	vec3 objectColor;
+};
 
-vec3 objColor = vec3(1.0, 0.0, 0.0);
+uniform Material material;
+
+uniform vec3 lightColor = vec3(1.0, 1.0, 1.0);
+uniform vec3 cameraPos;
+uniform vec3 lightPosition;
+float shinness = 128.0;
+
+in vec3 normCoords;
+in vec3 wPos;
+
+vec3 calculateAmbientLight()
+{
+	vec3 ambientLight = material.ambient * lightColor;
+	return ambientLight;
+}
+
+vec3 calculateDiffuseLight(vec3 lightPos)
+{
+	float diffuseColor = max(dot(lightPos, normCoords), 0.0);
+	
+	vec3 diffuseLight = material.diffuse * diffuseColor;
+	
+	return diffuseLight;
+}
+
+vec3 calculateSpecularLight(vec3 lightPos)
+{
+	vec3 lightReflected = reflect(-lightPos, normCoords);
+	vec3 cameraWorldPostion = normalize(cameraPos - wPos);
+	float specularColor = pow(max(dot(cameraWorldPostion, lightReflected), 0.0), shinness);
+	vec3 specularLight = material.specular * specularColor;
+	
+	return specularLight;
+}
 
 void main()
 {
-	vec3 ambientLight = vec3(0.2, 0.2, 0.2) * objColor;
-	vec3 diffuseLight = vec3(0.2, 0.2, 0.2);
-	vec3 specularLight = vec3(0.2, 0.2, 0.2);
-	vec4 lightPos = lightPosition - wPos;
-	float lightColor = max(dot(vec3(lightPos), normCoords), 0.0);
+	vec3 lightPos = normalize(lightPosition - wPos);
+	vec3 ambientLight = calculateAmbientLight();
+	vec3 diffuseLight = calculateDiffuseLight(lightPos);
+	vec3 specularLight = calculateSpecularLight(lightPos);
 	
-	diffuseLight *= lightColor * objColor;
-	
-	vec3 lightReflected = 2 * max(dot(vec3(lightPos), normCoords), 0.0) * normCoords;
-	vec4 cameraWorldPostion = wPos - cameraPos;
-	
-	float specularColor = pow(max(dot(vec3(cameraWorldPostion),lightReflected), 0.0), 32.0);
-	
-	specularLight *= specularColor * objColor;
-	
-	fragColor = vec4(ambientLight + diffuseLight + specularLight, 1.0);
+	fragColor = vec4((ambientLight + diffuseLight + specularLight) * material.objectColor, 1.0);
 }

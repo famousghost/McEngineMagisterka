@@ -29,6 +29,8 @@ public:
 
     void setLogType(LogType p_logType);
 
+    const std::string& fetchConsoleLogs();
+
     static Logger& getInstance();
 private:
     std::string prepareLogFile();
@@ -37,6 +39,7 @@ private:
 
     LogType s_logType;
     std::ofstream m_logFile;
+    std::string m_logToConsole;
 };
 
 }//GameEngine

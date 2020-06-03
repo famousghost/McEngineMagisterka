@@ -7,6 +7,7 @@ namespace McEngine
 
 Logger::Logger()
 {
+    m_logToConsole = "";
     try
     {
         m_logFile.open(prepareLogFile());
@@ -35,12 +36,18 @@ void Logger::log(const std::string& p_fileInfo,
    {
        std::string l_logInformation =  "[" + getLogType(p_logType) + "][" + p_fileInfo + ":" + p_line + "]: " + p_informationMessage + "\n";
        m_logFile << l_logInformation;
+       m_logToConsole += l_logInformation + "\n";
    }
 }
 
 void Logger::setLogType(LogType p_logType)
 {
     s_logType = p_logType;
+}
+
+const std::string & Logger::fetchConsoleLogs()
+{
+    return m_logToConsole;
 }
 
 std::string Logger::getCurrentTime()

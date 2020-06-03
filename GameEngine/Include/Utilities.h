@@ -23,6 +23,7 @@ struct Material
     glm::vec3 m_diffuseLight;
     glm::vec3 m_specularLight;
     glm::vec3 m_objectColor;
+    glm::vec3 m_highlightColor;
 };
 
 struct Section

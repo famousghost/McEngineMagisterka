@@ -59,7 +59,7 @@ void ObjectManager::updateCollider(Object& p_object,
 
     l_collider.m_shaderProgram->uniformMatrix4(l_colliderModel, "model");
     transformCollider(l_collider, l_colliderModel);
-    p_camera.update(*l_collider.m_shaderProgram, "cameraPos", "view", "projection");
+    p_camera.updateShaderProgram(*l_collider.m_shaderProgram, "cameraPos", "view", "projection");
 }
 
 void ObjectManager::transformCollider(Collider& p_collider, const glm::mat4& p_colliderModel)
@@ -109,7 +109,7 @@ void ObjectManager::setMaterialForObjectObject(Object& p_object)
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_ambientLight, "material.ambient");
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_diffuseLight, "material.diffuse");
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_specularLight, "material.specular");
-    p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_objectColor, "material.objectColor");
+    p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_highlightColor, "material.objectColor");
 }
 
 void ObjectManager::setTexture(Mesh& p_mesh,

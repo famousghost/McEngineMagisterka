@@ -43,10 +43,9 @@ GLuint TextureManager::getTexture(const std::string& p_textureLabel) const
 void TextureManager::activeTexture(GLenum p_textureId, 
                                    const std::string& p_textureLabel)
 {
-    glActiveTexture(p_textureId);
-
     try
     {
+        glActiveTexture(p_textureId);
         glBindTexture(GL_TEXTURE_2D, m_textures.at(p_textureLabel));
     }
     catch (std::exception& ex)

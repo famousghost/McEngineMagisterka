@@ -125,6 +125,9 @@ void GuiManager::meshGui()
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::Text("@copyright Marcin Czekaj");
 
+    ImGui::Text(Logger::getInstance().fetchConsoleLogs().c_str());
+
+
     ImGui::End();
     ImGui::Render();
 }

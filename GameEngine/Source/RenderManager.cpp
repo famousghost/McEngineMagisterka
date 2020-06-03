@@ -51,9 +51,9 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
     l_windowManager.bindGameFrameBuffer();
     glClearColor(l_windowManager.getBackgroundColor().x,
-        l_windowManager.getBackgroundColor().y,
-        l_windowManager.getBackgroundColor().z,
-        l_windowManager.getBackgroundColor().w);
+                 l_windowManager.getBackgroundColor().y,
+                 l_windowManager.getBackgroundColor().z,
+                 l_windowManager.getBackgroundColor().w);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -177,11 +177,11 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
                                                      glm::vec3(l_colider.m_maxVertex)))
             {
                 Gui::GuiManager::getInstance().chooseObjectViaMouse(l_object.m_objectName);
-                l_object.m_material.m_objectColor = glm::vec3(0.0f, 1.0f, 0.0f);
+                l_object.m_material.m_highlightColor = glm::vec3(0.0f, 1.0f, 0.0f);
             }
             else
             {
-                l_object.m_material.m_objectColor = glm::vec3(1.0f, 1.0f, 1.0f);
+                l_object.m_material.m_highlightColor = l_object.m_material.m_objectColor;
             }
         }
     }
