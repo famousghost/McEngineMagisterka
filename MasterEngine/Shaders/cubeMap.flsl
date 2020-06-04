@@ -1,0 +1,12 @@
+#version 330 core
+
+out vec4 fragCoords;
+
+uniform samplerCube skybox;
+
+in vec3 tCoords;
+
+void main()
+{
+	fragCoords = texture(skybox, tCoords);
+}

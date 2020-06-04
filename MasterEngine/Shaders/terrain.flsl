@@ -53,5 +53,5 @@ void main()
 	vec3 diffuseLight = calculateDiffuseLight(lightPos);
 	vec3 specularLight = calculateSpecularLight(lightPos);
 	
-	fragColor = texture(texture1, texturesCoords) * vec4(ambientLight + diffuseLight + specularLight, 1.0);
+	fragColor = vec4(1.0, 0.0, 1.0, 1.0);
 }

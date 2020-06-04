@@ -1,6 +1,7 @@
 #include "ObjectManager.h"
 #include "TextureManager.h"
 #include "LoadedObjectBuilder.h"
+#include "TerrainBuilder.h"
 #include "PhysicsManager.h"
 #include "ColiderObserver.h"
 #include "InputManager.h"
@@ -33,6 +34,15 @@ void ObjectManager::addCustomObject(std::string p_objectLabel,
     LoadedObjectBuilder l_loadedObjectBuilder(p_objectName, p_objectLabel);
     l_loadedObjectBuilder.addShaderProgram(p_shaderLabel).addMesh();
     auto l_object = l_loadedObjectBuilder.getObject();
+    addObject(l_object, p_objectLabel);
+}
+
+void ObjectManager::addTerrain(std::string p_objectLabel,
+                               std::string p_shaderLabel)
+{
+    TerrainBuilder l_terrainBuilder;
+    l_terrainBuilder.addShaderProgram(p_shaderLabel).addMesh();
+    auto l_object = l_terrainBuilder.getObject();
     addObject(l_object, p_objectLabel);
 }
 

@@ -58,10 +58,10 @@ void GuiManager::meshGui()
 
     static std::vector<std::string> items;
     static std::vector<std::string> shadersItems = {"defaultShader", 
-                                                    "colorShader", 
                                                     "diffuseShader", 
                                                     "textureShader", 
-                                                    "customObjectShader"};
+                                                    "customObjectShader",
+                                                    "terrainShader"};
 
     static std::vector<std::string> textureItems = {"Wall", 
                                                     "Awsomeface", 
@@ -74,7 +74,8 @@ void GuiManager::meshGui()
                                                      "Torus", 
                                                      "Monkeyhead", 
                                                      "Nanosuit", 
-                                                     "Plane"};
+                                                     "Plane",
+                                                     "Terrain"};
     objectChoosingComboBox(items);
     choosingObjectToAddComboBox(objectsToAdd);
     updateShaderComboBox(shadersItems);
@@ -228,7 +229,14 @@ void GuiManager::addObject(std::vector<std::string>& p_items)
     {
         std::string label = "Obj" + std::to_string(++m_elementNumber);
         auto& l_objManager = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager();
-        l_objManager.addCustomObject(label, m_currentObjectToAdd, m_currentShader);
+        if (m_currentObjectToAdd == "Terrain")
+        {
+            l_objManager.addTerrain(label, m_currentShader);
+        }
+        else
+        {
+            l_objManager.addCustomObject(label, m_currentObjectToAdd, m_currentShader);
+        }
         m_currentObject = label;
     }
 }

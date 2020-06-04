@@ -19,6 +19,7 @@ void ShaderManager::start()
     addShader("defaultShader", "Shaders/vertexShader.vlsl", "Shaders/fragmentShader.flsl");
     addShader("diffuseShader", "Shaders/lightCube.vlsl", "Shaders/lightCube.flsl");
     addShader("textureShader", "Shaders/textureCube.vlsl", "Shaders/textureCube.flsl");
+    addShader("terrainShader", "Shaders/terrain.vlsl", "Shaders/terrain.flsl");
     addShader("customObjectShader", "Shaders/textureCustom.vlsl", "Shaders/textureCustom.flsl");
     addShader("windowShader", "Shaders/windowShader.vlsl", "Shaders/windowShader.flsl");
     addShader("coliderShader", "Shaders/colider.vlsl", "Shaders/colider.flsl");
@@ -46,6 +47,7 @@ void ShaderManager::resetShaders()
     addShader("defaultShader", "Shaders/vertexShader.vlsl", "Shaders/fragmentShader.flsl");
     addShader("diffuseShader", "Shaders/lightCube.vlsl", "Shaders/lightCube.flsl");
     addShader("textureShader", "Shaders/textureCube.vlsl", "Shaders/textureCube.flsl");
+    addShader("terrainShader", "Shaders/terrain.vlsl", "Shaders/terrain.flsl");
     addShader("customObjectShader", "Shaders/textureCustom.vlsl", "Shaders/textureCustom.flsl");
     addShader("windowShader", "Shaders/windowShader.vlsl", "Shaders/windowShader.flsl");
     addShader("coliderShader", "Shaders/colider.vlsl", "Shaders/colider.flsl");

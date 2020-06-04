@@ -97,6 +97,24 @@
     <Filter Include="Pliki źródłowe\Observers">
       <UniqueIdentifier>{5b5537bb-ce37-4fa7-b147-b6daac95a1f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki nagłówkowe\MESHES\BUILDERS\MeshBuilders">
+      <UniqueIdentifier>{39f1f7d1-40cd-4138-99aa-c174f9d6a659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\MESHES\BUILDERS\ObjectBuilder">
+      <UniqueIdentifier>{55d75813-3d67-4704-a742-6a7d95ff35f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\MESHES\BUILDERS\MeshBuilders">
+      <UniqueIdentifier>{55ae96da-52dd-479a-96a6-312ce1885ee9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\MESHES\BUILDERS\ObjectBuilders">
+      <UniqueIdentifier>{c105fc76-129b-41bc-b6ae-fceef5b7c5c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\ExternalClasses">
+      <UniqueIdentifier>{e5d958a4-fdd9-4f62-a6c5-e19e6df78ac0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\ExternalClasses">
+      <UniqueIdentifier>{47de9397-4a9a-4ae4-a15e-5c1fba714937}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\glad.c">
@@ -186,32 +204,38 @@
     <ClCompile Include="Source\WindowManager.cpp">
       <Filter>Pliki źródłowe\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ScreenQuadBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
-    </ClCompile>
     <ClCompile Include="Source\TimeManager.cpp">
       <Filter>Pliki źródłowe\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LoadedObjectBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
     </ClCompile>
     <ClCompile Include="Source\FilePathParser.cpp">
       <Filter>Pliki źródłowe\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CubeColiderBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ColiderBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ScreenQuadMeshBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ColiderObserver.cpp">
       <Filter>Pliki źródłowe\Observers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ColiderBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS\ObjectBuilders</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CubeColiderBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS\MeshBuilders</Filter>
+    </ClCompile>
     <ClCompile Include="Source\LightBuilder.cpp">
-      <Filter>Pliki źródłowe\MESHES\BUILDERS</Filter>
+      <Filter>Pliki źródłowe\MESHES\BUILDERS\ObjectBuilders</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadedObjectBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS\ObjectBuilders</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ScreenQuadBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS\ObjectBuilders</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ScreenQuadMeshBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS\MeshBuilders</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TerrainMeshBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS\MeshBuilders</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TerrainBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS\ObjectBuilders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -230,14 +254,8 @@
     <ClInclude Include="Include\Logger.h">
       <Filter>Pliki nagłówkowe\LOGGER</Filter>
     </ClInclude>
-    <ClInclude Include="Include\ModelBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Object.h">
       <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\ObjectBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
     </ClInclude>
     <ClInclude Include="..\Libs\ImGUI\imconfig.h">
       <Filter>Pliki nagłówkowe\GUI\IMGUI</Filter>
@@ -326,26 +344,11 @@
     <ClInclude Include="Include\WindowManager.h">
       <Filter>Pliki nagłówkowe\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Include\ScreenQuadBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
     <ClInclude Include="Include\TimeManager.h">
       <Filter>Pliki nagłówkowe\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Include\LoadedObjectBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
     <ClInclude Include="Include\FilePathParser.h">
       <Filter>Pliki nagłówkowe\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\CubeColiderBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\ColiderBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\ScreenQuadMeshBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
     </ClInclude>
     <ClInclude Include="Include\IColiderObserver.h">
       <Filter>Pliki nagłówkowe\Observers</Filter>
@@ -359,9 +362,6 @@
     <ClInclude Include="Include\Transform.h">
       <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
     </ClInclude>
-    <ClInclude Include="Include\LightBuilder.h">
-      <Filter>Pliki nagłówkowe\MESHES\BUILDERS</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Collider.h">
       <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
     </ClInclude>
@@ -370,6 +370,36 @@
     </ClInclude>
     <ClInclude Include="Include\Light.h">
       <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TerrainMeshBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS\MeshBuilders</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TerrainBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS\ObjectBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ColiderBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS\ObjectBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LightBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS\ObjectBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ModelBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS\MeshBuilders</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CubeColiderBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS\MeshBuilders</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LoadedObjectBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS\ObjectBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ScreenQuadBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS\ObjectBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ScreenQuadMeshBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS\MeshBuilders</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ObjectBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS\ObjectBuilder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

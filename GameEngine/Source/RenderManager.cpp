@@ -119,6 +119,10 @@ void RenderManager::drawColliders(Meshes::Object& p_object,
                                   Cameras::Camera& p_camera,
                                   Meshes::ObjectManager& p_objectManager)
 {
+    if(not p_object.m_colider.m_meshes.size())
+    {
+        return;
+    }
     auto& l_object = p_object;
     auto& l_collider = l_object.m_colider;
     l_collider.m_shaderProgram->bindShaderProgram();
@@ -169,19 +173,22 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
 
         if (Inputs::InputManager::getInstance().s_onClickMouse)
         {
-            auto& l_colider = l_object.m_colider;
+            if (l_object.m_colider.m_meshes.size())
+            {
+                auto& l_colider = l_object.m_colider;
         
-            Inputs::MouseRay l_mouseRay;
+                Inputs::MouseRay l_mouseRay;
 
-            if (l_mouseRay.checkIntersectionWithCube(glm::vec3(l_colider.m_minVertex), 
-                                                     glm::vec3(l_colider.m_maxVertex)))
-            {
-                Gui::GuiManager::getInstance().chooseObjectViaMouse(l_object.m_objectName);
-                l_object.m_material.m_highlightColor = glm::vec3(0.0f, 1.0f, 0.0f);
-            }
-            else
-            {
-                l_object.m_material.m_highlightColor = l_object.m_material.m_objectColor;
+                if (l_mouseRay.checkIntersectionWithCube(glm::vec3(l_colider.m_minVertex), 
+                                                         glm::vec3(l_colider.m_maxVertex)))
+                {
+                    Gui::GuiManager::getInstance().chooseObjectViaMouse(l_object.m_objectName);
+                    l_object.m_material.m_highlightColor = glm::vec3(0.0f, 1.0f, 0.0f);
+                }
+                else
+                {
+                    l_object.m_material.m_highlightColor = l_object.m_material.m_objectColor;
+                }
             }
         }
     }
