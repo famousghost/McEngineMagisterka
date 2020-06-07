@@ -29,6 +29,8 @@ public:
 
     void addTerrain(std::string p_objectLabel, std::string p_shaderLabel);
 
+    void addSkyBox();
+
     void deleteObject(std::string p_objName);
 
     void update(Object & object);

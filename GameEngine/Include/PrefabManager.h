@@ -26,6 +26,8 @@ public:
 
     void createCubeColiderMesh();
 
+    void createSkyBoxMesh();
+
     void createTerrainMesh();
 
     void prepareVertexArrayObject(std::shared_ptr<Mesh>& p_mesh);
@@ -35,6 +37,8 @@ public:
     std::shared_ptr<Mesh> getColiderMesh() const;
 
     std::shared_ptr<Mesh> getTerrainMesh() const;
+
+    std::shared_ptr<Mesh> getSkyBoxMesh() const;
 
     void loadMeshFromFile(std::string p_filePath);
 
@@ -50,6 +54,7 @@ private:
     std::shared_ptr<Mesh> m_screenQuadMesh;
     std::shared_ptr<Mesh> m_cubeColiderMesh;
     std::shared_ptr<Mesh> m_terrainMesh;
+    std::shared_ptr<Mesh> m_skyBoxMesh;
 
     std::vector<std::shared_ptr<Mesh>> loadMesh(std::string p_filePath);
 

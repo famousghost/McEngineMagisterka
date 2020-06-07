@@ -20,11 +20,11 @@ int main()
     McEngine::Physics::PhysicsManager::getInstance().start();
     McEngine::Editor::EditorManager::getInstance().start();
     McEngine::GameWindow::WindowManager::getInstance().start();
-    McEngine::Scenes::ScenesManager::getInstace().start();
-    McEngine::Renderer::RenderManager::getInstance().start();
     McEngine::Meshes::PrefabManager::getInstance().start();
     McEngine::Shaders::ShaderManager::getInstance().start();
     McEngine::Textures::TextureManager::getInstance().start();
+    McEngine::Scenes::ScenesManager::getInstace().start();
+    McEngine::Renderer::RenderManager::getInstance().start();
     McEngine::Editor::EditorManager::getInstance().start();
     McEngine::Inputs::InputManager::getInstance().start();
     McEngine::Gui::GuiManager::getInstance().start();
@@ -37,11 +37,11 @@ int main()
 
     McEngine::Gui::GuiManager::getInstance().shutdown();
     McEngine::Inputs::InputManager::getInstance().shutdown();
+    McEngine::Meshes::PrefabManager::getInstance().shutdown();
+    McEngine::Renderer::RenderManager::getInstance().shutdown();
     McEngine::Editor::EditorManager::getInstance().shutdown();
     McEngine::Textures::TextureManager::getInstance().shutdown();
     McEngine::Shaders::ShaderManager::getInstance().shutdown();
-    McEngine::Meshes::PrefabManager::getInstance().shutdown();
-    McEngine::Renderer::RenderManager::getInstance().shutdown();
     McEngine::Scenes::ScenesManager::getInstace().shutdown();
     McEngine::GameWindow::WindowManager::getInstance().shutdown();
     McEngine::Editor::EditorManager::getInstance().shutdown();

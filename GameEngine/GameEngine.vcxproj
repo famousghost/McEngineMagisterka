@@ -183,6 +183,8 @@
     <ClCompile Include="Source\Shader.cpp" />
     <ClCompile Include="Source\ShaderLoader.cpp" />
     <ClCompile Include="Source\ShaderManager.cpp" />
+    <ClCompile Include="Source\SkyBoxBuilder.cpp" />
+    <ClCompile Include="Source\SkyBoxMeshBuilder.cpp" />
     <ClCompile Include="Source\TerrainBuilder.cpp" />
     <ClCompile Include="Source\TerrainMeshBuilder.cpp" />
     <ClCompile Include="Source\TextureLoader.cpp" />
@@ -235,6 +237,8 @@
     <ClInclude Include="Include\Shader.h" />
     <ClInclude Include="Include\ShaderLoader.h" />
     <ClInclude Include="Include\ShaderManager.h" />
+    <ClInclude Include="Include\SkyBoxBuilder.h" />
+    <ClInclude Include="Include\SkyBoxMeshBuilder.h" />
     <ClInclude Include="Include\STB.h" />
     <ClInclude Include="Include\stb_image.h" />
     <ClInclude Include="Include\TerrainBuilder.h" />

@@ -23,6 +23,8 @@ public:
 
     void activeTexture(GLenum p_textureId, const std::string & p_textureLabel);
 
+    void createCubeMapTexture(std::string p_texturePath, GLenum p_wrappingType, GLenum p_drawingType, std::string p_textureLabel);
+
     void activeTexturesForCustomObject(Meshes::Mesh & p_mesh, Shaders::Shader & p_shader);
 
     void deactiveTexture();

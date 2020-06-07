@@ -237,6 +237,12 @@
     <ClCompile Include="Source\TerrainBuilder.cpp">
       <Filter>Pliki źródłowe\MESHES\BUILDERS\ObjectBuilders</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SkyBoxMeshBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS\MeshBuilders</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SkyBoxBuilder.cpp">
+      <Filter>Pliki źródłowe\MESHES\BUILDERS\ObjectBuilders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Defines.h">
@@ -399,6 +405,12 @@
       <Filter>Pliki nagłówkowe\MESHES\BUILDERS\MeshBuilders</Filter>
     </ClInclude>
     <ClInclude Include="Include\ObjectBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS\ObjectBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\SkyBoxMeshBuilder.h">
+      <Filter>Pliki nagłówkowe\MESHES\BUILDERS\MeshBuilders</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\SkyBoxBuilder.h">
       <Filter>Pliki nagłówkowe\MESHES\BUILDERS\ObjectBuilder</Filter>
     </ClInclude>
   </ItemGroup>

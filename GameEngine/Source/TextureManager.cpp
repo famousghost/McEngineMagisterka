@@ -54,6 +54,14 @@ void TextureManager::activeTexture(GLenum p_textureId,
     }
 }
 
+void TextureManager::createCubeMapTexture(std::string p_texturePath,
+                                          GLenum p_wrappingType,
+                                          GLenum p_drawingType,
+                                          std::string p_textureLabel)
+{
+    
+}
+
 void TextureManager::activeTexturesForCustomObject(Meshes::Mesh& p_mesh,
                                                    Shaders::Shader& p_shader)
 {

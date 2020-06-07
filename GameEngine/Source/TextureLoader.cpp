@@ -16,6 +16,34 @@ TextureLoader::~TextureLoader()
 {
 }
 
+GLuint TextureLoader::loadCubeMapTexture(std::vector<std::string> p_texturesPath,
+                                         GLenum p_wrappingType,
+                                         GLenum p_drawingType)
+{
+    GLuint l_cubeTextureId;
+    glGenTextures(1, &l_cubeTextureId);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, l_cubeTextureId);
+
+    int l_width, l_height, l_nrChannels;
+
+    for (std::size_t i = 0; i < p_texturesPath.size(); ++i)
+    {
+        unsigned char *l_image = stbi_load(p_texturesPath[i].c_str(), &l_width, &l_height, &l_nrChannels, 0);
+        GLenum l_format;
+        if (l_nrChannels == 1)
+            l_format = GL_RED;
+        else if (l_nrChannels == 3)
+            l_format = GL_RGB;
+        else if (l_nrChannels == 4)
+            l_format = GL_RGBA;
+
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, l_width, l_height, 0, GL_RGB, GL_UNSIGNED_BYTE, l_image);
+        setCubeMapTextureParameters(p_wrappingType, p_drawingType);
+        stbi_image_free(l_image);
+    }
+    return l_cubeTextureId;
+}
+
 GLuint TextureLoader::loadTexture(std::string p_texturePath,
                                   GLenum p_wrappingType,
                                   GLenum p_drawingType)
@@ -95,6 +123,16 @@ void TextureLoader::setTextureParameters(GLenum p_wrappingType, GLenum p_drawing
 {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, p_wrappingType);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, p_wrappingType);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, p_drawingType);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, p_drawingType);
+}
+
+void TextureLoader::setCubeMapTextureParameters(GLenum p_wrappingType, GLenum p_drawingType)
+{
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, p_wrappingType);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, p_wrappingType);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, p_wrappingType);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, p_drawingType);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, p_drawingType);

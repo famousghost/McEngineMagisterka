@@ -17,11 +17,12 @@ void ScenesManager::start()
     LOG("Prepare Scene", LogType::INF);
     m_scenes.emplace_back(new Scene);
     m_currentAvaibaleScene = m_scenes.at(0);
+    m_currentAvaibaleScene->getObjectManager().addSkyBox();
 }
 
 void ScenesManager::updateCurrentScene(std::string sceneLabel)
 {
-    //TODO add scene vector as pair with label and object scene
+    //TODO add map of scenes
 }
 
 void ScenesManager::shutdown()

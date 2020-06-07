@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include "LoadedObjectBuilder.h"
 #include "TerrainBuilder.h"
+#include "SkyBoxBuilder.h"
 #include "PhysicsManager.h"
 #include "ColiderObserver.h"
 #include "InputManager.h"
@@ -44,6 +45,14 @@ void ObjectManager::addTerrain(std::string p_objectLabel,
     l_terrainBuilder.addShaderProgram(p_shaderLabel).addMesh();
     auto l_object = l_terrainBuilder.getObject();
     addObject(l_object, p_objectLabel);
+}
+
+void ObjectManager::addSkyBox()
+{
+    SkyBoxBuilder l_skyBoxBuilder;
+    l_skyBoxBuilder.addShaderProgram("defaultShader").addMesh();
+    auto l_object = l_skyBoxBuilder.getObject();
+    addObject(l_object, "Skybox");
 }
 
 void ObjectManager::update(Object& p_object)

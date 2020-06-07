@@ -4,6 +4,7 @@
 #include "CubeColiderBuilder.h"
 #include "TerrainMeshBuilder.h"
 #include "ScreenQuadMeshBuilder.h"
+#include "SkyBoxMeshBuilder.h"
 
 namespace McEngine
 {
@@ -28,6 +29,7 @@ void PrefabManager::shutdown()
 
 void PrefabManager::addDefaultMesh()
 {
+    createSkyBoxMesh();
     createScreenMesh();
     createCubeColiderMesh();
     createTerrainMesh();
@@ -61,6 +63,14 @@ void PrefabManager::createCubeColiderMesh()
     m_cubeColiderMesh = l_cubeColiderBuilder.buildVerticies().getMesh();
 
     prepareVertexArrayObject(m_cubeColiderMesh);
+}
+
+void PrefabManager::createSkyBoxMesh()
+{
+    SkyBoxMeshBuilder l_skyBoxMeshBuilder;
+    m_skyBoxMesh = l_skyBoxMeshBuilder.buildVerticies().getMesh();
+
+    prepareVertexArrayObject(m_skyBoxMesh);
 }
 
 void PrefabManager::createTerrainMesh()
@@ -99,10 +109,16 @@ std::shared_ptr<Mesh> PrefabManager::getTerrainMesh() const
     return m_terrainMesh;
 }
 
+std::shared_ptr<Mesh> PrefabManager::getSkyBoxMesh() const
+{
+    return m_skyBoxMesh;
+}
+
 void PrefabManager::loadMeshFromFile(std::string p_filePath)
 {
     m_objectName = Utility::FilePathParser::fetchObjectName(p_filePath);
     auto l_meshes = loadMesh(p_filePath);
+
     if (l_meshes.empty())
     {
         LOG("Cannot load object from file", LogType::ERR);

@@ -15,6 +15,8 @@ public:
     TextureLoader();
     ~TextureLoader();
 
+    GLuint loadCubeMapTexture(std::vector<std::string> p_texturesPath, GLenum p_wrappingType, GLenum p_drawingType);
+
     GLuint loadTexture(std::string p_texturePath,
                        GLenum p_wrappingType,
                        GLenum p_drawingType);
@@ -27,6 +29,8 @@ public:
 
 private:
     void setTextureParameters(GLenum p_wrappingType, GLenum p_drawingType);
+
+    void setCubeMapTextureParameters(GLenum p_wrappingType, GLenum p_drawingType);
 
     std::vector<Meshes::Texture> m_loadedTextures;
 };
