@@ -22,6 +22,26 @@ void RenderManager::shutdown()
     
 }
 
+void RenderManager::drawSkybox(Meshes::ObjectManager& p_objectManager,
+                               Cameras::Camera& p_camera)
+{
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glDepthMask(GL_FALSE);
+
+    auto& l_skybox = p_objectManager.getSkybox();
+    auto& l_shaderProgram = l_skybox.m_shaderProgram;
+    auto& l_mesh = l_skybox.m_meshes.at(0);
+    l_shaderProgram->bindShaderProgram();
+    Textures::TextureManager::getInstance().activeCubemapTexture();
+    p_camera.updateShaderProgramForSkybox(*l_shaderProgram, "cameraPos", "view", "projection");
+    l_mesh->m_vertexArray.bindVao();
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    l_mesh->m_vertexArray.unbindVao();
+    l_shaderProgram->unbindShaderProgram();
+
+    glDepthMask(GL_TRUE);
+}
+
 void RenderManager::draw(Scenes::Scene & p_scene)
 {
     auto& l_currentAvaiableScene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
@@ -30,7 +50,6 @@ void RenderManager::draw(Scenes::Scene & p_scene)
     auto& l_windowManager = GameWindow::WindowManager::getInstance();
     auto& l_objectManager = p_scene.getObjectManager();
     auto& l_window = l_windowManager.getWindow();
-
     
     l_windowManager.updateViewPort();
     l_window.poolEvents();
@@ -42,6 +61,10 @@ void RenderManager::draw(Scenes::Scene & p_scene)
                  l_windowManager.getBackgroundColor().w);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    l_editorCamera->update();
+
+    drawSkybox(l_objectManager, *l_editorCamera);
 
     drawObjects(p_scene, l_editorCamera);
 
@@ -57,6 +80,9 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    l_gameCamera->update();
+
+    drawSkybox(l_objectManager, *l_gameCamera);
 
     drawObjects(p_scene, l_gameCamera);
 
@@ -160,7 +186,7 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
         l_shaderProgram.bindShaderProgram();
 
         l_objectManager.update(l_object);
-        p_camera->update(l_shaderProgram, "cameraPos", "view", "projection");
+        p_camera->updateShaderProgram(l_shaderProgram, "cameraPos", "view", "projection");
 
         drawMeshes(l_object);
 

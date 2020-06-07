@@ -12,10 +12,9 @@ namespace Textures
 class TextureLoader
 {
 public:
-    TextureLoader();
-    ~TextureLoader();
-
     GLuint loadCubeMapTexture(std::vector<std::string> p_texturesPath, GLenum p_wrappingType, GLenum p_drawingType);
+
+    GLenum fetchChannelFormat(int p_channelNum);
 
     GLuint loadTexture(std::string p_texturePath,
                        GLenum p_wrappingType,

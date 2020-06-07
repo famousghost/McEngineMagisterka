@@ -33,6 +33,8 @@ public:
 
     void deleteObject(std::string p_objName);
 
+    Object & getSkybox();
+
     void update(Object & object);
 
     void updateCollider(Object & p_object, Cameras::Camera & p_camera);
@@ -47,6 +49,7 @@ public:
     glm::vec3 m_lightPosition;
 private:
     std::vector<std::pair<Object, std::string>> m_objects;
+    Object m_skyBox;
 
     void setMaterialForObjectObject(Object & p_object);
     void setModelMatrixForObject(Object & p_object);

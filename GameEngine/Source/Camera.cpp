@@ -96,17 +96,10 @@ void Camera::setProjectionMatrix(float p_fov,
     p_shaderProgram.uniformMatrix4(m_projectionMatrix, p_projectionMatrixUniform);
 }
 
-void Camera::update(Shaders::Shader& p_shaderProgram, 
-                    const std::string& p_cameraPostionUniform,
-                    const std::string& p_viewMatrixUniform,
-                    const std::string& p_projectionMatrixUniform)
+void Camera::update()
 {
     rotateCamera();
     moveCamera();
-    updateShaderProgram(p_shaderProgram, 
-                        p_cameraPostionUniform, 
-                        p_viewMatrixUniform, 
-                        p_projectionMatrixUniform);
 }
 
 void Camera::updateShaderProgram(Shaders::Shader& p_shaderProgram,
@@ -116,6 +109,17 @@ void Camera::updateShaderProgram(Shaders::Shader& p_shaderProgram,
 {
     p_shaderProgram.uniformVec3(m_cameraPosition, p_cameraPostionUniform);
     p_shaderProgram.uniformMatrix4(m_view, p_viewMatrixUniform);
+    setProjectionMatrix(45.0f, 0.1f, 100.0f, p_shaderProgram, p_projectionMatrixUniform);
+}
+
+void Camera::updateShaderProgramForSkybox(Shaders::Shader& p_shaderProgram,
+                                          const std::string& p_cameraPostionUniform,
+                                          const std::string& p_viewMatrixUniform,
+                                          const std::string& p_projectionMatrixUniform)
+{
+    p_shaderProgram.uniformVec3(m_cameraPosition, p_cameraPostionUniform);
+    glm::mat4 view = glm::mat4(glm::mat3(m_view));
+    p_shaderProgram.uniformMatrix4(view, p_viewMatrixUniform);
     setProjectionMatrix(45.0f, 0.1f, 100.0f, p_shaderProgram, p_projectionMatrixUniform);
 }
 

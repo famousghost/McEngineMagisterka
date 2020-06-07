@@ -54,9 +54,10 @@ void GuiManager::meshGui()
     ImGui::NewFrame();
 
     ImGui::Begin("McEngine");
-    ImGui::Text("Simple game engine");
+    ImGui::Text("Simple graphics engine");
 
     static std::vector<std::string> items;
+
     static std::vector<std::string> shadersItems = {"defaultShader", 
                                                     "diffuseShader", 
                                                     "textureShader", 

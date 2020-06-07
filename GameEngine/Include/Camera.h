@@ -17,12 +17,11 @@ public:
 
     void rotateCamera();
 
-    void update(Shaders::Shader & p_shaderProgram, 
-                const std::string& p_cameraPostionUniform, 
-                const std::string& p_viewMatrixUniform,
-                const std::string& p_projectionMatrixUniform);
+    void update();
 
     void updateShaderProgram(Shaders::Shader & p_shaderProgram, const std::string & p_cameraPostionUniform, const std::string & p_viewMatrixUniform, const std::string & p_projectionMatrixUniform);
+
+    void updateShaderProgramForSkybox(Shaders::Shader & p_shaderProgram, const std::string & p_cameraPostionUniform, const std::string & p_viewMatrixUniform, const std::string & p_projectionMatrixUniform);
 
     glm::mat4 getProjectionMatrix() const;
 

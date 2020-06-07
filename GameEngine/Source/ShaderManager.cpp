@@ -24,6 +24,7 @@ void ShaderManager::start()
     addShader("windowShader", "Shaders/windowShader.vlsl", "Shaders/windowShader.flsl");
     addShader("coliderShader", "Shaders/colider.vlsl", "Shaders/colider.flsl");
     addShader("lightShader", "Shaders/light.vlsl", "Shaders/light.flsl");
+    addShader("skyBoxShader", "Shaders/skybox.vlsl", "Shaders/skybox.flsl");
     GameWindow::WindowManager::getInstance().createWindowPlane();
 }
 
@@ -52,6 +53,7 @@ void ShaderManager::resetShaders()
     addShader("windowShader", "Shaders/windowShader.vlsl", "Shaders/windowShader.flsl");
     addShader("coliderShader", "Shaders/colider.vlsl", "Shaders/colider.flsl");
     addShader("lightShader", "Shaders/light.vlsl", "Shaders/light.flsl");
+    addShader("skyBoxShader", "Shaders/skybox.vlsl", "Shaders/skybox.flsl");
     GameWindow::WindowManager::getInstance().createWindowPlane();
 }
 

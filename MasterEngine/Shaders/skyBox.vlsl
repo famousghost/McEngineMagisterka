@@ -1,0 +1,16 @@
+#version 330 core
+layout(location = 0) in vec3 vertexCoords;
+
+uniform mat4 view;
+uniform mat4 projection;
+
+out vec3 textureCoords;
+
+void main()
+{
+	textureCoords = vertexCoords;
+	
+	vec4 clipSpace = projection * view * vec4(vertexCoords, 1.0);
+	
+	gl_Position = clipSpace;
+}

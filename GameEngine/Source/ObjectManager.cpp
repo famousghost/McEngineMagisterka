@@ -7,7 +7,6 @@
 #include "ColiderObserver.h"
 #include "InputManager.h"
 #include <algorithm>
-#include <iostream>
 
 namespace McEngine
 {
@@ -24,6 +23,7 @@ void ObjectManager::addObject(const Object& p_object, std::string p_objName)
     }
 
     m_objects.push_back(std::make_pair(p_object, p_objName));
+    m_objects.back().first.m_objectName = p_objName;
     ColiderObserver* l_coliderObserver = new ColiderObserver(m_objects.back().first);
     m_coliderObserver.push_back(l_coliderObserver);
 }
@@ -50,9 +50,12 @@ void ObjectManager::addTerrain(std::string p_objectLabel,
 void ObjectManager::addSkyBox()
 {
     SkyBoxBuilder l_skyBoxBuilder;
-    l_skyBoxBuilder.addShaderProgram("defaultShader").addMesh();
-    auto l_object = l_skyBoxBuilder.getObject();
-    addObject(l_object, "Skybox");
+    l_skyBoxBuilder.addShaderProgram("skyBoxShader").addMesh();
+    m_skyBox = l_skyBoxBuilder.getObject();
+
+    m_skyBox.m_shaderProgram->bindShaderProgram();
+    m_skyBox.m_shaderProgram->uniform1I(0, "cubemap");
+    m_skyBox.m_shaderProgram->unbindShaderProgram();
 }
 
 void ObjectManager::update(Object& p_object)
@@ -159,6 +162,11 @@ void ObjectManager::deleteObject(std::string p_objName)
         return;
     }
     m_objects.erase(objectToDeleteIt);
+}
+
+Object& ObjectManager::getSkybox()
+{
+    return m_skyBox;
 }
 
 std::vector<std::pair<Object, std::string>>& ObjectManager::getObjects()

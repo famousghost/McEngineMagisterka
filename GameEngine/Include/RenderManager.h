@@ -12,6 +12,7 @@ public:
     void start();
 
     void shutdown();
+    void drawSkybox(Meshes::ObjectManager & p_objectManager, Cameras::Camera & p_camera);
     void draw(Scenes::Scene& p_scene);
 
     void showMesh();

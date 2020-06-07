@@ -70,7 +70,13 @@ void PrefabManager::createSkyBoxMesh()
     SkyBoxMeshBuilder l_skyBoxMeshBuilder;
     m_skyBoxMesh = l_skyBoxMeshBuilder.buildVerticies().getMesh();
 
-    prepareVertexArrayObject(m_skyBoxMesh);
+    auto& l_vertexArray = m_skyBoxMesh->m_vertexArray;
+
+    l_vertexArray.bindVao();
+
+    l_vertexArray.addValuesToAttribPointer(m_skyBoxMesh->m_verticies);
+
+    l_vertexArray.unbindVao();
 }
 
 void PrefabManager::createTerrainMesh()

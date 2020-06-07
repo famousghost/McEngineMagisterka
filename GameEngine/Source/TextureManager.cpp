@@ -26,6 +26,20 @@ void TextureManager::start()
     createTexture("Textures/wall.jpg", GL_REPEAT, GL_LINEAR, "Wall");
     createTexture("Textures/awesomeface.png", GL_REPEAT, GL_LINEAR, "Awsomeface");
     createTexture("Textures/Face_Side1.jpg", GL_REPEAT, GL_LINEAR, "Face_Side1");
+    createCubeMapTexture(prepareDefaultCubemapTextures(), GL_CLAMP_TO_EDGE, GL_LINEAR);
+}
+
+std::vector<std::string> TextureManager::prepareDefaultCubemapTextures()
+{
+    return std::vector<std::string>
+    {
+        "Textures/Cubemap/xpos.png",
+        "Textures/Cubemap/xneg.png",
+        "Textures/Cubemap/ypos.png",
+        "Textures/Cubemap/yneg.png",
+        "Textures/Cubemap/zpos.png",
+        "Textures/Cubemap/zneg.png"
+    };
 }
 
 void TextureManager::setTextureIdInShader(const std::string& p_shaderLabel)
@@ -54,12 +68,18 @@ void TextureManager::activeTexture(GLenum p_textureId,
     }
 }
 
-void TextureManager::createCubeMapTexture(std::string p_texturePath,
-                                          GLenum p_wrappingType,
-                                          GLenum p_drawingType,
-                                          std::string p_textureLabel)
+void TextureManager::activeCubemapTexture()
 {
-    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, m_cubeMapTexture);
+}
+
+void TextureManager::createCubeMapTexture(std::vector<std::string> p_texturesPath,
+                                          GLenum p_wrappingType,
+                                          GLenum p_drawingType)
+{
+    TextureLoader l_textureLoader;
+    m_cubeMapTexture = l_textureLoader.loadCubeMapTexture(p_texturesPath, p_wrappingType, p_drawingType);
 }
 
 void TextureManager::activeTexturesForCustomObject(Meshes::Mesh& p_mesh,
@@ -71,6 +91,7 @@ void TextureManager::activeTexturesForCustomObject(Meshes::Mesh& p_mesh,
     for (std::size_t i = 0; i < l_textures.size(); i++)
     {
         glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, l_textures[i].id);
         std::string l_number;
         std::string l_name = l_textures[i].label;
         if (l_name == "texture_diffuse")
@@ -79,7 +100,6 @@ void TextureManager::activeTexturesForCustomObject(Meshes::Mesh& p_mesh,
             l_number = std::to_string(specularNr++);
 
         p_shader.uniform1I(i, ("textureMaterial." + l_name + l_number).c_str());
-        glBindTexture(GL_TEXTURE_2D, l_textures[i].id);
     }
     glActiveTexture(GL_TEXTURE0);
 }

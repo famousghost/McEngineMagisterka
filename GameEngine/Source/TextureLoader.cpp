@@ -7,14 +7,6 @@ namespace McEngine
 {
 namespace Textures
 {
-TextureLoader::TextureLoader()
-{
-}
-
-
-TextureLoader::~TextureLoader()
-{
-}
 
 GLuint TextureLoader::loadCubeMapTexture(std::vector<std::string> p_texturesPath,
                                          GLenum p_wrappingType,
@@ -29,19 +21,32 @@ GLuint TextureLoader::loadCubeMapTexture(std::vector<std::string> p_texturesPath
     for (std::size_t i = 0; i < p_texturesPath.size(); ++i)
     {
         unsigned char *l_image = stbi_load(p_texturesPath[i].c_str(), &l_width, &l_height, &l_nrChannels, 0);
-        GLenum l_format;
-        if (l_nrChannels == 1)
-            l_format = GL_RED;
-        else if (l_nrChannels == 3)
-            l_format = GL_RGB;
-        else if (l_nrChannels == 4)
-            l_format = GL_RGBA;
 
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, l_width, l_height, 0, GL_RGB, GL_UNSIGNED_BYTE, l_image);
-        setCubeMapTextureParameters(p_wrappingType, p_drawingType);
+        if(l_image)
+        {
+            LOG(p_texturesPath[i].c_str(), LogType::DBG);
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, l_width, l_height, 0, GL_RGB, GL_UNSIGNED_BYTE, l_image);
+        }
+        else
+        {
+            std::string errMsg = "Cannot load texture from path " + p_texturesPath[i];
+            LOG(errMsg, LogType::ERR);
+        }
         stbi_image_free(l_image);
     }
+
+    setCubeMapTextureParameters(p_wrappingType, p_drawingType);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     return l_cubeTextureId;
+}
+
+GLenum TextureLoader::fetchChannelFormat(int p_channelNum)
+{
+    if (p_channelNum == 1)
+        return GL_RED;
+    if (p_channelNum == 4)
+        return GL_RGBA;
+    return GL_RGB;
 }
 
 GLuint TextureLoader::loadTexture(std::string p_texturePath,
@@ -57,13 +62,7 @@ GLuint TextureLoader::loadTexture(std::string p_texturePath,
 
     if (l_image)
     {
-        GLenum l_format;
-        if (l_nrChannels == 1)
-            l_format = GL_RED;
-        else if (l_nrChannels == 3)
-            l_format = GL_RGB;
-        else if (l_nrChannels == 4)
-            l_format = GL_RGBA;
+        GLenum l_format = fetchChannelFormat(l_nrChannels);
 
         glBindTexture(GL_TEXTURE_2D, l_textureId);
         setTextureParameters(p_wrappingType, p_drawingType);
@@ -130,12 +129,12 @@ void TextureLoader::setTextureParameters(GLenum p_wrappingType, GLenum p_drawing
 
 void TextureLoader::setCubeMapTextureParameters(GLenum p_wrappingType, GLenum p_drawingType)
 {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, p_wrappingType);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, p_wrappingType);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, p_wrappingType);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, p_wrappingType);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, p_wrappingType);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, p_wrappingType);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, p_drawingType);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, p_drawingType);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, p_drawingType);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, p_drawingType);
 }
 
 }//Textrues
