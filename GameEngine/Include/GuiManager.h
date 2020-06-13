@@ -37,6 +37,7 @@ private:
     void initImGui();
     std::size_t m_objectElementSize;
     std::string m_currentObject;
+    std::string m_currentCollider;
     std::string m_currentObjectToAdd;
     std::string m_currentShader;
     std::string m_currentTexture;
@@ -45,14 +46,16 @@ private:
     std::size_t m_elementNumber;
     bool m_colidersVisiblity;
 
-    void addObject(std::vector<std::string>& p_items);
+    void addObject(std::vector<std::string>& p_items, std::vector<std::string>& p_colliders);
+    void colliderMoveOperations(Meshes::Object & p_object);
     void objectMoveOperations();
     void setObjectProperties();
-    void deleteObject(std::vector<std::string>& p_items);
+    void deleteObject(std::vector<std::string>& p_items, std::vector<std::string>& p_colliders);
     void updateShaderComboBox(std::vector<std::string>& p_shaderItems);
     void choosingObjectToAddComboBox(std::vector<std::string>& p_shaderItems);
     void updateTextureComboBox(std::vector<std::string>& p_textureItems);
-    void objectChoosingComboBox(std::vector<std::string>& p_items);
+    void objectChoosingComboBox(std::vector<std::string>& p_items, std::vector<std::string>& p_colliders);
+    void colliderChoosingComboBox(std::vector<std::string>& p_items);
     void updateListOfObjects(std::vector<std::string>& p_shaderItems);
     void updateListOfShaders(std::vector<std::string>& p_shadersToAdd);
     void updateObjectShader();

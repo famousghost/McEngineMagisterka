@@ -1,32 +1,45 @@
 #pragma once
 #include "IColiderObserver.h"
 #include "Utilities.h"
+#include "Transform.h"
 
 namespace McEngine
 {
 namespace Meshes
 {
+enum class ColliderType
+{
+    NO_COLLIDER,
+    CUBE_ABB,
+    CUBE_OBB,
+    SPHERE,
+};
+
 struct Collider
 {
+    ColliderType m_colliderType;
+    std::string m_colliderName;
     std::vector<std::shared_ptr<Mesh>> m_meshes;
     std::shared_ptr<Shaders::Shader> m_shaderProgram;
     std::vector<glm::vec4> m_verticies;
-    glm::vec3 m_position;
-    glm::vec3 m_scale;
+    Transform m_transform;
     glm::vec4 m_minVertex;
     glm::vec4 m_maxVertex;
     Section m_xSection;
     Section m_ySection;
     Section m_zSection;
     Normals m_normals;
+    float m_radius;
     glm::vec3 m_coliderColor;
 
     Collider()
     {
-        m_position = glm::vec3(0.0f, 0.0f, 0.0f);
-        m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
+        m_colliderType = ColliderType::SPHERE;
+        m_transform.m_position = glm::vec3(0.0f, 0.0f, 0.0f);
+        m_transform.m_rotatione = glm::vec3(0.0f, 0.0f, 0.0f);
+        m_transform.m_scale = glm::vec3(0.0f, 0.0f, 0.0f);
         m_coliderColor = glm::vec3(0.0f, 1.0f, 0.0f);
-
+        m_radius = 1.0f;
         setDefaultValues();
     }
 

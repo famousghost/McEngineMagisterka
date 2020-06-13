@@ -31,7 +31,7 @@ public:
 
     void activeTexture(GLenum p_textureId, const std::string & p_textureLabel);
 
-    void activeCubemapTexture();
+    void activeCubemapTexture(Meshes::Object & p_object);
 
     void createCubeMapTexture(std::vector<std::string> p_texturesPath, GLenum p_wrappingType, GLenum p_drawingType);
 

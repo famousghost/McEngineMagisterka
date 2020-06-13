@@ -77,7 +77,9 @@ void GuiManager::meshGui()
                                                      "Nanosuit", 
                                                      "Plane",
                                                      "Terrain"};
-    objectChoosingComboBox(items);
+    static std::vector<std::string> colliders;
+    objectChoosingComboBox(items, colliders);
+    colliderChoosingComboBox(colliders);
     choosingObjectToAddComboBox(objectsToAdd);
     updateShaderComboBox(shadersItems);
     updateTextureComboBox(textureItems);
@@ -87,8 +89,8 @@ void GuiManager::meshGui()
     auto l_backgroundColor = GameWindow::WindowManager::getInstance().getBackgroundColor();
     ImGui::ColorEdit3("Change Color", (float*)&l_backgroundColor);
 
-    addObject(items);
-    deleteObject(items);
+    addObject(items, colliders);
+    deleteObject(items, colliders);
     updateObjectShader();
     updateObjectTetxture();
     updateListOfObjects(objectsToAdd);
@@ -211,7 +213,8 @@ bool GuiManager::getColliderVisiblity() const
     return m_colidersVisiblity;
 }
 
-void GuiManager::addObject(std::vector<std::string>& p_items)
+void GuiManager::addObject(std::vector<std::string>& p_items,
+                           std::vector<std::string>& p_colliders)
 {
     auto& l_objects =
         Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
@@ -220,7 +223,13 @@ void GuiManager::addObject(std::vector<std::string>& p_items)
         LOG("Object size is bigger than previous", LogType::INF);
         for (std::size_t i = m_objectElementSize; i < l_objects.size(); i++)
         {
+            m_currentCollider = "";
+            p_colliders.clear();
             p_items.push_back(l_objects.at(i).second);
+            for(auto& l_collider : l_objects.at(i).first.m_colider)
+            {
+                p_colliders.push_back(l_collider.m_colliderName);
+            }
         }
 
         m_objectElementSize = l_objects.size();
@@ -242,6 +251,26 @@ void GuiManager::addObject(std::vector<std::string>& p_items)
     }
 }
 
+void GuiManager::colliderMoveOperations(Meshes::Object& p_object)
+{
+    auto& l_colliders = p_object.m_colider;
+    if (l_colliders.size() == 0 or m_currentCollider.empty())
+    {
+        return;
+    }
+
+    auto colIt = std::find_if(l_colliders.begin(), l_colliders.end(),
+        [&](auto& label)
+    {
+        return m_currentCollider == label.m_colliderName;
+    });
+
+    auto& l_transform = colIt->m_transform;
+    ImGui::SliderFloat3("Collider Translation", &l_transform.m_position.x, -10.0f, 10.0f);
+    ImGui::SliderFloat3("Collider Rotatione", &l_transform.m_rotatione.x, -360.0f, 360.0f);
+    ImGui::SliderFloat3("Collider Scale", &l_transform.m_scale.x, -10.0f, 10.0f);
+}
+
 void GuiManager::objectMoveOperations()
 {
     auto& l_objects =
@@ -254,10 +283,12 @@ void GuiManager::objectMoveOperations()
 
     if (objIt != l_objects.end())
     {
-        auto& l_transform = objIt->first.m_transform;
+        auto& l_obj = objIt->first;
+        auto& l_transform = l_obj.m_transform;
         ImGui::SliderFloat3("Translation", &l_transform.m_position.x, -10.0f, 10.0f);
         ImGui::SliderFloat3("Rotatione", &l_transform.m_rotatione.x, -360.0f, 360.0f);
         ImGui::SliderFloat3("Scale", &l_transform.m_scale.x, -10.0f, 10.0f);
+        colliderMoveOperations(l_obj);
     }
 }
 
@@ -281,7 +312,8 @@ void GuiManager::setObjectProperties()
     }
 }
 
-void GuiManager::deleteObject(std::vector<std::string>& p_items)
+void GuiManager::deleteObject(std::vector<std::string>& p_items,
+                              std::vector<std::string>& p_colliders)
 {
     auto& l_objects = 
         Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
@@ -297,8 +329,10 @@ void GuiManager::deleteObject(std::vector<std::string>& p_items)
 
         if(comboItemToDelete != p_items.end())
         {
+            p_colliders.clear();
             p_items.erase(comboItemToDelete);
             m_currentObject = "";
+            m_currentCollider = "";
             m_objectElementSize = l_objects.size();
         }
     }
@@ -370,7 +404,8 @@ void GuiManager::updateTextureComboBox(std::vector<std::string>& p_textureItems)
     }
 }
 
-void GuiManager::objectChoosingComboBox(std::vector<std::string>& p_items)
+void GuiManager::objectChoosingComboBox(std::vector<std::string>& p_items,
+                                        std::vector<std::string>& p_colliders)
 {
 
     if (ImGui::BeginCombo("##objectCombo", m_currentObject.c_str()))
@@ -380,7 +415,41 @@ void GuiManager::objectChoosingComboBox(std::vector<std::string>& p_items)
             bool is_selected = (m_currentObject == p_items.at(i));
             if (ImGui::Selectable(p_items.at(i).c_str(), is_selected))
             {
+                m_currentCollider = "";
+                p_colliders.clear();
+                auto& l_objects =
+                    Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
+                auto objIt = std::find_if(l_objects.begin(), l_objects.end(),
+                    [&](auto& label)
+                {
+                    return m_currentObject == label.second;
+                });
+
                 m_currentObject = p_items.at(i);
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+
+                for (auto& l_collider : objIt->first.m_colider)
+                {
+                    p_colliders.push_back(l_collider.m_colliderName);
+                }
+            }
+        }
+        ImGui::EndCombo();
+    }
+}
+
+void GuiManager::colliderChoosingComboBox(std::vector<std::string>& p_items)
+{
+
+    if (ImGui::BeginCombo("##colliderCombo", m_currentCollider.c_str()))
+    {
+        for (int i = 0; i < p_items.size(); i++)
+        {
+            bool is_selected = (m_currentCollider == p_items.at(i));
+            if (ImGui::Selectable(p_items.at(i).c_str(), is_selected))
+            {
+                m_currentCollider = p_items.at(i);
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();
             }

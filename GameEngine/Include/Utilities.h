@@ -13,8 +13,8 @@ struct Material
 {
     Material()
     {
-        m_ambientLight = glm::vec3(0.1f, 0.1f, 0.1f);
-        m_diffuseLight = glm::vec3(0.1f, 0.1f, 0.1f);
+        m_ambientLight = glm::vec3(0.2f, 0.2f, 0.2f);
+        m_diffuseLight = glm::vec3(1.0f, 1.0f, 1.0f);
         m_specularLight = glm::vec3(0.1f, 0.1f, 0.1f);
         m_objectColor = glm::vec3(1.0f, 1.0f, 1.0f);
     }

@@ -243,6 +243,18 @@
     <ClCompile Include="Source\SkyBoxBuilder.cpp">
       <Filter>Pliki źródłowe\MESHES\BUILDERS\ObjectBuilders</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ColliderHandler.cpp">
+      <Filter>Pliki źródłowe\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CubeAABBCollisionHandler.cpp">
+      <Filter>Pliki źródłowe\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CubeOBBCollsionHandler.cpp">
+      <Filter>Pliki źródłowe\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SphereCollsionHandler.cpp">
+      <Filter>Pliki źródłowe\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Defines.h">
@@ -412,6 +424,21 @@
     </ClInclude>
     <ClInclude Include="Include\SkyBoxBuilder.h">
       <Filter>Pliki nagłówkowe\MESHES\BUILDERS\ObjectBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CollisionHandler.h">
+      <Filter>Pliki nagłówkowe\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CubeAABBCollisionHandler.h">
+      <Filter>Pliki nagłówkowe\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MeshCollisionHandler.h">
+      <Filter>Pliki nagłówkowe\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\CubeOBBCollsionHandler.h">
+      <Filter>Pliki nagłówkowe\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\SphereCollsionHandler.h">
+      <Filter>Pliki nagłówkowe\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -68,9 +68,15 @@ void TextureManager::activeTexture(GLenum p_textureId,
     }
 }
 
-void TextureManager::activeCubemapTexture()
+void TextureManager::activeCubemapTexture(Meshes::Object& p_object)
 {
-    glActiveTexture(GL_TEXTURE0);
+    int textureSize = 0;
+    for (auto& l_mesh : p_object.m_meshes)
+    {
+        textureSize += l_mesh->m_textures.size();
+    }
+    p_object.m_shaderProgram->uniform1I(textureSize+1, "cubemap");
+    glActiveTexture(GL_TEXTURE0+textureSize+1);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_cubeMapTexture);
 }
 

@@ -161,7 +161,10 @@
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\ColiderBuilder.cpp" />
     <ClCompile Include="Source\ColiderObserver.cpp" />
+    <ClCompile Include="Source\ColliderHandler.cpp" />
     <ClCompile Include="Source\CubeColiderBuilder.cpp" />
+    <ClCompile Include="Source\CubeAABBCollisionHandler.cpp" />
+    <ClCompile Include="Source\CubeOBBCollsionHandler.cpp" />
     <ClCompile Include="Source\FilePathParser.cpp" />
     <ClCompile Include="Source\LightBuilder.cpp" />
     <ClCompile Include="Source\LoadedObjectBuilder.cpp" />
@@ -185,6 +188,7 @@
     <ClCompile Include="Source\ShaderManager.cpp" />
     <ClCompile Include="Source\SkyBoxBuilder.cpp" />
     <ClCompile Include="Source\SkyBoxMeshBuilder.cpp" />
+    <ClCompile Include="Source\SphereCollsionHandler.cpp" />
     <ClCompile Include="Source\TerrainBuilder.cpp" />
     <ClCompile Include="Source\TerrainMeshBuilder.cpp" />
     <ClCompile Include="Source\TextureLoader.cpp" />
@@ -208,6 +212,9 @@
     <ClInclude Include="Include\ColiderBuilder.h" />
     <ClInclude Include="Include\ColiderStates.h" />
     <ClInclude Include="Include\Collider.h" />
+    <ClInclude Include="Include\CollisionHandler.h" />
+    <ClInclude Include="Include\CubeAABBCollisionHandler.h" />
+    <ClInclude Include="Include\CubeOBBCollsionHandler.h" />
     <ClInclude Include="Include\IColiderObserver.h" />
     <ClInclude Include="Include\CubeColiderBuilder.h" />
     <ClInclude Include="Include\FilePathParser.h" />
@@ -215,6 +222,7 @@
     <ClInclude Include="Include\Light.h" />
     <ClInclude Include="Include\LightBuilder.h" />
     <ClInclude Include="Include\LoadedObjectBuilder.h" />
+    <ClInclude Include="Include\MeshCollisionHandler.h" />
     <ClInclude Include="Include\MouseRay.h" />
     <ClInclude Include="Include\Defines.h" />
     <ClInclude Include="Include\EditorManager.h" />
@@ -239,6 +247,7 @@
     <ClInclude Include="Include\ShaderManager.h" />
     <ClInclude Include="Include\SkyBoxBuilder.h" />
     <ClInclude Include="Include\SkyBoxMeshBuilder.h" />
+    <ClInclude Include="Include\SphereCollsionHandler.h" />
     <ClInclude Include="Include\STB.h" />
     <ClInclude Include="Include\stb_image.h" />
     <ClInclude Include="Include\TerrainBuilder.h" />

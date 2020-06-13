@@ -12,7 +12,8 @@ struct Object
     std::vector<std::shared_ptr<Mesh>> m_meshes;
     std::shared_ptr<Shaders::Shader> m_shaderProgram;
     std::list<IColiderObserver*> m_collsionObservers;
-    Collider m_colider;
+    std::vector<Collider> m_colider;
+    int m_colliderNumber;
     std::string m_currentAvaiableTexture;
     Material m_material;
     Transform m_transform;
@@ -38,6 +39,7 @@ struct Object
 
     Object()
     {
+        m_colliderNumber = 1;
         m_currentAvaiableTexture = "texture";
     }
 };

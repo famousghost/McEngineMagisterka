@@ -32,7 +32,7 @@ void RenderManager::drawSkybox(Meshes::ObjectManager& p_objectManager,
     auto& l_shaderProgram = l_skybox.m_shaderProgram;
     auto& l_mesh = l_skybox.m_meshes.at(0);
     l_shaderProgram->bindShaderProgram();
-    Textures::TextureManager::getInstance().activeCubemapTexture();
+    Textures::TextureManager::getInstance().activeCubemapTexture(l_skybox);
     p_camera.updateShaderProgramForSkybox(*l_shaderProgram, "cameraPos", "view", "projection");
     l_mesh->m_vertexArray.bindVao();
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -40,6 +40,11 @@ void RenderManager::drawSkybox(Meshes::ObjectManager& p_objectManager,
     l_shaderProgram->unbindShaderProgram();
 
     glDepthMask(GL_TRUE);
+
+    if (not m_fillMesh)
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
 }
 
 void RenderManager::draw(Scenes::Scene & p_scene)
@@ -73,10 +78,6 @@ void RenderManager::draw(Scenes::Scene & p_scene)
     l_windowManager.unbindFrameBuffer();
 
     l_windowManager.bindGameFrameBuffer();
-    glClearColor(l_windowManager.getBackgroundColor().x,
-                 l_windowManager.getBackgroundColor().y,
-                 l_windowManager.getBackgroundColor().z,
-                 l_windowManager.getBackgroundColor().w);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -96,7 +97,6 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
 void RenderManager::drawScene()
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glDisable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -145,28 +145,30 @@ void RenderManager::drawColliders(Meshes::Object& p_object,
                                   Cameras::Camera& p_camera,
                                   Meshes::ObjectManager& p_objectManager)
 {
-    if(not p_object.m_colider.m_meshes.size())
+    if(not p_object.m_colider.size())
     {
         return;
     }
-    auto& l_object = p_object;
-    auto& l_collider = l_object.m_colider;
-    l_collider.m_shaderProgram->bindShaderProgram();
-    p_objectManager.updateCollider(p_object, p_camera);
-    if (Gui::GuiManager::getInstance().getColliderVisiblity())
+    for(auto& collider : p_object.m_colider)
     {
-        glDisable(GL_CULL_FACE);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        auto& l_object = p_object;
+        collider.m_shaderProgram->bindShaderProgram();
+        p_objectManager.updateCollider(p_object, p_camera);
+        if (Gui::GuiManager::getInstance().getColliderVisiblity())
+        {
+            glDisable(GL_CULL_FACE);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-        auto& l_coliderMesh = l_object.m_colider.m_meshes.at(0);
-        l_coliderMesh->m_vertexArray.bindVao();
-        glDrawElements(GL_TRIANGLES, l_coliderMesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
-        l_coliderMesh->m_vertexArray.unbindVao();
+            auto& l_coliderMesh = collider.m_meshes.at(0);
+            l_coliderMesh->m_vertexArray.bindVao();
+            glDrawElements(GL_TRIANGLES, l_coliderMesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
+            l_coliderMesh->m_vertexArray.unbindVao();
 
-        glEnable(GL_CULL_FACE);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            glEnable(GL_CULL_FACE);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
+        collider.m_shaderProgram->unbindShaderProgram();
     }
-    l_collider.m_shaderProgram->unbindShaderProgram();
 }
 
 void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras::Camera>& p_camera)
@@ -199,21 +201,22 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
 
         if (Inputs::InputManager::getInstance().s_onClickMouse)
         {
-            if (l_object.m_colider.m_meshes.size())
+            if (l_object.m_colider.size())
             {
-                auto& l_colider = l_object.m_colider;
-        
-                Inputs::MouseRay l_mouseRay;
+                for(auto& l_collider : l_object.m_colider)
+                {
+                    Inputs::MouseRay l_mouseRay;
 
-                if (l_mouseRay.checkIntersectionWithCube(glm::vec3(l_colider.m_minVertex), 
-                                                         glm::vec3(l_colider.m_maxVertex)))
-                {
-                    Gui::GuiManager::getInstance().chooseObjectViaMouse(l_object.m_objectName);
-                    l_object.m_material.m_highlightColor = glm::vec3(0.0f, 1.0f, 0.0f);
-                }
-                else
-                {
-                    l_object.m_material.m_highlightColor = l_object.m_material.m_objectColor;
+                    if (l_mouseRay.checkIntersectionWithCube(glm::vec3(l_collider.m_minVertex),
+                                                             glm::vec3(l_collider.m_maxVertex)))
+                    {
+                        Gui::GuiManager::getInstance().chooseObjectViaMouse(l_object.m_objectName);
+                        l_object.m_material.m_highlightColor = glm::vec3(0.0f, 1.0f, 0.0f);
+                    }
+                    else
+                    {
+                        l_object.m_material.m_highlightColor = l_object.m_material.m_objectColor;
+                    }
                 }
             }
         }
@@ -226,6 +229,8 @@ void RenderManager::drawMeshes(Meshes::Object& p_object)
     for (auto& mesh : p_object.m_meshes)
     {
         Textures::TextureManager::getInstance().activeTexturesForCustomObject(*mesh, *p_object.m_shaderProgram);
+        p_object.m_shaderProgram->uniform1I(10, "cubemap");
+        Textures::TextureManager::getInstance().activeCubemapTexture(p_object);
         mesh->m_vertexArray.bindVao();
         glDrawElements(GL_TRIANGLES, mesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
         mesh->m_vertexArray.unbindVao();

@@ -1,0 +1,37 @@
+#version 330 core
+
+layout(location = 0) in vec3 vertexCoords;
+layout(location = 1) in vec2 textureCordinates;
+layout(location = 2) in vec3 aNormals;
+
+out vec2 Tcordinates;
+out vec3 normalCoords;
+out vec3 FragPosition;
+out vec3 reflectedVector;
+out vec3 refractedVector;
+out vec3 wPos;
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+uniform vec3 cameraPos;
+
+float tiling = 4.0f;
+
+void main()
+{
+	vec4 worldPosition = model * vec4(vertexCoords, 1.0f);
+	
+	wPos = vec3(worldPosition);
+	
+	gl_Position = projection * view * worldPosition;
+	Tcordinates = textureCordinates;
+	FragPosition = vec3(model * vec4(vertexCoords,1.0f));
+	normalCoords = mat3(transpose(inverse(model))) * aNormals;
+	vec3 unitNormal = normalize(normalCoords);
+
+	
+	vec3 viewVector = normalize(worldPosition.xyz - cameraPos);
+	reflectedVector = reflect(viewVector, unitNormal);
+	refractedVector = refract(viewVector, unitNormal,1.0f);
+}

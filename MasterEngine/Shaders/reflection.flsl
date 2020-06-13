@@ -1,0 +1,31 @@
+#version 330 core
+in vec2 Tcordinates;
+in vec3 normalCoords;
+in vec3 FragPosition;
+in vec3 reflectedVector;
+in vec3 refractedVector;
+in vec3 wPos;
+
+out vec4 fragCoords;
+
+uniform sampler2D texture1;
+uniform samplerCube cubemap;
+uniform vec3 lightPosition;
+
+const float ambient = 0.3f;
+
+void main()
+{
+	vec3 lightPos = normalize(lightPosition - wPos);
+	float birghtness = max(dot(-lightPos, normalize(normalCoords)),0.0f)+ ambient;
+	fragCoords = texture(texture1,Tcordinates) * birghtness;
+	
+	
+	vec3 reflectedCoords = reflectedVector;
+	vec3 refractedCoords = refractedVector;
+	
+	vec4 reflectedColour = texture(cubemap,reflectedVector);
+	vec4 refractedColour = texture(cubemap,refractedVector);
+	vec4 mixColor = mix(reflectedColour,refractedColour,0.5f);
+	fragCoords = mix(fragCoords,mixColor,0.6f);
+}

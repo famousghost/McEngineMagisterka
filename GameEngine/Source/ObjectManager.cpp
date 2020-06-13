@@ -68,20 +68,33 @@ void ObjectManager::update(Object& p_object)
 void ObjectManager::updateCollider(Object& p_object, 
                                    Cameras::Camera& p_camera)
 {
-    auto& l_collider = p_object.m_colider;
-    l_collider.m_shaderProgram->uniformVec3(l_collider.m_coliderColor, "coliderColor");
-    glm::mat4 l_colliderModel;
-    glm::mat4 l_colliderModelRotatione;
+    for(auto& l_collider : p_object.m_colider)
+    {
+        l_collider.m_shaderProgram->uniformVec3(l_collider.m_coliderColor, "coliderColor");
+        glm::mat4 l_colliderModel;
+        glm::mat4 l_colliderModelRotatione;
+        auto l_colliderTranslate = p_object.m_transform.m_position + l_collider.m_transform.m_position;
+        auto l_colliderRotationeX = p_object.m_transform.m_rotatione.x + l_collider.m_transform.m_rotatione.x;
+        auto l_colliderRotationeY = p_object.m_transform.m_rotatione.y + l_collider.m_transform.m_rotatione.y;
+        auto l_colliderRotationeZ = p_object.m_transform.m_rotatione.z + l_collider.m_transform.m_rotatione.z;
+        auto l_colliderSacale = p_object.m_transform.m_scale + l_collider.m_transform.m_scale;
+        //l_collider.m_radius = l_colliderSacale.x;
+        l_colliderModel = glm::translate(l_colliderModel, l_colliderTranslate);
+        l_colliderModel = glm::rotate(l_colliderModel, 
+                                      glm::radians(l_colliderRotationeX),
+                                      glm::vec3(1.0f, 0.0f, 0.0f));
+        l_colliderModel = glm::rotate(l_colliderModel, 
+                                      glm::radians(l_colliderRotationeY),
+                                      glm::vec3(0.0f, 1.0f, 0.0f));
+        l_colliderModel = glm::rotate(l_colliderModel, 
+                                      glm::radians(l_colliderRotationeZ),
+                                      glm::vec3(0.0f, 0.0f, 1.0f));
+        l_colliderModel = glm::scale(l_colliderModel, l_colliderSacale);
 
-    l_colliderModel = glm::translate(l_colliderModel, p_object.m_transform.m_position);
-    l_colliderModel = glm::rotate(l_colliderModel, glm::radians(p_object.m_transform.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    l_colliderModel = glm::rotate(l_colliderModel, glm::radians(p_object.m_transform.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    l_colliderModel = glm::rotate(l_colliderModel, glm::radians(p_object.m_transform.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    l_colliderModel = glm::scale(l_colliderModel, p_object.m_transform.m_scale);
-
-    l_collider.m_shaderProgram->uniformMatrix4(l_colliderModel, "model");
-    transformCollider(l_collider, l_colliderModel);
-    p_camera.updateShaderProgram(*l_collider.m_shaderProgram, "cameraPos", "view", "projection");
+        l_collider.m_shaderProgram->uniformMatrix4(l_colliderModel, "model");
+        transformCollider(l_collider, l_colliderModel);
+        p_camera.updateShaderProgram(*l_collider.m_shaderProgram, "cameraPos", "view", "projection");
+    }
 }
 
 void ObjectManager::transformCollider(Collider& p_collider, const glm::mat4& p_colliderModel)
@@ -121,7 +134,7 @@ void ObjectManager::setModelMatrixForObject(Object& p_object)
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
     l_model = glm::scale(l_model, l_transform.m_scale);
     p_object.updateTransformation(l_transform);
-    l_physcis.checkCollisionDetectionOBB(p_object, m_objects);
+    l_physcis.collisionChecker(p_object, m_objects);
     p_object.m_shaderProgram->uniformMatrix4(l_model, "model");
 }
 
