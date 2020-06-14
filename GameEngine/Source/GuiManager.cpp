@@ -23,6 +23,7 @@ void GuiManager::start()
     m_objectElementSize = 0;
     m_elementNumber = 0;
     m_colidersVisiblity = false;
+    m_colliderTypeName = "OBB";
     initImGui();
 }
 
@@ -77,8 +78,13 @@ void GuiManager::meshGui()
                                                      "Nanosuit", 
                                                      "Plane",
                                                      "Terrain"};
+
+    static std::vector<std::string> colliderTypes = {"OBB",
+                                                     "AABB",
+                                                     "SPHERE"};
     static std::vector<std::string> colliders;
     objectChoosingComboBox(items, colliders);
+    colliderTypeChoosingComboBox(colliderTypes);
     colliderChoosingComboBox(colliders);
     choosingObjectToAddComboBox(objectsToAdd);
     updateShaderComboBox(shadersItems);
@@ -245,7 +251,7 @@ void GuiManager::addObject(std::vector<std::string>& p_items,
         }
         else
         {
-            l_objManager.addCustomObject(label, m_currentObjectToAdd, m_currentShader);
+            l_objManager.addCustomObject(label, m_currentObjectToAdd, m_currentShader, m_colliderType);
         }
         m_currentObject = label;
     }
@@ -455,6 +461,37 @@ void GuiManager::colliderChoosingComboBox(std::vector<std::string>& p_items)
             }
         }
         ImGui::EndCombo();
+    }
+}
+
+void GuiManager::colliderTypeChoosingComboBox(std::vector<std::string>& p_items)
+{
+
+    if (ImGui::BeginCombo("##colliderTypeCombo", m_colliderTypeName.c_str()))
+    {
+        for (int i = 0; i < p_items.size(); i++)
+        {
+            bool is_selected = (m_colliderTypeName == p_items.at(i));
+            if (ImGui::Selectable(p_items.at(i).c_str(), is_selected))
+            {
+                m_colliderTypeName = p_items.at(i);
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
+    if (m_colliderTypeName == "OBB")
+    {
+        m_colliderType = Meshes::ColliderType::CUBE_OBB;
+    }
+    else if (m_colliderTypeName == "AABB")
+    {
+        m_colliderType = Meshes::ColliderType::CUBE_AABB;
+    }
+    else if (m_colliderTypeName == "SPHERE")
+    {
+        m_colliderType = Meshes::ColliderType::SPHERE;
     }
 }
 

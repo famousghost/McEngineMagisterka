@@ -10,7 +10,7 @@ namespace Meshes
 enum class ColliderType
 {
     NO_COLLIDER,
-    CUBE_ABB,
+    CUBE_AABB,
     CUBE_OBB,
     SPHERE,
 };

@@ -2,6 +2,7 @@
 #include "CubeAABBCollisionHandler.h"
 #include "CubeOBBCollsionHandler.h"
 #include "SphereCollsionHandler.h"
+#include "SphereVAABBCollsionHandler.h"
 #include <algorithm>
 #include <math.h>
 
@@ -26,7 +27,8 @@ void CollisionHandler::setShouldCheckCollision(bool p_shouldCheckCollision)
 
 bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_colliderA,
                                               const Meshes::Collider& p_ColliderB,
-                                              float p_distanceBetweenObjects)
+                                              const glm::vec3& p_objectCenterA,
+                                              const glm::vec3& p_objectCenterB)
 {
     
     std::unique_ptr<MeshCollisionHandler> m_meshCollisionHandler;
@@ -37,8 +39,8 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
         m_meshCollisionHandler = std::make_unique<CubeOBBCollsionHandler>();
         return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
     }
-    else if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_ABB
-             and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_ABB)
+    else if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
+             and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_AABB)
 
     {
         m_meshCollisionHandler = std::make_unique<CubeAABBCollisionHandler>();
@@ -48,17 +50,17 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
               and p_ColliderB.m_colliderType == Meshes::ColliderType::SPHERE)
     {
         
-        m_meshCollisionHandler = std::make_unique<SphereCollsionHandler>(p_distanceBetweenObjects);
+        m_meshCollisionHandler = std::make_unique<SphereCollsionHandler>(p_objectCenterA, p_objectCenterB);
         return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
     }
-    else if ((p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_ABB
+    else if ((p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
              and p_ColliderB.m_colliderType == Meshes::ColliderType::SPHERE)
              or 
              (p_colliderA.m_colliderType == Meshes::ColliderType::SPHERE
-             and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_ABB))
+             and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_AABB))
     {
-        //m_meshCollisionHandler = std::make_unique<SphereVCubeABBCollsionHandler>();
-        //return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
+        m_meshCollisionHandler = std::make_unique<SphereVAABBCollsionHandler>(p_objectCenterA, p_objectCenterB);
+        return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
     }
     else if ((p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_OBB
              and p_ColliderB.m_colliderType == Meshes::ColliderType::SPHERE)
@@ -83,12 +85,15 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
         {
             continue;
         }
-        float l_distance = glm::distance(p_object.m_transform.m_position, p_objects[i].first.m_transform.m_position);
+
         for(auto& colliderA : p_object.m_colider)
         {
             for(auto& colliderB : p_objects[i].first.m_colider)
             { 
-                if (checkCollsionForObject(colliderA, colliderB, l_distance))
+                if (checkCollsionForObject(colliderA, 
+                                           colliderB, 
+                                           p_object.m_transform.m_position, 
+                                           p_objects[i].first.m_transform.m_position))
                 {
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
                     l_isColliding = true;

@@ -255,6 +255,12 @@
     <ClCompile Include="Source\SphereCollsionHandler.cpp">
       <Filter>Pliki źródłowe\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SphereVAABBCollsionHandler.cpp">
+      <Filter>Pliki źródłowe\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SphereVOBBCollisionHandler.cpp">
+      <Filter>Pliki źródłowe\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Defines.h">
@@ -438,6 +444,12 @@
       <Filter>Pliki nagłówkowe\Physics</Filter>
     </ClInclude>
     <ClInclude Include="Include\SphereCollsionHandler.h">
+      <Filter>Pliki nagłówkowe\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\SphereVAABBCollsionHandler.h">
+      <Filter>Pliki nagłówkowe\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\SphereVOBBCollisionHandler.h">
       <Filter>Pliki nagłówkowe\Physics</Filter>
     </ClInclude>
   </ItemGroup>

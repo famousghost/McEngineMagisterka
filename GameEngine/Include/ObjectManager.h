@@ -23,6 +23,8 @@ class ObjectManager
 public:
     void addObject(const Object& p_object, std::string p_objName);
 
+    void addCustomObject(std::string p_objectLabel, std::string p_objectName, std::string p_shaderLabel, ColliderType p_defaultColliderType);
+
     void addCustomObject(std::string p_objectLabel, 
                          std::string p_objectName, 
                          std::string p_shaderLabel);

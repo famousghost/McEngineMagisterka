@@ -14,6 +14,16 @@ LoadedObjectBuilder::LoadedObjectBuilder(std::string p_meshName, std::string p_o
     m_object.m_colider.emplace_back();
 }
 
+LoadedObjectBuilder::LoadedObjectBuilder(std::string p_meshName, std::string p_objectName, ColliderType p_defaultColliderType)
+    :m_meshName(p_meshName),
+    m_objectName(p_objectName),
+    m_defaultColliderType(p_defaultColliderType)
+    
+{
+    m_object.m_colider.emplace_back();
+    m_object.m_colider.back().m_colliderType = p_defaultColliderType;
+}
+
 ObjectBuilder & LoadedObjectBuilder::addMesh()
 {
     try
@@ -23,7 +33,14 @@ ObjectBuilder & LoadedObjectBuilder::addMesh()
         m_object.m_meshes.insert(m_object.m_meshes.begin(), l_objectMeshes.begin(), l_objectMeshes.end());
         m_object.m_objectName = m_objectName;
         m_object.m_colider.back().m_colliderName = "Collider" + std::to_string(m_object.m_colliderNumber++);
-        m_object.m_colider.back().m_meshes.push_back(l_prefabManager.getColiderMesh());
+        if(m_object.m_colider.back().m_colliderType == ColliderType::SPHERE)
+        {
+            m_object.m_colider.back().m_meshes.push_back(l_prefabManager.getMesh("Sphere"));
+        }
+        else
+        {
+            m_object.m_colider.back().m_meshes.push_back(l_prefabManager.getColiderMesh());
+        }
     }
     catch (std::exception& ex)
     {

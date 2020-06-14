@@ -30,6 +30,17 @@ void ObjectManager::addObject(const Object& p_object, std::string p_objName)
 
 void ObjectManager::addCustomObject(std::string p_objectLabel,
                                     std::string p_objectName,
+                                    std::string p_shaderLabel,
+                                    ColliderType p_defaultColliderType)
+{
+    LoadedObjectBuilder l_loadedObjectBuilder(p_objectName, p_objectLabel, p_defaultColliderType);
+    l_loadedObjectBuilder.addShaderProgram(p_shaderLabel).addMesh();
+    auto l_object = l_loadedObjectBuilder.getObject();
+    addObject(l_object, p_objectLabel);
+}
+
+void ObjectManager::addCustomObject(std::string p_objectLabel,
+                                    std::string p_objectName,
                                     std::string p_shaderLabel)
 {
     LoadedObjectBuilder l_loadedObjectBuilder(p_objectName, p_objectLabel);
