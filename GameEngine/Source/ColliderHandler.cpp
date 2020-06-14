@@ -25,8 +25,10 @@ void CollisionHandler::setShouldCheckCollision(bool p_shouldCheckCollision)
 }
 
 bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_colliderA,
-                                              const Meshes::Collider& p_ColliderB)
+                                              const Meshes::Collider& p_ColliderB,
+                                              float p_distanceBetweenObjects)
 {
+    
     std::unique_ptr<MeshCollisionHandler> m_meshCollisionHandler;
 
     if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_OBB
@@ -45,7 +47,8 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
     else if (p_colliderA.m_colliderType == Meshes::ColliderType::SPHERE
               and p_ColliderB.m_colliderType == Meshes::ColliderType::SPHERE)
     {
-        m_meshCollisionHandler = std::make_unique<SphereCollsionHandler>();
+        
+        m_meshCollisionHandler = std::make_unique<SphereCollsionHandler>(p_distanceBetweenObjects);
         return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
     }
     else if ((p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_ABB
@@ -80,12 +83,12 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
         {
             continue;
         }
-
+        float l_distance = glm::distance(p_object.m_transform.m_position, p_objects[i].first.m_transform.m_position);
         for(auto& colliderA : p_object.m_colider)
         {
             for(auto& colliderB : p_objects[i].first.m_colider)
             { 
-                if (checkCollsionForObject(colliderA, colliderB))
+                if (checkCollsionForObject(colliderA, colliderB, l_distance))
                 {
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
                     l_isColliding = true;

@@ -14,7 +14,7 @@ public:
     void collisionChecker(Meshes::Object & p_object, std::vector<std::pair<Meshes::Object, std::string>>& p_objects);
 
 private:
-    bool checkCollsionForObject(const Meshes::Collider & p_colliderA, const Meshes::Collider & p_ColliderB);
+    bool checkCollsionForObject(const Meshes::Collider & p_colliderA, const Meshes::Collider & p_ColliderB, float p_distanceBetweenObjects);
     bool m_shouldCheckCollsion;
 };
 }//Physics
