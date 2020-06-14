@@ -33,12 +33,12 @@ std::vector<std::string> TextureManager::prepareDefaultCubemapTextures()
 {
     return std::vector<std::string>
     {
-        "Textures/Cubemap/xpos.png",
-        "Textures/Cubemap/xneg.png",
-        "Textures/Cubemap/ypos.png",
-        "Textures/Cubemap/yneg.png",
-        "Textures/Cubemap/zpos.png",
-        "Textures/Cubemap/zneg.png"
+        "Textures/Cubemap/xpos.jpg",
+        "Textures/Cubemap/xneg.jpg",
+        "Textures/Cubemap/ypos.jpg",
+        "Textures/Cubemap/yneg.jpg",
+        "Textures/Cubemap/zpos.jpg",
+        "Textures/Cubemap/zneg.jpg"
     };
 }
 

@@ -3,6 +3,7 @@
 #include "CubeOBBCollsionHandler.h"
 #include "SphereCollsionHandler.h"
 #include "SphereVAABBCollsionHandler.h"
+#include "SphereVOBBCollisionHandler.h"
 #include <algorithm>
 #include <math.h>
 
@@ -68,8 +69,8 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
              (p_colliderA.m_colliderType == Meshes::ColliderType::SPHERE
              and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_OBB))
     {
-        //m_meshCollisionHandler = std::make_unique<SphereVCubeOBBCollsionHandler>();
-        //return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
+        m_meshCollisionHandler = std::make_unique<SphereVOBBCollisionHandler>(p_objectCenterA, p_objectCenterB);
+        return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
     }
 
     return false;

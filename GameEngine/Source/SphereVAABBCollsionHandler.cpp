@@ -19,7 +19,7 @@ bool SphereVAABBCollsionHandler::checkCollision(const Meshes::Collider & p_colid
     float l_radius;
     if (p_coliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB)
     {
-        glm::vec3 l_sphereCenter = m_objectCenterA + p_coliderB.m_transform.m_position;
+        glm::vec3 l_sphereCenter = m_objectCenterB + p_coliderB.m_transform.m_position;
         l_closestPointOnAABBCube = 
             glm::vec3(
                 std::max(p_coliderA.m_xSection.min.x, std::min(l_sphereCenter.x, p_coliderA.m_xSection.max.x)),

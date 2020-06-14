@@ -8,7 +8,7 @@ namespace Physics
 {
 
 bool CubeOBBCollsionHandler::checkCollision(const Meshes::Collider & p_coliderA,
-                                               const Meshes::Collider & p_coliderB)
+                                            const Meshes::Collider & p_coliderB)
 {
     std::vector<glm::vec3> l_colliderAEdges;
     std::vector<glm::vec3> l_colliderBEdges;

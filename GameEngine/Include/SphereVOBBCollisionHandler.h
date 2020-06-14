@@ -9,13 +9,15 @@ namespace Physics
 class SphereVOBBCollisionHandler : public MeshCollisionHandler
 {
 public:
-    SphereVOBBCollisionHandler(float p_distance);
+    SphereVOBBCollisionHandler(const glm::vec3 & p_objectCenterA,
+                               const glm::vec3 & p_objectCenterB);
 
     bool checkCollision(const Meshes::Collider & p_coliderA,
                         const Meshes::Collider & p_coliderB) override;
 
 private:
-    float m_distance;
+    const glm::vec3& m_objectCenterA;
+    const glm::vec3& m_objectCenterB;
 };
 
 }//Physics

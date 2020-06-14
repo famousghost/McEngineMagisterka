@@ -29,19 +29,19 @@ void ObjectManager::addObject(const Object& p_object, std::string p_objName)
 }
 
 void ObjectManager::addCustomObject(std::string p_objectLabel,
-                                    std::string p_objectName,
-                                    std::string p_shaderLabel,
-                                    ColliderType p_defaultColliderType)
+std::string p_objectName,
+std::string p_shaderLabel,
+ColliderType p_defaultColliderType)
 {
-    LoadedObjectBuilder l_loadedObjectBuilder(p_objectName, p_objectLabel, p_defaultColliderType);
-    l_loadedObjectBuilder.addShaderProgram(p_shaderLabel).addMesh();
-    auto l_object = l_loadedObjectBuilder.getObject();
-    addObject(l_object, p_objectLabel);
+LoadedObjectBuilder l_loadedObjectBuilder(p_objectName, p_objectLabel, p_defaultColliderType);
+l_loadedObjectBuilder.addShaderProgram(p_shaderLabel).addMesh();
+auto l_object = l_loadedObjectBuilder.getObject();
+addObject(l_object, p_objectLabel);
 }
 
 void ObjectManager::addCustomObject(std::string p_objectLabel,
-                                    std::string p_objectName,
-                                    std::string p_shaderLabel)
+    std::string p_objectName,
+    std::string p_shaderLabel)
 {
     LoadedObjectBuilder l_loadedObjectBuilder(p_objectName, p_objectLabel);
     l_loadedObjectBuilder.addShaderProgram(p_shaderLabel).addMesh();
@@ -50,7 +50,7 @@ void ObjectManager::addCustomObject(std::string p_objectLabel,
 }
 
 void ObjectManager::addTerrain(std::string p_objectLabel,
-                               std::string p_shaderLabel)
+    std::string p_shaderLabel)
 {
     TerrainBuilder l_terrainBuilder;
     l_terrainBuilder.addShaderProgram(p_shaderLabel).addMesh();
@@ -76,10 +76,10 @@ void ObjectManager::update(Object& p_object)
     activeTextures(p_object);
 }
 
-void ObjectManager::updateCollider(Object& p_object, 
-                                   Cameras::Camera& p_camera)
+void ObjectManager::updateCollider(Object& p_object,
+    Cameras::Camera& p_camera)
 {
-    for(auto& l_collider : p_object.m_colider)
+    for (auto& l_collider : p_object.m_colider)
     {
         l_collider.m_shaderProgram->uniformVec3(l_collider.m_coliderColor, "coliderColor");
         glm::mat4 l_colliderModel;
@@ -91,15 +91,15 @@ void ObjectManager::updateCollider(Object& p_object,
         auto l_colliderSacale = p_object.m_transform.m_scale + l_collider.m_transform.m_scale;
         //l_collider.m_radius = l_colliderSacale.x;
         l_colliderModel = glm::translate(l_colliderModel, l_colliderTranslate);
-        l_colliderModel = glm::rotate(l_colliderModel, 
-                                      glm::radians(l_colliderRotationeX),
-                                      glm::vec3(1.0f, 0.0f, 0.0f));
-        l_colliderModel = glm::rotate(l_colliderModel, 
-                                      glm::radians(l_colliderRotationeY),
-                                      glm::vec3(0.0f, 1.0f, 0.0f));
-        l_colliderModel = glm::rotate(l_colliderModel, 
-                                      glm::radians(l_colliderRotationeZ),
-                                      glm::vec3(0.0f, 0.0f, 1.0f));
+        l_colliderModel = glm::rotate(l_colliderModel,
+            glm::radians(l_colliderRotationeX),
+            glm::vec3(1.0f, 0.0f, 0.0f));
+        l_colliderModel = glm::rotate(l_colliderModel,
+            glm::radians(l_colliderRotationeY),
+            glm::vec3(0.0f, 1.0f, 0.0f));
+        l_colliderModel = glm::rotate(l_colliderModel,
+            glm::radians(l_colliderRotationeZ),
+            glm::vec3(0.0f, 0.0f, 1.0f));
         l_colliderModel = glm::scale(l_colliderModel, l_colliderSacale);
 
         l_collider.m_shaderProgram->uniformMatrix4(l_colliderModel, "model");
@@ -111,6 +111,7 @@ void ObjectManager::updateCollider(Object& p_object,
 void ObjectManager::transformCollider(Collider& p_collider, const glm::mat4& p_colliderModel)
 {
     p_collider.setDefaultValues();
+    p_collider.m_modelMatrix = p_colliderModel;
     p_collider.m_minVertex = p_colliderModel * p_collider.m_minVertex;
     p_collider.m_maxVertex = p_colliderModel * p_collider.m_maxVertex;
 

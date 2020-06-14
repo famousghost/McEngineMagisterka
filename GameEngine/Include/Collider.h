@@ -22,6 +22,7 @@ struct Collider
     std::vector<std::shared_ptr<Mesh>> m_meshes;
     std::shared_ptr<Shaders::Shader> m_shaderProgram;
     std::vector<glm::vec4> m_verticies;
+    glm::mat4 m_modelMatrix;
     Transform m_transform;
     glm::vec4 m_minVertex;
     glm::vec4 m_maxVertex;
@@ -45,6 +46,7 @@ struct Collider
 
     void setDefaultValues()
     {
+        m_modelMatrix = glm::mat4();
         m_minVertex = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
         m_maxVertex = glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);
 
