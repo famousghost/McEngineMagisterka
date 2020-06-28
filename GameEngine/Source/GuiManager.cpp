@@ -219,6 +219,11 @@ bool GuiManager::getColliderVisiblity() const
     return m_colidersVisiblity;
 }
 
+std::string GuiManager::getCurrentAviableObject() const
+{
+    return m_currentObject;
+}
+
 void GuiManager::addObject(std::vector<std::string>& p_items,
                            std::vector<std::string>& p_colliders)
 {

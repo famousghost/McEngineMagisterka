@@ -18,6 +18,8 @@ struct Object
     Material m_material;
     Transform m_transform;
     std::string m_objectName;
+    glm::vec3 m_movementDirection;
+    float m_velocity;
 
     void attach(IColiderObserver* p_coliderObserver)
     {
@@ -41,6 +43,8 @@ struct Object
     {
         m_colliderNumber = 1;
         m_currentAvaiableTexture = "texture";
+        m_movementDirection = glm::vec3();
+        m_velocity = 1.0f;
     }
 };
 

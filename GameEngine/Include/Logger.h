@@ -20,8 +20,6 @@ enum class LogType : unsigned int
 class Logger : public std::exception
 {
 public:
-    Logger();
-    ~Logger();
     void log(const std::string& p_fileInfo,
                     const std::string& p_line,
                     const std::string& p_informationMessage,
@@ -33,6 +31,8 @@ public:
 
     static Logger& getInstance();
 private:
+    Logger();
+    ~Logger();
     std::string prepareLogFile();
     std::string getCurrentTime();
     std::string getLogType(LogType p_logType);

@@ -6,6 +6,8 @@
 #include "PhysicsManager.h"
 #include "ColiderObserver.h"
 #include "InputManager.h"
+#include "TimeManager.h"
+#include "GuiManager.h"
 #include <algorithm>
 
 namespace McEngine
@@ -73,7 +75,42 @@ void ObjectManager::update(Object& p_object)
 {
     setMaterialForObjectObject(p_object);
     setModelMatrixForObject(p_object);
+    moveObject(p_object);
     activeTextures(p_object);
+}
+
+void ObjectManager::moveObject(Object& p_object)
+{
+    auto& l_inputManager = Inputs::InputManager::getInstance();
+    auto& l_timeManager = Time::TimeManager::getInstance();
+    if(p_object.m_objectName == Gui::GuiManager::getInstance().getCurrentAviableObject())
+    {
+        if (l_inputManager.getKeyDown(GLFW_KEY_LEFT))
+        {
+            p_object.m_movementDirection.x = -p_object.m_velocity * l_timeManager.getDeltaTime();
+        }
+        if (l_inputManager.getKeyDown(GLFW_KEY_RIGHT))
+        {
+            p_object.m_movementDirection.x = p_object.m_velocity * l_timeManager.getDeltaTime();
+        }
+        if (l_inputManager.getKeyDown(GLFW_KEY_UP))
+        {
+            p_object.m_movementDirection.z = -p_object.m_velocity * l_timeManager.getDeltaTime();
+        }
+        if (l_inputManager.getKeyDown(GLFW_KEY_DOWN))
+        {
+            p_object.m_movementDirection.z = p_object.m_velocity * l_timeManager.getDeltaTime();
+        }
+        if (l_inputManager.getKeyDown(GLFW_KEY_U))
+        {
+            p_object.m_movementDirection.y = -p_object.m_velocity * l_timeManager.getDeltaTime();
+        }
+        if (l_inputManager.getKeyDown(GLFW_KEY_J))
+        {
+            p_object.m_movementDirection.y = p_object.m_velocity * l_timeManager.getDeltaTime();
+        }
+    }
+    p_object.m_transform.m_position += p_object.m_movementDirection;
 }
 
 void ObjectManager::updateCollider(Object& p_object,

@@ -81,7 +81,7 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    l_gameCamera->update();
+    l_gameCamera->updateGameCamera();
 
     drawSkybox(l_objectManager, *l_gameCamera);
 

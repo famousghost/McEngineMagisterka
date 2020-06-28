@@ -97,6 +97,7 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                                            p_objects[i].first.m_transform.m_position))
                 {
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
+                    p_object.m_movementDirection *= -1.0f;
                     l_isColliding = true;
                 }
             }

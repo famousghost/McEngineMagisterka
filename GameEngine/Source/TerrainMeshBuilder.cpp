@@ -1,4 +1,5 @@
 #include "TerrainMeshBuilder.h"
+#include <random>
 
 namespace McEngine
 {
@@ -22,12 +23,16 @@ namespace Meshes
         float rowOffset = 1.0f / m_rows;
         float columnOffset = 1.0f / m_columns;
 
+        std::random_device rd;  //Will be used to obtain a seed for the random number engine
+        std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+        std::uniform_real_distribution<> distrib(0, 1);
+
         for (int i = 0; i < m_rows; ++i)
         {
             float z = -1.0f;
             for (int j = 0; j < m_columns; ++j)
             {
-                l_verticies.emplace_back(x, 0.0, z);
+                l_verticies.emplace_back(x, distrib(gen)/5.0f, z);
                 z += columnOffset;
             }
             x+= rowOffset;

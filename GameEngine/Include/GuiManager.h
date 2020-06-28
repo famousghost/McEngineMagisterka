@@ -25,6 +25,8 @@ public:
 
     bool getColliderVisiblity() const;
 
+    std::string getCurrentAviableObject() const;
+
     static GuiManager& getInstance()
     {
         static GuiManager guiManager;

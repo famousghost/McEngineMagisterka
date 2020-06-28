@@ -15,9 +15,13 @@ public:
 
     void moveCamera();
 
+    void moveGameCamera();
+
     void rotateCamera();
 
     void update();
+
+    void updateGameCamera();
 
     void updateShaderProgram(Shaders::Shader & p_shaderProgram, const std::string & p_cameraPostionUniform, const std::string & p_viewMatrixUniform, const std::string & p_projectionMatrixUniform);
 

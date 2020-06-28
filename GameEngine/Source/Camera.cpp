@@ -13,6 +13,7 @@ namespace Cameras
 namespace
 {
     constexpr float SPEED_AXIS_Z = 50.0f;
+    constexpr float MOVEMENT_SPEED = 5.0f;
     constexpr float SPEED_AXIS_X_Y = 5.0f;
     constexpr float SENSITIVITY = 40.0f;
 }
@@ -46,6 +47,32 @@ void Camera::moveCamera()
     l_inputManager.s_cameraMoveSpeedOnAxisX = 0.0f;
     l_inputManager.s_cameraMoveSpeedOnAxisY = 0.0f;
 
+    m_view = glm::lookAt(m_cameraPosition, m_cameraPosition + m_cameraFront, m_cameraUp);
+}
+
+void Camera::moveGameCamera()
+{
+    auto& l_inputManager = Inputs::InputManager::getInstance();
+    float l_deltaTime = Time::TimeManager::getInstance().getDeltaTime();
+
+    if(l_inputManager.getKeyDown(GLFW_KEY_W))
+    {
+        m_cameraPosition += m_cameraFront * MOVEMENT_SPEED * l_deltaTime;
+    }
+    if (l_inputManager.getKeyDown(GLFW_KEY_S))
+    {
+        m_cameraPosition -= m_cameraFront * MOVEMENT_SPEED * l_deltaTime;
+    }
+
+    glm::vec3 l_newCameraRight = glm::normalize(glm::cross(m_cameraFront, m_cameraUp));
+    if(l_inputManager.getKeyDown(GLFW_KEY_A))
+    {
+        m_cameraPosition -= l_newCameraRight * MOVEMENT_SPEED * l_deltaTime;
+    }
+    if (l_inputManager.getKeyDown(GLFW_KEY_D))
+    {
+        m_cameraPosition += l_newCameraRight * MOVEMENT_SPEED * l_deltaTime;
+    }
     m_view = glm::lookAt(m_cameraPosition, m_cameraPosition + m_cameraFront, m_cameraUp);
 }
 
@@ -100,6 +127,11 @@ void Camera::update()
 {
     rotateCamera();
     moveCamera();
+}
+
+void Camera::updateGameCamera()
+{
+    moveGameCamera();
 }
 
 void Camera::updateShaderProgram(Shaders::Shader& p_shaderProgram,
