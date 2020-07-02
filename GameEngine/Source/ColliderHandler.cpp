@@ -5,6 +5,7 @@
 #include "SphereVAABBCollsionHandler.h"
 #include "SphereVOBBCollisionHandler.h"
 #include <algorithm>
+#include "TimeManager.h"
 #include <math.h>
 
 namespace McEngine
@@ -31,30 +32,30 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
                                               const glm::vec3& p_objectCenterA,
                                               const glm::vec3& p_objectCenterB)
 {
-    
     std::unique_ptr<MeshCollisionHandler> m_meshCollisionHandler;
 
+    m_collsionDirection = glm::normalize(p_objectCenterB - p_objectCenterA);
     if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_OBB
         and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_OBB)
     {
         m_meshCollisionHandler = std::make_unique<CubeOBBCollsionHandler>();
         return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
     }
-    else if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
+    if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
              and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_AABB)
 
     {
         m_meshCollisionHandler = std::make_unique<CubeAABBCollisionHandler>();
-        return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
+        return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);;
     }
-    else if (p_colliderA.m_colliderType == Meshes::ColliderType::SPHERE
+    if (p_colliderA.m_colliderType == Meshes::ColliderType::SPHERE
               and p_ColliderB.m_colliderType == Meshes::ColliderType::SPHERE)
     {
         
         m_meshCollisionHandler = std::make_unique<SphereCollsionHandler>(p_objectCenterA, p_objectCenterB);
         return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
     }
-    else if ((p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
+    if ((p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
              and p_ColliderB.m_colliderType == Meshes::ColliderType::SPHERE)
              or 
              (p_colliderA.m_colliderType == Meshes::ColliderType::SPHERE
@@ -63,7 +64,7 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
         m_meshCollisionHandler = std::make_unique<SphereVAABBCollsionHandler>(p_objectCenterA, p_objectCenterB);
         return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
     }
-    else if ((p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_OBB
+    if ((p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_OBB
              and p_ColliderB.m_colliderType == Meshes::ColliderType::SPHERE)
              or 
              (p_colliderA.m_colliderType == Meshes::ColliderType::SPHERE
@@ -72,8 +73,6 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
         m_meshCollisionHandler = std::make_unique<SphereVOBBCollisionHandler>(p_objectCenterA, p_objectCenterB);
         return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
     }
-
-    return false;
 }
 
 void CollisionHandler::collisionChecker(Meshes::Object& p_object,
@@ -91,13 +90,15 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
         {
             for(auto& colliderB : p_objects[i].first.m_colider)
             { 
-                if (checkCollsionForObject(colliderA, 
-                                           colliderB, 
-                                           p_object.m_transform.m_position, 
-                                           p_objects[i].first.m_transform.m_position))
+                if (p_object.m_isColliding = checkCollsionForObject(colliderA, 
+                                                                    colliderB, 
+                                                                    p_object.m_transform.m_position, 
+                                                                    p_objects[i].first.m_transform.m_position))
                 {
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
-                    p_object.m_movementDirection *= -1.0f;
+                    p_object.m_transform.m_position -=  0.5f * p_object.m_velocity * m_collsionDirection * static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
+                    m_collsionDirection = glm::vec3();
+                    
                     l_isColliding = true;
                 }
             }

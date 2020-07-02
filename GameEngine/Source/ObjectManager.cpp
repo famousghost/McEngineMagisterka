@@ -74,8 +74,8 @@ void ObjectManager::addSkyBox()
 void ObjectManager::update(Object& p_object)
 {
     setMaterialForObjectObject(p_object);
-    setModelMatrixForObject(p_object);
     moveObject(p_object);
+    setModelMatrixForObject(p_object);
     activeTextures(p_object);
 }
 
@@ -87,30 +87,32 @@ void ObjectManager::moveObject(Object& p_object)
     {
         if (l_inputManager.getKeyDown(GLFW_KEY_LEFT))
         {
-            p_object.m_movementDirection.x = -p_object.m_velocity * l_timeManager.getDeltaTime();
+            p_object.m_movementDirection.x = -p_object.m_velocity;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_RIGHT))
         {
-            p_object.m_movementDirection.x = p_object.m_velocity * l_timeManager.getDeltaTime();
+            p_object.m_movementDirection.x = p_object.m_velocity;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_UP))
         {
-            p_object.m_movementDirection.z = -p_object.m_velocity * l_timeManager.getDeltaTime();
+            p_object.m_movementDirection.z = -p_object.m_velocity;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_DOWN))
         {
-            p_object.m_movementDirection.z = p_object.m_velocity * l_timeManager.getDeltaTime();
+            p_object.m_movementDirection.z = p_object.m_velocity;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_U))
         {
-            p_object.m_movementDirection.y = -p_object.m_velocity * l_timeManager.getDeltaTime();
+            p_object.m_movementDirection.y = p_object.m_velocity;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_J))
         {
-            p_object.m_movementDirection.y = p_object.m_velocity * l_timeManager.getDeltaTime();
+            p_object.m_movementDirection.y = -p_object.m_velocity;
         }
     }
-    p_object.m_transform.m_position += p_object.m_movementDirection;
+    auto l_move = p_object.m_movementDirection * static_cast<float>(l_timeManager.getDeltaTime());
+    p_object.m_transform.m_position += l_move;
+    p_object.m_movementDirection = glm::vec3();
 }
 
 void ObjectManager::updateCollider(Object& p_object,

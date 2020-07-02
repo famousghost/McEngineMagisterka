@@ -1,5 +1,6 @@
 #include "SphereVOBBCollisionHandler.h"
 #include <algorithm>
+#include <iostream>
 
 namespace McEngine
 {
@@ -16,9 +17,16 @@ bool SphereVOBBCollisionHandler::checkCollision(const Meshes::Collider & p_colid
     glm::vec3 l_closestPointOnOBBCube;
     float l_distance;
     float l_radius;
+    float l_minDistance = 100000.0f;
     if (p_coliderA.m_colliderType == Meshes::ColliderType::CUBE_OBB)
     {
-        glm::mat4 l_inverseTransformPoint = glm::inverse(p_coliderA.m_modelMatrix);
+        std::vector<glm::vec3> l_normals = {p_coliderA.m_normals.x, 
+                                            -p_coliderA.m_normals.x,
+                                            p_coliderA.m_normals.y,
+                                            -p_coliderA.m_normals.y,
+                                            p_coliderA.m_normals.z,
+                                            -p_coliderA.m_normals.z};
+        glm::mat4 l_inverseTransformPoint = glm:: inverse(p_coliderA.m_modelMatrix);
         glm::vec4 l_localSphereCenter = l_inverseTransformPoint * glm::vec4((m_objectCenterB + p_coliderB.m_transform.m_position), 1.0f);
 
         glm::vec4 l_localXSectionMin = l_inverseTransformPoint * p_coliderA.m_xSection.min;
@@ -39,6 +47,12 @@ bool SphereVOBBCollisionHandler::checkCollision(const Meshes::Collider & p_colid
     }
     else
     {
+        std::vector<glm::vec3> l_normals = { p_coliderB.m_normals.x,
+                                             -p_coliderB.m_normals.x,
+                                             p_coliderB.m_normals.y,
+                                             -p_coliderB.m_normals.y,
+                                             p_coliderB.m_normals.z,
+                                             -p_coliderB.m_normals.z };
         glm::mat4 l_inverseTransformPoint = glm::inverse(p_coliderB.m_modelMatrix);
         glm::vec4 l_localSphereCenter = l_inverseTransformPoint * glm::vec4((m_objectCenterA + p_coliderA.m_transform.m_position), 1.0f);
 
@@ -59,7 +73,7 @@ bool SphereVOBBCollisionHandler::checkCollision(const Meshes::Collider & p_colid
         l_radius = p_coliderA.m_radius;
     }
 
-    return l_distance <= l_radius;
+    return l_distance < l_radius;
 }
 
 }//Physics

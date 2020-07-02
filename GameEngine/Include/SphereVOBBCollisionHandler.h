@@ -16,8 +16,8 @@ public:
                         const Meshes::Collider & p_coliderB) override;
 
 private:
-    const glm::vec3& m_objectCenterA;
-    const glm::vec3& m_objectCenterB;
+    glm::vec3 m_objectCenterA;
+    glm::vec3 m_objectCenterB;
 };
 
 }//Physics

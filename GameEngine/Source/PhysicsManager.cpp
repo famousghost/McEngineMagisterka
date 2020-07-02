@@ -35,10 +35,10 @@ void PhysicsManager::setShouldCheckCollision(bool p_shouldCheckCollision)
 void PhysicsManager::collisionChecker(Meshes::Object& p_object,
                                       std::vector<std::pair<Meshes::Object, std::string>>& p_objects)
 {
-    if(getShouldCheckCollsion())
-    {
+    //if(getShouldCheckCollsion())
+    //{
         m_collsionHandler.collisionChecker(p_object, p_objects);
-    }
+    //}
 }
 
 }//Physics

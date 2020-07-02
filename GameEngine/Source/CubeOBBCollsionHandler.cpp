@@ -82,7 +82,6 @@ bool CubeOBBCollsionHandler::checkCollision(const Meshes::Collider & p_coliderA,
     return true;
 }
 
-
 std::vector<double> CubeOBBCollsionHandler::getProjectedPointsToAxis(const std::vector<glm::vec4>& p_listOfVec,
     const glm::vec3& p_normals)
 {

@@ -19,7 +19,9 @@ struct Object
     Transform m_transform;
     std::string m_objectName;
     glm::vec3 m_movementDirection;
+    glm::vec3 m_collsionDirection;
     float m_velocity;
+    bool m_isColliding;
 
     void attach(IColiderObserver* p_coliderObserver)
     {
@@ -41,10 +43,11 @@ struct Object
 
     Object()
     {
+        m_isColliding = false;
         m_colliderNumber = 1;
         m_currentAvaiableTexture = "texture";
         m_movementDirection = glm::vec3();
-        m_velocity = 1.0f;
+        m_velocity = 5.0f;
     }
 };
 

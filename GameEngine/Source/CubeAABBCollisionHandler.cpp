@@ -4,7 +4,6 @@ namespace McEngine
 {
 namespace Physics
 {
-
 bool CubeAABBCollisionHandler::checkCollision(const Meshes::Collider& p_coliderA,
                                               const Meshes::Collider& p_coliderB)
 {

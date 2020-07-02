@@ -40,7 +40,7 @@ bool SphereVAABBCollsionHandler::checkCollision(const Meshes::Collider & p_colid
         l_radius = p_coliderA.m_radius;
     }
 
-    return l_distance <= l_radius;
+    return l_distance < l_radius;
 }
 
 }//Physics
