@@ -96,10 +96,21 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                                                                     p_objects[i].first.m_transform.m_position))
                 {
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
-                    p_object.m_transform.m_position -=  0.5f * p_object.m_velocity * m_collsionDirection * static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
+                    auto& l_timeManager = Time::TimeManager::getInstance();
+                    if (p_object.m_rigidBody)
+                    {
+                        p_object.m_gravity = 0.0f;
+                    }
+                    p_object.m_transform.m_position -= 0.5f * p_object.m_velocity * m_collsionDirection * static_cast<float>(l_timeManager.getDeltaTime());
                     m_collsionDirection = glm::vec3();
-                    
                     l_isColliding = true;
+                }
+                else
+                {
+                    if (p_object.m_rigidBody)
+                    {
+                        p_object.m_gravity = 9.81f;
+                    }
                 }
             }
         }

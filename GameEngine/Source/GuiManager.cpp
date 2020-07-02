@@ -83,6 +83,7 @@ void GuiManager::meshGui()
                                                      "AABB",
                                                      "SPHERE"};
     static std::vector<std::string> colliders;
+
     objectChoosingComboBox(items, colliders);
     colliderTypeChoosingComboBox(colliderTypes);
     colliderChoosingComboBox(colliders);
@@ -128,9 +129,29 @@ void GuiManager::meshGui()
         l_renderManager.fillMesh();
     }
 
+    static std::string rigidBody = "rigidbody";
+    if (ImGui::Button(rigidBody.c_str()))
+    {
+
+        auto& l_objects =
+            Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
+
+        auto objIt = std::find_if(l_objects.begin(), l_objects.end(),
+            [&](auto& label)
+        {
+            return m_currentObject == label.second;
+        });
+
+        if (objIt != l_objects.end())
+        {
+            objIt->first.m_rigidBody = not objIt->first.m_rigidBody;
+        }
+    }
+
     refreshShader();
     
     ImGui::SliderFloat3("LightPosition", &l_objectManager.m_lightPosition.x, -10.0f, 10.0f);
+
 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::Text("@copyright Marcin Czekaj");
@@ -288,7 +309,7 @@ void GuiManager::colliderMoveOperations(Meshes::Object& p_object)
     }
     else
     {
-        ImGui::SliderFloat3("Collider Scale", &l_radius, -10.0f, 10.0f);
+        ImGui::SliderFloat3("Collider Scale", &l_transform.m_scale.x, -10.0f, 10.0f);
     }
 }
 
@@ -317,7 +338,7 @@ void GuiManager::objectMoveOperations()
         }
         else
         {
-            ImGui::SliderFloat3("Scale", &l_radius, -10.0f, 10.0f);
+            ImGui::SliderFloat3("Scale", &l_transform.m_scale.x, -10.0f, 10.0f);
         }
         colliderMoveOperations(l_obj);
     }
@@ -441,10 +462,10 @@ void GuiManager::objectChoosingComboBox(std::vector<std::string>& p_items,
 
     if (ImGui::BeginCombo("##objectCombo", m_currentObject.c_str()))
     {
-        for (int i = 0; i < p_items.size(); i++)
+        for (auto& l_item : p_items)
         {
-            bool is_selected = (m_currentObject == p_items.at(i));
-            if (ImGui::Selectable(p_items.at(i).c_str(), is_selected))
+            bool is_selected = (m_currentObject == l_item);
+            if (ImGui::Selectable(l_item.c_str(), is_selected))
             {
                 m_currentCollider = "";
                 p_colliders.clear();
@@ -456,14 +477,9 @@ void GuiManager::objectChoosingComboBox(std::vector<std::string>& p_items,
                     return m_currentObject == label.second;
                 });
 
-                m_currentObject = p_items.at(i);
+                m_currentObject = l_item;
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();
-
-                for (auto& l_collider : objIt->first.m_colider)
-                {
-                    p_colliders.push_back(l_collider.m_colliderName);
-                }
             }
         }
         ImGui::EndCombo();
@@ -472,20 +488,27 @@ void GuiManager::objectChoosingComboBox(std::vector<std::string>& p_items,
 
 void GuiManager::colliderChoosingComboBox(std::vector<std::string>& p_items)
 {
-
+    if (p_items.size() <= 0)
+    {
+        return;
+    }
     if (ImGui::BeginCombo("##colliderCombo", m_currentCollider.c_str()))
     {
-        for (int i = 0; i < p_items.size(); i++)
+        if(m_currentObject != "")
         {
-            bool is_selected = (m_currentCollider == p_items.at(i));
-            if (ImGui::Selectable(p_items.at(i).c_str(), is_selected))
+            for (int i = 0; i < p_items.size(); i++)
             {
-                m_currentCollider = p_items.at(i);
-                if (is_selected)
-                    ImGui::SetItemDefaultFocus();
+                bool is_selected = (m_currentCollider == p_items.at(i));
+                if (ImGui::Selectable(p_items.at(i).c_str(), is_selected))
+                {
+                    m_currentCollider = p_items.at(i);
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
             }
+        
+            ImGui::EndCombo();
         }
-        ImGui::EndCombo();
     }
 }
 

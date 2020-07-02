@@ -39,6 +39,8 @@ public:
 
     void update(Object & object);
 
+    void gravity(Object & p_object);
+
     void moveObject(Object & p_object);
 
     void updateCollider(Object & p_object, Cameras::Camera & p_camera);

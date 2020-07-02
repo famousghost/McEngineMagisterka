@@ -14,7 +14,6 @@ namespace McEngine
 {
 namespace Meshes
 {
-
 void ObjectManager::addObject(const Object& p_object, std::string p_objName)
 {
     if (std::find_if(m_objects.begin(), m_objects.end(), 
@@ -75,8 +74,22 @@ void ObjectManager::update(Object& p_object)
 {
     setMaterialForObjectObject(p_object);
     moveObject(p_object);
+    if (p_object.m_rigidBody)
+    {
+        //gravity(p_object);
+    }
     setModelMatrixForObject(p_object);
     activeTextures(p_object);
+}
+
+void ObjectManager::gravity(Object& p_object)
+{
+    auto& l_timeManager = Time::TimeManager::getInstance();
+
+    if(not p_object.m_isColliding)
+    {
+        p_object.m_transform.m_position.y -= p_object.m_gravity * l_timeManager.getDeltaTime();
+    }
 }
 
 void ObjectManager::moveObject(Object& p_object)
@@ -111,11 +124,20 @@ void ObjectManager::moveObject(Object& p_object)
         }
     }
     auto l_move = p_object.m_movementDirection * static_cast<float>(l_timeManager.getDeltaTime());
+    if (l_move != glm::vec3())
+    {
+        p_object.m_isMoving = true;
+    }
+    else
+    {
+        p_object.m_isMoving = false;
+    }
+
     if(not p_object.m_isColliding)
     {
         p_object.m_transform.m_position += l_move;
+        p_object.m_movementDirection = glm::vec3();
     }
-    p_object.m_movementDirection = glm::vec3();
 }
 
 void ObjectManager::updateCollider(Object& p_object,
