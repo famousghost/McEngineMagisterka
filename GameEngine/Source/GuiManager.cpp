@@ -279,7 +279,17 @@ void GuiManager::colliderMoveOperations(Meshes::Object& p_object)
     auto& l_transform = colIt->m_transform;
     ImGui::SliderFloat3("Collider Translation", &l_transform.m_position.x, -10.0f, 10.0f);
     ImGui::SliderFloat3("Collider Rotatione", &l_transform.m_rotatione.x, -360.0f, 360.0f);
-    ImGui::SliderFloat3("Collider Scale", &l_transform.m_scale.x, -10.0f, 10.0f);
+    auto& l_radius = colIt->m_transform.m_radiusScale;
+    if (colIt->m_colliderType == Meshes::ColliderType::SPHERE)
+    {
+        l_transform.m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
+        ImGui::SliderFloat("Collider Scale", &l_radius, -10.0f, 10.0f);
+        l_transform.m_scale *= l_radius;
+    }
+    else
+    {
+        ImGui::SliderFloat3("Collider Scale", &l_radius, -10.0f, 10.0f);
+    }
 }
 
 void GuiManager::objectMoveOperations()
@@ -296,9 +306,19 @@ void GuiManager::objectMoveOperations()
     {
         auto& l_obj = objIt->first;
         auto& l_transform = l_obj.m_transform;
+        auto& l_radius = l_obj.m_transform.m_radiusScale;
         ImGui::SliderFloat3("Translation", &l_transform.m_position.x, -10.0f, 10.0f);
         ImGui::SliderFloat3("Rotatione", &l_transform.m_rotatione.x, -360.0f, 360.0f);
-        ImGui::SliderFloat3("Scale", &l_transform.m_scale.x, -10.0f, 10.0f);
+        if (objIt->first.m_colider.at(0).m_colliderType == Meshes::ColliderType::SPHERE)
+        {
+            l_transform.m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
+            ImGui::SliderFloat("Scale", &l_radius, -10.0f, 10.0f);
+            l_transform.m_scale *= l_radius;
+        }
+        else
+        {
+            ImGui::SliderFloat3("Scale", &l_radius, -10.0f, 10.0f);
+        }
         colliderMoveOperations(l_obj);
     }
 }

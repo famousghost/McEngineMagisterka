@@ -111,7 +111,10 @@ void ObjectManager::moveObject(Object& p_object)
         }
     }
     auto l_move = p_object.m_movementDirection * static_cast<float>(l_timeManager.getDeltaTime());
-    p_object.m_transform.m_position += l_move;
+    if(not p_object.m_isColliding)
+    {
+        p_object.m_transform.m_position += l_move;
+    }
     p_object.m_movementDirection = glm::vec3();
 }
 
@@ -128,7 +131,7 @@ void ObjectManager::updateCollider(Object& p_object,
         auto l_colliderRotationeY = p_object.m_transform.m_rotatione.y + l_collider.m_transform.m_rotatione.y;
         auto l_colliderRotationeZ = p_object.m_transform.m_rotatione.z + l_collider.m_transform.m_rotatione.z;
         auto l_colliderSacale = p_object.m_transform.m_scale + l_collider.m_transform.m_scale;
-        //l_collider.m_radius = l_colliderSacale.x;
+        l_collider.m_radius = l_colliderSacale.x;
         l_colliderModel = glm::translate(l_colliderModel, l_colliderTranslate);
         l_colliderModel = glm::rotate(l_colliderModel,
             glm::radians(l_colliderRotationeX),
