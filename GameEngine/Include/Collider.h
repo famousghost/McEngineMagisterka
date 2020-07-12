@@ -61,7 +61,7 @@ struct Collider
 
         m_normals.x = glm::vec3(1.0f, 0.0f, 0.0f);
         m_normals.y = glm::vec3(0.0f, 1.0f, 0.0f);
-        m_normals.z = glm::vec3(0.0f, 0.0f, 1.0f);
+        m_normals.z = glm::vec3(0.0f, 0.0f, -1.0f);
 
         std::vector<glm::vec4> l_verticies =
         {

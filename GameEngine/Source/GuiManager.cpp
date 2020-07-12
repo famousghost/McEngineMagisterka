@@ -148,6 +148,25 @@ void GuiManager::meshGui()
         }
     }
 
+    static std::string gravityForce = "gravityForce";
+    if (ImGui::Button(gravityForce.c_str()))
+    {
+
+        auto& l_objects =
+            Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
+
+        auto objIt = std::find_if(l_objects.begin(), l_objects.end(),
+            [&](auto& label)
+        {
+            return m_currentObject == label.second;
+        });
+
+        if (objIt != l_objects.end())
+        {
+            objIt->first.m_gravityForce = not objIt->first.m_gravityForce;
+        }
+    }
+
     refreshShader();
     
     ImGui::SliderFloat3("LightPosition", &l_objectManager.m_lightPosition.x, -10.0f, 10.0f);

@@ -21,7 +21,8 @@ struct Object
     glm::vec3 m_movementDirection;
     glm::vec3 m_collsionDirection;
     bool m_rigidBody;
-    float m_velocity;
+    bool m_gravityForce;
+    glm::vec3 m_velocity;
     bool m_isColliding;
     bool m_isMoving;
     float m_gravity;
@@ -48,12 +49,13 @@ struct Object
     {
         m_isMoving = false;
         m_rigidBody = false;
+        m_gravityForce = false;
         m_isColliding = false;
         m_colliderNumber = 1;
         m_gravity = 9.81f;
         m_currentAvaiableTexture = "texture";
         m_movementDirection = glm::vec3();
-        m_velocity = 5.0f;
+        m_velocity = glm::vec3();
     }
 };
 

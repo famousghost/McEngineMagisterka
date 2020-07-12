@@ -7,6 +7,17 @@ namespace McEngine
 namespace Physics
 {
 
+
+CubeOBBCollsionHandler::CubeOBBCollsionHandler(glm::vec3 & p_minimumTranslationVector, 
+                                               const glm::vec3 & p_objectACenter, 
+                                               const glm::vec3 & p_objectBCenter)
+    :m_minGap(100000.0f),
+    m_minimumTranslationVector(p_minimumTranslationVector),
+    m_objectCenterA(p_objectACenter),
+    m_objectCenterB(p_objectBCenter)
+{
+}
+
 bool CubeOBBCollsionHandler::checkCollision(const Meshes::Collider & p_coliderA,
                                             const Meshes::Collider & p_coliderB)
 {
@@ -21,38 +32,10 @@ bool CubeOBBCollsionHandler::checkCollision(const Meshes::Collider & p_coliderA,
     l_colliderBEdges.push_back(glm::vec3(p_coliderB.m_normals.y));
     l_colliderBEdges.push_back(glm::vec3(p_coliderB.m_normals.z));
 
-    auto l_projectedColiderAToAX = getProjectedPointsToAxis(p_coliderA.m_verticies, l_colliderAEdges[0]);
-    auto l_projectedColiderAToAY = getProjectedPointsToAxis(p_coliderA.m_verticies, l_colliderAEdges[1]);
-    auto l_projectedColiderAToAZ = getProjectedPointsToAxis(p_coliderA.m_verticies, l_colliderAEdges[2]);
-
-    auto l_projectedColiderAToBX = getProjectedPointsToAxis(p_coliderA.m_verticies, l_colliderBEdges[0]);
-    auto l_projectedColiderAToBY = getProjectedPointsToAxis(p_coliderA.m_verticies, l_colliderBEdges[1]);
-    auto l_projectedColiderAToBZ = getProjectedPointsToAxis(p_coliderA.m_verticies, l_colliderBEdges[2]);
-
-    auto l_projectedColiderBToBX = getProjectedPointsToAxis(p_coliderB.m_verticies, l_colliderBEdges[0]);
-    auto l_projectedColiderBToBY = getProjectedPointsToAxis(p_coliderB.m_verticies, l_colliderBEdges[1]);
-    auto l_projectedColiderBToBZ = getProjectedPointsToAxis(p_coliderB.m_verticies, l_colliderBEdges[2]);
-
-    auto l_projectedColiderBToAX = getProjectedPointsToAxis(p_coliderB.m_verticies, l_colliderAEdges[0]);
-    auto l_projectedColiderBToAY = getProjectedPointsToAxis(p_coliderB.m_verticies, l_colliderAEdges[1]);
-    auto l_projectedColiderBToAZ = getProjectedPointsToAxis(p_coliderB.m_verticies, l_colliderAEdges[2]);
-
-    if (not checkCollisionForNormalAxis(l_projectedColiderAToAX,
-        l_projectedColiderAToAY,
-        l_projectedColiderAToAZ,
-        l_projectedColiderBToAX,
-        l_projectedColiderBToAY,
-        l_projectedColiderBToAZ))
-    {
-        return false;
-    }
-
-    if (not checkCollisionForNormalAxis(l_projectedColiderAToBX,
-        l_projectedColiderAToBY,
-        l_projectedColiderAToBZ,
-        l_projectedColiderBToBX,
-        l_projectedColiderBToBY,
-        l_projectedColiderBToBZ))
+    if (not checkCollisionForNormalsAxis(p_coliderA, 
+                                         p_coliderB, 
+                                         l_colliderAEdges,
+                                         l_colliderBEdges))
     {
         return false;
     }
@@ -71,12 +54,27 @@ bool CubeOBBCollsionHandler::checkCollision(const Meshes::Collider & p_coliderA,
             auto l_projectedColiderA = getProjectedPointsToAxis(p_coliderA.m_verticies, l_normal);
             auto l_projectedColiderB = getProjectedPointsToAxis(p_coliderB.m_verticies, l_normal);
 
-            if (not checkCollisionForAxis(l_projectedColiderA,
-                l_projectedColiderB))
+            auto l_overlap = checkCollisionForAxis(l_projectedColiderA,
+                                                   l_projectedColiderB);
+
+            if (not l_overlap)
             {
                 return false;
             }
+            else
+            {
+                if (m_minGap > l_overlap)
+                {
+                    m_minGap = l_overlap;
+                    m_minimumTranslationVector = l_normal;
+                }
+            }
         }
+    }
+
+    if (glm::dot(m_objectCenterA - m_objectCenterB, m_minimumTranslationVector) < 0)
+    {
+        m_minimumTranslationVector = -m_minimumTranslationVector;
     }
 
     return true;
@@ -94,8 +92,9 @@ std::vector<double> CubeOBBCollsionHandler::getProjectedPointsToAxis(const std::
     }
     return l_result;
 }
-bool CubeOBBCollsionHandler::checkCollisionForAxis(const std::vector<double>& p_projectedColliderA,
-    const std::vector<double>& p_projectedColliderB)
+
+double CubeOBBCollsionHandler::checkCollisionForAxis(const std::vector<double>& p_projectedColliderA,
+                                                     const std::vector<double>& p_projectedColliderB)
 {
     auto minA = std::min_element(p_projectedColliderA.begin(), p_projectedColliderA.end());
     auto maxA = std::max_element(p_projectedColliderA.begin(), p_projectedColliderA.end());
@@ -105,57 +104,64 @@ bool CubeOBBCollsionHandler::checkCollisionForAxis(const std::vector<double>& p_
 
     auto l_longSpan = std::abs(std::max(*maxA, *maxB) - std::min(*minA, *minB));
     auto l_sumSpan = std::abs(*maxA - *minA + *maxB - *minB);
-    return l_longSpan < l_sumSpan;
+    return (l_longSpan < l_sumSpan) ? std::abs(l_longSpan - l_sumSpan) : 0.0;
 }
 
-bool CubeOBBCollsionHandler::checkCollisionForNormalAxis(const std::vector<double>& p_projectedColliderAX,
-    const std::vector<double>& p_projectedColliderAY,
-    const std::vector<double>& p_projectedColliderAZ,
-    const std::vector<double>& p_projectedColliderBX,
-    const std::vector<double>& p_projectedColliderBY,
-    const std::vector<double>& p_projectedColliderBZ)
+bool CubeOBBCollsionHandler::checkCollisionForNormalsAxis(const Meshes::Collider & p_coliderA,
+                                                          const Meshes::Collider & p_coliderB,
+                                                          const std::vector<glm::vec3>& p_colliderAEdges,
+                                                          const std::vector<glm::vec3>& p_colliderBEdges)
 {
-    auto minAX = std::min_element(p_projectedColliderAX.begin(), p_projectedColliderAX.end());
-    auto minAY = std::min_element(p_projectedColliderAY.begin(), p_projectedColliderAY.end());
-    auto minAZ = std::max_element(p_projectedColliderAZ.begin(), p_projectedColliderAZ.end());
-
-    auto maxAX = std::max_element(p_projectedColliderAX.begin(), p_projectedColliderAX.end());
-    auto maxAY = std::max_element(p_projectedColliderAY.begin(), p_projectedColliderAY.end());
-    auto maxAZ = std::min_element(p_projectedColliderAZ.begin(), p_projectedColliderAZ.end());
-
-    auto minBX = std::min_element(p_projectedColliderBX.begin(), p_projectedColliderBX.end());
-    auto minBY = std::min_element(p_projectedColliderBY.begin(), p_projectedColliderBY.end());
-    auto minBZ = std::max_element(p_projectedColliderBZ.begin(), p_projectedColliderBZ.end());
-
-    auto maxBX = std::max_element(p_projectedColliderBX.begin(), p_projectedColliderBX.end());
-    auto maxBY = std::max_element(p_projectedColliderBY.begin(), p_projectedColliderBY.end());
-    auto maxBZ = std::min_element(p_projectedColliderBZ.begin(), p_projectedColliderBZ.end());
-
-    auto l_longSpan = std::abs(std::max(*maxAX, *maxBX) - std::min(*minAX, *minBX));
-    auto l_sumSpan = std::abs(*maxAX - *minAX + *maxBX - *minBX);
-
-    if (l_longSpan >= l_sumSpan)
+    for(std::size_t i = 0; i < 3; ++i)
     {
-        return false;
+        auto l_overlap = checkCollisionForNormalAxis(getProjectedPointsToAxis(p_coliderA.m_verticies, p_colliderAEdges[i]),
+                                                     getProjectedPointsToAxis(p_coliderB.m_verticies, p_colliderAEdges[i]));
+        if (not l_overlap)
+        {
+            return false;
+        }
+        else
+        {
+            if (m_minGap > l_overlap)
+            {
+                m_minGap = l_overlap;
+                m_minimumTranslationVector = p_colliderAEdges[i];
+            }
+        }
     }
-
-    l_longSpan = std::abs(std::max(*maxAY, *maxBY) - std::min(*minAY, *minBY));
-    l_sumSpan = std::abs(*maxAY - *minAY + *maxBY - *minBY);
-
-    if (l_longSpan >= l_sumSpan)
+    for (std::size_t i = 0; i < 3; ++i)
     {
-        return false;
+        auto l_overlap = checkCollisionForNormalAxis(getProjectedPointsToAxis(p_coliderA.m_verticies, p_colliderBEdges[i]),
+                                                 getProjectedPointsToAxis(p_coliderB.m_verticies, p_colliderBEdges[i]));
+        if (not l_overlap)
+        {
+            return false;
+        }
+        else
+        {
+            if (m_minGap > l_overlap)
+            {
+                m_minGap = l_overlap;
+                m_minimumTranslationVector = p_colliderBEdges[i];
+            }
+        }
     }
-
-    l_longSpan = std::abs(std::min(*maxAZ, *maxBZ) - std::max(*minAZ, *minBZ));
-    l_sumSpan = std::abs(*minAZ - *maxAZ + *minBZ - *maxBZ);
-
-    if (l_longSpan >= l_sumSpan)
-    {
-        return false;
-    }
-
     return true;
+}
+
+double CubeOBBCollsionHandler::checkCollisionForNormalAxis(const std::vector<double>& p_projectedColliderA, 
+                                                           const std::vector<double>& p_projectedColliderB)
+{
+    auto minA = std::min_element(p_projectedColliderA.begin(), p_projectedColliderA.end());
+    auto maxA = std::max_element(p_projectedColliderA.begin(), p_projectedColliderA.end());
+
+    auto minB = std::min_element(p_projectedColliderB.begin(), p_projectedColliderB.end());
+    auto maxB = std::max_element(p_projectedColliderB.begin(), p_projectedColliderB.end());
+
+    auto l_longSpan = std::abs(std::max(*maxA, *maxB) - std::min(*minA, *minB));
+    auto l_sumSpan = std::abs(*maxA - *minA + *maxB - *minB);
+
+    return (l_longSpan >= l_sumSpan) ? 0.0 : std::abs(l_longSpan - l_sumSpan);
 }
 }//Physics
 }//McEngine
