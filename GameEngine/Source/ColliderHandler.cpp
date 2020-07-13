@@ -79,7 +79,9 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
     if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_OBB
         and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_OBB)
     {
-        m_meshCollisionHandler = std::make_unique<CubeOBBCollsionHandler>(m_collsionDirection, p_objectCenterA, p_objectCenterB);
+        m_meshCollisionHandler = std::make_unique<CubeOBBCollsionHandler>(m_collsionDirection, 
+                                                                          p_objectCenterA, 
+                                                                          p_objectCenterB);
         return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
     }
     if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
@@ -111,7 +113,9 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
              (p_colliderA.m_colliderType == Meshes::ColliderType::SPHERE
              and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_OBB))
     {
-        m_meshCollisionHandler = std::make_unique<SphereVOBBCollisionHandler>(p_objectCenterA, p_objectCenterB);
+        m_meshCollisionHandler = std::make_unique<SphereVOBBCollisionHandler>(p_objectCenterA, 
+                                                                              p_objectCenterB, 
+                                                                              m_collsionDirection);
         return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
     }
 }
