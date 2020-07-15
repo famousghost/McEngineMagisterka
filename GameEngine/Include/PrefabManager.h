@@ -40,7 +40,7 @@ public:
 
     std::shared_ptr<Mesh> getSkyBoxMesh() const;
 
-    void loadMeshFromFile(std::string p_filePath);
+    bool loadMeshFromFile(std::string p_filePath);
 
     std::shared_ptr<Mesh> getMesh(std::string p_label) const;
 

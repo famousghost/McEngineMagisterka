@@ -17,7 +17,7 @@ private:
     double checkCollisionForNormalAxis(const std::vector<double>& p_projectedColliderA, const std::vector<double>& p_projectedColliderB);
     double checkCollisionForAxis(const std::vector<double>& p_projectedColliderA, const std::vector<double>& p_projectedColliderB);
     glm::vec3& m_minimumTranslationVector;
-    float m_minGap;
+    float m_minOverlap;
 
     glm::vec3 m_objectCenterA;
     glm::vec3 m_objectCenterB;

@@ -11,7 +11,7 @@ namespace Physics
 CubeOBBCollsionHandler::CubeOBBCollsionHandler(glm::vec3 & p_minimumTranslationVector, 
                                                const glm::vec3 & p_objectACenter, 
                                                const glm::vec3 & p_objectBCenter)
-    :m_minGap(100000.0f),
+    :m_minOverlap(100000.0f),
     m_minimumTranslationVector(p_minimumTranslationVector),
     m_objectCenterA(p_objectACenter),
     m_objectCenterB(p_objectBCenter)
@@ -63,9 +63,9 @@ bool CubeOBBCollsionHandler::checkCollision(const Meshes::Collider & p_coliderA,
             }
             else
             {
-                if (m_minGap > l_overlap)
+                if (m_minOverlap > l_overlap)
                 {
-                    m_minGap = l_overlap;
+                    m_minOverlap = l_overlap;
                     m_minimumTranslationVector = l_normal;
                 }
             }
@@ -122,9 +122,9 @@ bool CubeOBBCollsionHandler::checkCollisionForNormalsAxis(const Meshes::Collider
         }
         else
         {
-            if (m_minGap > l_overlap)
+            if (m_minOverlap > l_overlap)
             {
-                m_minGap = l_overlap;
+                m_minOverlap = l_overlap;
                 m_minimumTranslationVector = p_colliderAEdges[i];
             }
         }
@@ -139,9 +139,9 @@ bool CubeOBBCollsionHandler::checkCollisionForNormalsAxis(const Meshes::Collider
         }
         else
         {
-            if (m_minGap > l_overlap)
+            if (m_minOverlap > l_overlap)
             {
-                m_minGap = l_overlap;
+                m_minOverlap = l_overlap;
                 m_minimumTranslationVector = p_colliderBEdges[i];
             }
         }

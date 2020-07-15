@@ -144,7 +144,7 @@ void GuiManager::meshGui()
 
         if (objIt != l_objects.end())
         {
-            objIt->first.m_rigidBody = not objIt->first.m_rigidBody;
+            objIt->first.m_isRigidBody = not objIt->first.m_isRigidBody;
         }
     }
 
@@ -195,7 +195,10 @@ void GuiManager::updateListOfObjects(std::vector<std::string>& p_objectsToAdd)
             return;
         }
         std::string l_objectPath = "Objects/";
-        l_prefabManager.loadMeshFromFile(l_objectPath + l_filePath);
+        if (not l_prefabManager.loadMeshFromFile(l_objectPath + l_filePath))
+        {
+            return;
+        }
         p_objectsToAdd.push_back(l_objectName);
         strcpy(l_filePath, "");
     }

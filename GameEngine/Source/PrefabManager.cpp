@@ -120,7 +120,7 @@ std::shared_ptr<Mesh> PrefabManager::getSkyBoxMesh() const
     return m_skyBoxMesh;
 }
 
-void PrefabManager::loadMeshFromFile(std::string p_filePath)
+bool PrefabManager::loadMeshFromFile(std::string p_filePath)
 {
     m_objectName = Utility::FilePathParser::fetchObjectName(p_filePath);
     auto l_meshes = loadMesh(p_filePath);
@@ -128,10 +128,11 @@ void PrefabManager::loadMeshFromFile(std::string p_filePath)
     if (l_meshes.empty())
     {
         LOG("Cannot load object from file", LogType::ERR);
-        return;
+        return false;
     }
 
     addMeshesToMap(l_meshes);
+    return true;
 }
 
 void PrefabManager::addMeshesToMap(std::vector<std::shared_ptr<Mesh>>& p_meshes)

@@ -36,14 +36,14 @@ void ObjectManager::addObject(const Object& p_object, std::string p_objName)
 }
 
 void ObjectManager::addCustomObject(std::string p_objectLabel,
-std::string p_objectName,
-std::string p_shaderLabel,
-ColliderType p_defaultColliderType)
+                                    std::string p_objectName,
+                                    std::string p_shaderLabel,
+                                    ColliderType p_defaultColliderType)
 {
-LoadedObjectBuilder l_loadedObjectBuilder(p_objectName, p_objectLabel, p_defaultColliderType);
-l_loadedObjectBuilder.addShaderProgram(p_shaderLabel).addMesh();
-auto l_object = l_loadedObjectBuilder.getObject();
-addObject(l_object, p_objectLabel);
+    LoadedObjectBuilder l_loadedObjectBuilder(p_objectName, p_objectLabel, p_defaultColliderType);
+    l_loadedObjectBuilder.addShaderProgram(p_shaderLabel).addMesh();
+    auto l_object = l_loadedObjectBuilder.getObject();
+    addObject(l_object, p_objectLabel);
 }
 
 void ObjectManager::addCustomObject(std::string p_objectLabel,
@@ -80,7 +80,7 @@ void ObjectManager::update(Object& p_object)
 {
     setMaterialForObjectObject(p_object);
     moveObject(p_object);
-    if (p_object.m_rigidBody && p_object.m_gravityForce)
+    if (p_object.m_isRigidBody && p_object.m_gravityForce)
     {
         gravity(p_object);
     }
@@ -94,7 +94,7 @@ void ObjectManager::gravity(Object& p_object)
 
     if(not p_object.m_isColliding)
     {
-        p_object.m_velocity.y -= p_object.m_gravity * l_timeManager.getDeltaTime();
+        p_object.m_velocity.y -= (p_object.m_gravity / p_object.m_rigidBody.m_mass) * l_timeManager.getDeltaTime();
     }
 }
 
@@ -132,14 +132,6 @@ void ObjectManager::moveObject(Object& p_object)
     }
 
     auto l_move = (p_object.m_movementDirection + p_object.m_velocity) * static_cast<float>(l_timeManager.getDeltaTime());
-    if (l_move != glm::vec3())
-    {
-        p_object.m_isMoving = true;
-    }
-    else
-    {
-        p_object.m_isMoving = false;
-    }
 
     if(not p_object.m_isColliding)
     {

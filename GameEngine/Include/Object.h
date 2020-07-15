@@ -1,6 +1,7 @@
 #pragma once
 #include "Collider.h"
 #include "Light.h"
+#include "Rigidbody.h"
 
 namespace McEngine
 {
@@ -13,6 +14,7 @@ struct Object
     std::shared_ptr<Shaders::Shader> m_shaderProgram;
     std::list<IColiderObserver*> m_collsionObservers;
     std::vector<Collider> m_colider;
+    Rigidbody m_rigidBody;
     int m_colliderNumber;
     std::string m_currentAvaiableTexture;
     Material m_material;
@@ -20,11 +22,11 @@ struct Object
     std::string m_objectName;
     glm::vec3 m_movementDirection;
     glm::vec3 m_collsionDirection;
-    bool m_rigidBody;
+    bool m_isRigidBody;
     bool m_gravityForce;
     glm::vec3 m_velocity;
+    glm::vec3 m_acceleration;
     bool m_isColliding;
-    bool m_isMoving;
     float m_gravity;
 
     void attach(IColiderObserver* p_coliderObserver)
@@ -47,8 +49,7 @@ struct Object
 
     Object()
     {
-        m_isMoving = false;
-        m_rigidBody = false;
+        m_isRigidBody = false;
         m_gravityForce = false;
         m_isColliding = false;
         m_colliderNumber = 1;

@@ -240,6 +240,7 @@
     <ClInclude Include="Include\ObjectManager.h" />
     <ClInclude Include="Include\PhysicsManager.h" />
     <ClInclude Include="Include\RenderManager.h" />
+    <ClInclude Include="Include\Rigidbody.h" />
     <ClInclude Include="Include\Scene.h" />
     <ClInclude Include="Include\ScenesManager.h" />
     <ClInclude Include="Include\ScreenQuadBuilder.h" />

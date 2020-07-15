@@ -124,7 +124,7 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                                         std::vector<std::pair<Meshes::Object, std::string>>& p_objects)
 {
     bool l_isColliding = false;
-    if (not p_object.m_rigidBody)
+    if (not p_object.m_isRigidBody)
     {
         return;
     }

@@ -452,5 +452,8 @@
     <ClInclude Include="Include\SphereVOBBCollisionHandler.h">
       <Filter>Pliki nagłówkowe\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Rigidbody.h">
+      <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
