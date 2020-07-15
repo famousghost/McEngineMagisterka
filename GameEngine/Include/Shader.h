@@ -13,7 +13,7 @@ class Shader
 public:
     Shader() = default;
     ~Shader();
-    void createProgram(const std::string& p_vertexShaderPath, const std::string& p_fragmentShaderPath);
+    bool createProgram(const std::string& p_vertexShaderPath, const std::string& p_fragmentShaderPath);
     void bindShaderProgram();
     void unbindShaderProgram();
     void uniformMatrix4(const glm::mat4& p_matrix, const std::string& p_uniformName);
@@ -26,10 +26,10 @@ public:
     void refresh();
 private:
     GLuint createShader(const std::string& p_shaderPath, GLenum p_shaderType);
-    void getProgramLinkStatus();
+    bool getProgramLinkStatus();
     void attachShadersToProgram();
     void compileShader(GLuint p_shaderId, const std::string & p_shaderPath);
-    void getShaderCompileStatus(GLuint p_shaderId);
+    bool getShaderCompileStatus(GLuint p_shaderId);
 
     std::string m_vertexShader;
     std::string m_fragmentShader;

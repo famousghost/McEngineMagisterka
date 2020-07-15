@@ -219,9 +219,12 @@ void GuiManager::updateListOfShaders(std::vector<std::string>& p_shadersToAdd)
         std::string l_shaderPath = "Shaders/";
         std::string l_vlsl = ".vlsl";
         std::string l_flsl = ".flsl";
-        l_shaderManager.addShader(l_shaderName, 
-                                  l_shaderPath + l_shaderName + l_vlsl, 
-                                  l_shaderPath + l_shaderName + l_flsl);
+        if (not l_shaderManager.addShader(l_shaderName,
+                                          l_shaderPath + l_shaderName + l_vlsl,
+                                          l_shaderPath + l_shaderName + l_flsl))
+        {
+            return;
+        }
         p_shadersToAdd.push_back(l_shaderName);
         strcpy(l_filePath, "");
     }

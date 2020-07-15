@@ -8,8 +8,7 @@ namespace Physics
 {
 
 void PhysicsManager::start()
-{
-    
+{  
 }
 
 void PhysicsManager::shutdown()

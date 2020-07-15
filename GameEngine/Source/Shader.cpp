@@ -24,7 +24,7 @@ void Shader::compileShader(GLuint p_shaderId, const std::string& p_shaderPath)
     glCompileShader(p_shaderId);
 }
 
-void Shader::getShaderCompileStatus(GLuint p_shaderId)
+bool Shader::getShaderCompileStatus(GLuint p_shaderId)
 {
     char l_errBuffer[512];
     int l_success;
@@ -36,7 +36,9 @@ void Shader::getShaderCompileStatus(GLuint p_shaderId)
         glGetShaderInfoLog(p_shaderId, 512, NULL, l_errBuffer);
         std::string l_errMessage = l_errBuffer;
         LOG("Cannot compile shader:" + l_errMessage, LogType::WARN);
+        return false;
     }
+    return true;
 }
 
 GLuint Shader::createShader(const std::string& p_shaderPath, GLenum p_shaderType)
@@ -44,12 +46,15 @@ GLuint Shader::createShader(const std::string& p_shaderPath, GLenum p_shaderType
     GLuint l_shaderId = glCreateShader(p_shaderType);
 
     compileShader(l_shaderId, p_shaderPath);
-    getShaderCompileStatus(l_shaderId);
+    if (not getShaderCompileStatus(l_shaderId))
+    {
+        return -1;
+    }
 
     return l_shaderId;
 }
 
-void Shader::getProgramLinkStatus()
+bool Shader::getProgramLinkStatus()
 {
     char l_errBuffer[512];
     int l_success;
@@ -61,7 +66,9 @@ void Shader::getProgramLinkStatus()
         glGetProgramInfoLog(m_shaderProgramId, 512, NULL, l_errBuffer);
         std::string l_errMessage = l_errBuffer;
         LOG("Cannot link shader program:" + l_errMessage, LogType::WARN);
+        return false;
     }
+    return true;
 }
 
 void Shader::attachShadersToProgram()
@@ -72,7 +79,7 @@ void Shader::attachShadersToProgram()
     glLinkProgram(m_shaderProgramId);
 }
 
-void Shader::createProgram(const std::string& p_vertexShaderPath, const std::string& p_fragmentShaderPath)
+bool Shader::createProgram(const std::string& p_vertexShaderPath, const std::string& p_fragmentShaderPath)
 {
     m_vertexShaderPath = p_vertexShaderPath;
     m_fragmentShaderPath = p_fragmentShaderPath;
@@ -80,10 +87,19 @@ void Shader::createProgram(const std::string& p_vertexShaderPath, const std::str
     m_vertexShaderId = createShader(m_vertexShaderPath, GL_VERTEX_SHADER);
     m_fragmentShaderId = createShader(m_fragmentShaderPath, GL_FRAGMENT_SHADER);
 
+    if (m_vertexShaderId == -1 or m_fragmentShaderId == -1)
+    {
+        return false;
+    }
+
     m_shaderProgramId = glCreateProgram();
 
     attachShadersToProgram();
-    getProgramLinkStatus();
+    if (not getProgramLinkStatus())
+    {
+        return false;
+    }
+    return true;
 }
 
 void Shader::bindShaderProgram()

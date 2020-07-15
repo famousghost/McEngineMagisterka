@@ -33,13 +33,17 @@ void ShaderManager::shutdown()
     m_shaders.clear();
 }
 
-void ShaderManager::addShader(std::string p_shaderLabel,
+bool ShaderManager::addShader(std::string p_shaderLabel,
                               std::string p_vertexShader,
                               std::string P_fragmentShader)
 {
     std::shared_ptr<Shader> l_shader = std::make_shared<Shader>();
-    l_shader->createProgram(p_vertexShader, P_fragmentShader);
+    if (not l_shader->createProgram(p_vertexShader, P_fragmentShader))
+    {
+        return false;
+    }
     m_shaders.insert(std::make_pair(p_shaderLabel, l_shader));
+    return true;
 }
 
 void ShaderManager::resetShaders()

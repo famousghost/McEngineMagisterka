@@ -10,6 +10,8 @@ struct Rigidbody
     float m_velocity;
     float m_angularVelocity;
 
+
+
     Rigidbody()
     {
         m_mass = 1.0f;
