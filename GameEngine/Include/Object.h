@@ -53,7 +53,7 @@ struct Object
         m_gravityForce = false;
         m_isColliding = false;
         m_colliderNumber = 1;
-        m_gravity = 9.81f;
+        m_gravity = -9.87f;
         m_currentAvaiableTexture = "texture";
         m_movementDirection = glm::vec3();
         m_velocity = glm::vec3();

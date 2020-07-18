@@ -455,5 +455,11 @@
     <ClInclude Include="Include\Rigidbody.h">
       <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mass.h">
+      <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MaterialProperties.h">
+      <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

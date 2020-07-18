@@ -224,6 +224,8 @@
     <ClInclude Include="Include\Light.h" />
     <ClInclude Include="Include\LightBuilder.h" />
     <ClInclude Include="Include\LoadedObjectBuilder.h" />
+    <ClInclude Include="Include\Mass.h" />
+    <ClInclude Include="Include\MaterialProperties.h" />
     <ClInclude Include="Include\MeshCollisionHandler.h" />
     <ClInclude Include="Include\MouseRay.h" />
     <ClInclude Include="Include\Defines.h" />

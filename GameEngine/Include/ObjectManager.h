@@ -39,8 +39,6 @@ public:
 
     void update(Object & object);
 
-    void gravity(Object & p_object);
-
     void moveObject(Object & p_object);
 
     void updateCollider(Object & p_object, Cameras::Camera & p_camera);
@@ -54,6 +52,9 @@ public:
     std::vector<std::pair<Object, std::string>>& getObjects();
     glm::vec3 m_lightPosition;
 private:
+    void calculateObjectMass(Object & p_object);
+    void gravity(Object & p_object);
+
     std::vector<std::pair<Object, std::string>> m_objects;
     Object m_skyBox;
 

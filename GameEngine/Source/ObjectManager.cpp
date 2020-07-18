@@ -80,10 +80,6 @@ void ObjectManager::update(Object& p_object)
 {
     setMaterialForObjectObject(p_object);
     moveObject(p_object);
-    if (p_object.m_isRigidBody && p_object.m_gravityForce)
-    {
-        gravity(p_object);
-    }
     setModelMatrixForObject(p_object);
     activeTextures(p_object);
 }
@@ -94,44 +90,56 @@ void ObjectManager::gravity(Object& p_object)
 
     if(not p_object.m_isColliding)
     {
-        p_object.m_velocity.y -= (p_object.m_gravity / p_object.m_rigidBody.m_mass) * l_timeManager.getDeltaTime();
+        p_object.m_acceleration.y = p_object.m_gravity;
+        p_object.m_velocity.y += p_object.m_acceleration.y * l_timeManager.getDeltaTime();
     }
+}
+
+void ObjectManager::calculateObjectMass(Object& p_object)
+{
+    
 }
 
 void ObjectManager::moveObject(Object& p_object)
 {
     auto& l_inputManager = Inputs::InputManager::getInstance();
     auto& l_timeManager = Time::TimeManager::getInstance();
-    p_object.m_movementDirection = glm::vec3();
+    p_object.m_rigidBody.m_force = glm::vec3();
     if(p_object.m_objectName == Gui::GuiManager::getInstance().getCurrentAviableObject())
     {
         if (l_inputManager.getKeyDown(GLFW_KEY_LEFT))
         {
-            p_object.m_movementDirection.x = -CONST_VELOCITY;
+            p_object.m_rigidBody.m_force.x = -CONST_VELOCITY;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_RIGHT))
         {
-            p_object.m_movementDirection.x = CONST_VELOCITY;
+            p_object.m_rigidBody.m_force.x = CONST_VELOCITY;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_UP))
         {
-            p_object.m_movementDirection.z = -CONST_VELOCITY;
+            p_object.m_rigidBody.m_force.z = -CONST_VELOCITY;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_DOWN))
         {
-            p_object.m_movementDirection.z = CONST_VELOCITY;
+            p_object.m_rigidBody.m_force.z = CONST_VELOCITY;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_U))
         {
-            p_object.m_movementDirection.y = CONST_VELOCITY;
+            p_object.m_rigidBody.m_force.y = CONST_VELOCITY;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_J))
         {
-            p_object.m_movementDirection.y = -CONST_VELOCITY;
+            p_object.m_rigidBody.m_force.y = -CONST_VELOCITY;
         }
     }
 
-    auto l_move = (p_object.m_movementDirection + p_object.m_velocity) * static_cast<float>(l_timeManager.getDeltaTime());
+    p_object.m_velocity = p_object.m_rigidBody.m_force * p_object.m_rigidBody.m_mass.m_inverseMass;
+    auto l_move = p_object.m_velocity * static_cast<float>(l_timeManager.getDeltaTime());
+
+    if (p_object.m_isRigidBody and p_object.m_gravityForce)
+    {
+        gravity(p_object);
+    }
 
     if(not p_object.m_isColliding)
     {
@@ -203,13 +211,13 @@ void ObjectManager::setModelMatrixForObject(Object& p_object)
     auto& l_physcis = Physics::PhysicsManager::getInstance();
     glm::mat4 l_model;
     auto& l_transform = p_object.m_transform;
+    p_object.updateTransformation(l_transform);
+    l_physcis.collisionChecker(p_object, m_objects);
     l_model = glm::translate(l_model, l_transform.m_position);
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
     l_model = glm::scale(l_model, l_transform.m_scale);
-    p_object.updateTransformation(l_transform);
-    l_physcis.collisionChecker(p_object, m_objects);
     p_object.m_shaderProgram->uniformMatrix4(l_model, "model");
 }
 

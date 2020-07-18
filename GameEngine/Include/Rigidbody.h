@@ -1,4 +1,8 @@
 #pragma once
+#include "Mass.h"
+#include "MaterialProperties.h"
+#include <matrix_transform.hpp>
+#include <type_ptr.hpp>
 
 namespace McEngine
 {
@@ -6,17 +10,16 @@ namespace Meshes
 {
 struct Rigidbody
 {
-    float m_mass;
-    float m_velocity;
-    float m_angularVelocity;
-
+    Mass m_mass;
+    glm::vec3 m_velocity;
+    glm::vec3 m_force;
+    double m_gravity;
+    MaterialProperties m_materialProperties;
 
 
     Rigidbody()
     {
-        m_mass = 1.0f;
-        m_velocity = 0.0f;
-        m_angularVelocity = 0.0f;
+        m_gravity = -9.87;
     }
 };
 
