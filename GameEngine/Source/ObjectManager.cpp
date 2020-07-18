@@ -133,8 +133,7 @@ void ObjectManager::moveObject(Object& p_object)
         }
     }
 
-    p_object.m_velocity = p_object.m_rigidBody.m_force * p_object.m_rigidBody.m_mass.m_inverseMass;
-    auto l_move = p_object.m_velocity * static_cast<float>(l_timeManager.getDeltaTime());
+    auto l_move = (p_object.m_velocity + p_object.m_rigidBody.m_force) * static_cast<float>(l_timeManager.getDeltaTime());
 
     if (p_object.m_isRigidBody and p_object.m_gravityForce)
     {

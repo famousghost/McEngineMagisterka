@@ -22,8 +22,8 @@ struct MaterialProperties
 
     MaterialProperties()
     {
-        m_density = 0.0f;
-        m_restitution = 0.4f;
+        m_density = 0.6f;
+        m_restitution = 0.1f;
     }
 };
 }//Meshes

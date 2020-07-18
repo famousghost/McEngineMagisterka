@@ -143,7 +143,7 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                                                                     colliderB, 
                                                                     p_object.m_transform.m_position, 
                                                                     p_objects[i].first.m_transform.m_position,
-                                                                    p_object.m_movementDirection))
+                                                                    p_object.m_rigidBody.m_force))
                 {
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
 
@@ -152,13 +152,6 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                     m_collsionDirection = glm::vec3();
                     l_isColliding = true;
                     if (p_object.m_gravityForce)
-                    {
-                        p_object.m_velocity.y = 0.0f;
-                    }
-                }
-                else
-                {   
-                    if(not p_object.m_gravityForce)
                     {
                         p_object.m_velocity.y = 0.0f;
                     }
