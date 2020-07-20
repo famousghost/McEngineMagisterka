@@ -18,6 +18,7 @@ namespace Meshes
 namespace
 {
     constexpr float CONST_VELOCITY = 1.0f;
+    constexpr float CONST_FORCE = 500.0f;
 }
 
 void ObjectManager::addObject(const Object& p_object, std::string p_objName)
@@ -33,6 +34,9 @@ void ObjectManager::addObject(const Object& p_object, std::string p_objName)
     m_objects.back().first.m_objectName = p_objName;
     ColiderObserver* l_coliderObserver = new ColiderObserver(m_objects.back().first);
     m_coliderObserver.push_back(l_coliderObserver);
+    Physics::PhysicsManager::getInstance().calculateObjectMass(m_objects.back().first);
+    auto l_materialType = Gui::GuiManager::getInstance().getMaterialType();
+    m_objects.back().first.m_rigidBody.m_materialProperties.setMaterialType(l_materialType);
 }
 
 void ObjectManager::addCustomObject(std::string p_objectLabel,
@@ -82,6 +86,7 @@ void ObjectManager::update(Object& p_object)
     moveObject(p_object);
     setModelMatrixForObject(p_object);
     activeTextures(p_object);
+    p_object.m_rigidBody.m_velocity = glm::vec3();
 }
 
 void ObjectManager::gravity(Object& p_object)
@@ -90,14 +95,9 @@ void ObjectManager::gravity(Object& p_object)
 
     if(not p_object.m_isColliding)
     {
-        p_object.m_acceleration.y = p_object.m_gravity;
-        p_object.m_velocity.y += p_object.m_acceleration.y * l_timeManager.getDeltaTime();
+        p_object.m_rigidBody.m_force.y = p_object.m_gravity * p_object.m_rigidBody.m_massProperties.m_mass;
+        p_object.m_rigidBody.m_velocity.y += p_object.m_rigidBody.m_force.y * l_timeManager.getDeltaTime();
     }
-}
-
-void ObjectManager::calculateObjectMass(Object& p_object)
-{
-    
 }
 
 void ObjectManager::moveObject(Object& p_object)
@@ -109,31 +109,38 @@ void ObjectManager::moveObject(Object& p_object)
     {
         if (l_inputManager.getKeyDown(GLFW_KEY_LEFT))
         {
-            p_object.m_rigidBody.m_force.x = -CONST_VELOCITY;
+            p_object.m_movementDirection.x = -CONST_VELOCITY;
+            p_object.m_rigidBody.m_force.x = CONST_FORCE;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_RIGHT))
         {
-            p_object.m_rigidBody.m_force.x = CONST_VELOCITY;
+            p_object.m_movementDirection.x = CONST_VELOCITY;
+            p_object.m_rigidBody.m_force.x = CONST_FORCE;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_UP))
         {
-            p_object.m_rigidBody.m_force.z = -CONST_VELOCITY;
+            p_object.m_movementDirection.z = -CONST_VELOCITY;
+            p_object.m_rigidBody.m_force.z = CONST_FORCE;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_DOWN))
         {
-            p_object.m_rigidBody.m_force.z = CONST_VELOCITY;
+            p_object.m_movementDirection.z = CONST_VELOCITY;
+            p_object.m_rigidBody.m_force.z = CONST_FORCE;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_U))
         {
-            p_object.m_rigidBody.m_force.y = CONST_VELOCITY;
+            p_object.m_movementDirection.y = CONST_VELOCITY;
+            p_object.m_rigidBody.m_force.y = CONST_FORCE;
         }
         if (l_inputManager.getKeyDown(GLFW_KEY_J))
         {
-            p_object.m_rigidBody.m_force.y = -CONST_VELOCITY;
+            p_object.m_movementDirection.y = -CONST_VELOCITY;
+            p_object.m_rigidBody.m_force.y = CONST_FORCE;
         }
     }
 
-    auto l_move = (p_object.m_velocity + p_object.m_rigidBody.m_force) * static_cast<float>(l_timeManager.getDeltaTime());
+    p_object.m_rigidBody.m_velocity += (p_object.m_rigidBody.m_force * p_object.m_rigidBody.m_massProperties.m_inverseMass) * static_cast<float>(l_timeManager.getDeltaTime());
+    p_object.m_rigidBody.m_velocity *= p_object.m_movementDirection;
 
     if (p_object.m_isRigidBody and p_object.m_gravityForce)
     {
@@ -142,7 +149,7 @@ void ObjectManager::moveObject(Object& p_object)
 
     if(not p_object.m_isColliding)
     {
-        p_object.m_transform.m_position += l_move;
+        p_object.m_transform.m_position += p_object.m_rigidBody.m_velocity  * static_cast<float>(l_timeManager.getDeltaTime());
     }
 }
 
@@ -210,14 +217,22 @@ void ObjectManager::setModelMatrixForObject(Object& p_object)
     auto& l_physcis = Physics::PhysicsManager::getInstance();
     glm::mat4 l_model;
     auto& l_transform = p_object.m_transform;
-    p_object.updateTransformation(l_transform);
-    l_physcis.collisionChecker(p_object, m_objects);
+    l_physcis.updatePhysics(p_object, m_objects);
     l_model = glm::translate(l_model, l_transform.m_position);
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
     l_model = glm::scale(l_model, l_transform.m_scale);
+    scaleObjectSize(p_object);
     p_object.m_shaderProgram->uniformMatrix4(l_model, "model");
+}
+
+void ObjectManager::scaleObjectSize(Object& p_object)
+{
+    auto& l_transform = p_object.m_transform;
+    p_object.m_rigidBody.m_width *= l_transform.m_scale.x;
+    p_object.m_rigidBody.m_height *= l_transform.m_scale.y;
+    p_object.m_rigidBody.m_length *= l_transform.m_scale.z;
 }
 
 void ObjectManager::setMaterialForObjectObject(Object& p_object)

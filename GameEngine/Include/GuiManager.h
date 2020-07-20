@@ -27,6 +27,8 @@ public:
 
     std::string getCurrentAviableObject() const;
 
+    std::string getMaterialType() const;
+
     static GuiManager& getInstance()
     {
         static GuiManager guiManager;
@@ -46,6 +48,7 @@ private:
     std::string m_newObjectPath;
     std::string m_logsInformation;
     std::string m_colliderTypeName;
+    std::string m_materialType;
     Meshes::ColliderType m_colliderType;
     std::size_t m_elementNumber;
     bool m_colidersVisiblity;
@@ -61,6 +64,8 @@ private:
     void objectChoosingComboBox(std::vector<std::string>& p_items, std::vector<std::string>& p_colliders);
     void colliderChoosingComboBox(std::vector<std::string>& p_items);
     void colliderTypeChoosingComboBox(std::vector<std::string>& p_items);
+    void choosingObjectMaterialType(std::vector<std::string>& p_materialTypes);
+    void updateObjectMassProperties();
     void updateListOfObjects(std::vector<std::string>& p_shaderItems);
     void updateListOfShaders(std::vector<std::string>& p_shadersToAdd);
     void updateObjectShader();

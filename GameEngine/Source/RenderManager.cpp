@@ -177,7 +177,6 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
 
     auto& l_objects = l_objectManager.getObjects();
     auto& l_physicsManager = Physics::PhysicsManager::getInstance();
-
     for (auto& object : l_objects)
     {
         auto& l_object = object.first;

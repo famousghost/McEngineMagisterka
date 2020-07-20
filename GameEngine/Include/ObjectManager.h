@@ -52,7 +52,6 @@ public:
     std::vector<std::pair<Object, std::string>>& getObjects();
     glm::vec3 m_lightPosition;
 private:
-    void calculateObjectMass(Object & p_object);
     void gravity(Object & p_object);
 
     std::vector<std::pair<Object, std::string>> m_objects;
@@ -60,6 +59,7 @@ private:
 
     void setMaterialForObjectObject(Object & p_object);
     void setModelMatrixForObject(Object & p_object);
+    void scaleObjectSize(Object & p_object);
     std::vector<IColiderObserver*> m_coliderObserver;
 
 };

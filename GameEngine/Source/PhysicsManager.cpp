@@ -1,4 +1,5 @@
 #include "PhysicsManager.h"
+#include "TimeManager.h"
 #include <algorithm>
 #include <math.h>
 
@@ -21,9 +22,27 @@ PhysicsManager & PhysicsManager::getInstance()
     return l_physicsManager;
 }
 
+void PhysicsManager::calculateObjectMass(Meshes::Object& p_object)
+{
+    p_object.m_rigidBody.m_massProperties.m_mass = 
+        p_object.m_rigidBody.m_materialProperties.m_density * calculateObjectVolume(p_object);
+    p_object.m_rigidBody.m_massProperties.m_inverseMass = 1.0f / p_object.m_rigidBody.m_massProperties.m_mass;                         
+}
+
+float PhysicsManager::calculateObjectVolume(Meshes::Object& p_object)
+{
+    return p_object.m_rigidBody.m_width * p_object.m_rigidBody.m_height * p_object.m_rigidBody.m_length;
+}
+
 bool PhysicsManager::getShouldCheckCollsion() const
 {
     return m_collsionHandler.getShouldCheckCollsion();
+}
+
+void PhysicsManager::updatePhysics(Meshes::Object& p_object,
+                                   std::vector<std::pair<Meshes::Object, std::string>>& p_objects)
+{
+    collisionChecker(p_object, p_objects);
 }
 
 void PhysicsManager::setShouldCheckCollision(bool p_shouldCheckCollision)

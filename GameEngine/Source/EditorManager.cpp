@@ -45,7 +45,10 @@ void EditorManager::editorLoop()
     {
         double l_previousTime = l_currentTime;
         l_currentTime = glfwGetTime();
-        Time::TimeManager::getInstance().setDeltaTime(l_currentTime - l_previousTime);
+        auto& l_timeManager = Time::TimeManager::getInstance();
+        l_timeManager.setDeltaTime(l_currentTime - l_previousTime);
+        l_timeManager.setAccumulator(l_currentTime - l_previousTime);
+
         Gui::GuiManager::getInstance().meshGui();
         l_renderManager.draw(*scene);
     }

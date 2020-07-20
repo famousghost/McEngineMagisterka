@@ -69,8 +69,7 @@ glm::vec3 CollisionHandler::calculateRealCollsionDirection(const glm::vec3& p_co
 bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_colliderA,
                                               const Meshes::Collider& p_ColliderB,
                                               const glm::vec3& p_objectCenterA,
-                                              const glm::vec3& p_objectCenterB,
-                                              const glm::vec3& p_movementDirection)
+                                              const glm::vec3& p_objectCenterB)
 {
     std::unique_ptr<MeshCollisionHandler> m_meshCollisionHandler;
 
@@ -124,10 +123,6 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                                         std::vector<std::pair<Meshes::Object, std::string>>& p_objects)
 {
     bool l_isColliding = false;
-    if (not p_object.m_isRigidBody)
-    {
-        return;
-    }
     for (std::size_t i = 0; i < p_objects.size(); ++i)
     {
         if (p_object.m_objectName == p_objects[i].first.m_objectName)
@@ -142,18 +137,22 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                 if (p_object.m_isColliding = checkCollsionForObject(colliderA, 
                                                                     colliderB, 
                                                                     p_object.m_transform.m_position, 
-                                                                    p_objects[i].first.m_transform.m_position,
-                                                                    p_object.m_rigidBody.m_force))
+                                                                    p_objects[i].first.m_transform.m_position))
                 {
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
 
                     auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
-                    p_object.m_transform.m_position += (p_object.m_velocity + m_collsionDirection) * l_deltaTime;
-                    m_collsionDirection = glm::vec3();
+                    p_object.m_transform.m_position += glm::length(p_object.m_rigidBody.m_velocity) * m_collsionDirection * l_deltaTime;
+                    if(p_objects[i].first.m_isRigidBody)
+                    {
+                        p_objects[i].first.m_rigidBody.m_velocity = p_object.m_rigidBody.m_velocity;
+                        p_objects[i].first.m_movementDirection = p_object.m_movementDirection;
+                        p_objects[i].first.m_transform.m_position -= glm::length(p_objects[i].first.m_rigidBody.m_velocity) * m_collsionDirection * l_deltaTime;
+                    }
                     l_isColliding = true;
                     if (p_object.m_gravityForce)
                     {
-                        p_object.m_velocity.y = 0.0f;
+                        p_object.m_rigidBody.m_velocity.y += 9.87f;
                     }
                 }
             }

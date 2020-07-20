@@ -6,6 +6,7 @@
 #include "WindowManager.h"
 #include "RenderManager.h"
 #include "FilePathParser.h"
+#include "PhysicsManager.h"
 #include <algorithm>
 #include "Logger.h"
 
@@ -18,6 +19,7 @@ void GuiManager::start()
 {
     m_currentShader = "defaultShader";
     m_currentObject = "";
+    m_materialType = "ROCK";
     m_currentObjectToAdd = "Cube";
     m_currentTexture = "Wall";
     m_objectElementSize = 0;
@@ -84,10 +86,19 @@ void GuiManager::meshGui()
                                                      "SPHERE"};
     static std::vector<std::string> colliders;
 
+    static std::vector<std::string> materialTypes = {"ROCK",
+                                                     "WOOD",
+                                                     "METAL",
+                                                     "BOUNCY_BALL",
+                                                     "SUPER_BALL",
+                                                     "PILLOW",
+                                                     "STATIC"};
+
     objectChoosingComboBox(items, colliders);
     colliderTypeChoosingComboBox(colliderTypes);
     colliderChoosingComboBox(colliders);
     choosingObjectToAddComboBox(objectsToAdd);
+    choosingObjectMaterialType(materialTypes);
     updateShaderComboBox(shadersItems);
     updateTextureComboBox(textureItems);
     objectMoveOperations();
@@ -102,6 +113,7 @@ void GuiManager::meshGui()
     updateObjectTetxture();
     updateListOfObjects(objectsToAdd);
     updateListOfShaders(shadersItems);
+    updateObjectMassProperties();
 
     static std::string buttonName = "show collider";
     if (ImGui::Button(buttonName.c_str()))
@@ -268,6 +280,11 @@ bool GuiManager::getColliderVisiblity() const
 std::string GuiManager::getCurrentAviableObject() const
 {
     return m_currentObject;
+}
+
+std::string GuiManager::getMaterialType() const
+{
+    return m_materialType;
 }
 
 void GuiManager::addObject(std::vector<std::string>& p_items,
@@ -554,6 +571,7 @@ void GuiManager::colliderTypeChoosingComboBox(std::vector<std::string>& p_items)
         }
         ImGui::EndCombo();
     }
+
     if (m_colliderTypeName == "OBB")
     {
         m_colliderType = Meshes::ColliderType::CUBE_OBB;
@@ -565,6 +583,46 @@ void GuiManager::colliderTypeChoosingComboBox(std::vector<std::string>& p_items)
     else if (m_colliderTypeName == "SPHERE")
     {
         m_colliderType = Meshes::ColliderType::SPHERE;
+    }
+}
+
+void GuiManager::choosingObjectMaterialType(std::vector<std::string>& p_materialTypes)
+{
+    if (ImGui::BeginCombo("##materialTypeCombo", m_materialType.c_str()))
+    {
+        for (int i = 0; i < p_materialTypes.size(); i++)
+        {
+            bool is_selected = (m_currentObjectToAdd == p_materialTypes.at(i));
+            if (ImGui::Selectable(p_materialTypes.at(i).c_str(), is_selected))
+            {
+                m_materialType = p_materialTypes.at(i);
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
+}
+
+void GuiManager::updateObjectMassProperties()
+{
+    auto& l_objects =
+        Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager().getObjects();
+    if (ImGui::Button("Update MaterialType"))
+    {
+        auto objIt = std::find_if(l_objects.begin(), l_objects.end(),
+            [&](auto& label)
+        {
+            return m_currentObject == label.second;
+        });
+        if (objIt != l_objects.end())
+        {
+            if (m_materialType != "")
+            {
+                objIt->first.m_rigidBody.m_materialProperties.setMaterialType(m_materialType);
+                Physics::PhysicsManager::getInstance().calculateObjectMass(objIt->first);
+            }
+        }
     }
 }
 
