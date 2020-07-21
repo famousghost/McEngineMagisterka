@@ -23,7 +23,10 @@ class ObjectManager
 public:
     void addObject(const Object& p_object, std::string p_objName);
 
-    void addCustomObject(std::string p_objectLabel, std::string p_objectName, std::string p_shaderLabel, ColliderType p_defaultColliderType);
+    void addCustomObject(std::string p_objectLabel, 
+                         std::string p_objectName, 
+                         std::string p_shaderLabel, 
+                         ColliderType p_defaultColliderType);
 
     void addCustomObject(std::string p_objectLabel, 
                          std::string p_objectName, 
@@ -52,7 +55,11 @@ public:
     std::vector<std::pair<Object, std::string>>& getObjects();
     glm::vec3 m_lightPosition;
 private:
+    void resetValues(Object & p_object);
+
     void gravity(Object & p_object);
+
+    void dbgVector(const glm::vec3 & p_vec);
 
     std::vector<std::pair<Object, std::string>> m_objects;
     Object m_skyBox;

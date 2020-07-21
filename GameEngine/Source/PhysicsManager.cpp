@@ -26,12 +26,13 @@ void PhysicsManager::calculateObjectMass(Meshes::Object& p_object)
 {
     p_object.m_rigidBody.m_massProperties.m_mass = 
         p_object.m_rigidBody.m_materialProperties.m_density * calculateObjectVolume(p_object);
-    p_object.m_rigidBody.m_massProperties.m_inverseMass = 1.0f / p_object.m_rigidBody.m_massProperties.m_mass;                         
+    p_object.m_rigidBody.m_massProperties.m_inverseMass = 1.0f / p_object.m_rigidBody.m_massProperties.m_mass;
+    LOG(std::to_string(p_object.m_rigidBody.m_massProperties.m_mass), LogType::DBG);
 }
 
 float PhysicsManager::calculateObjectVolume(Meshes::Object& p_object)
 {
-    return p_object.m_rigidBody.m_width * p_object.m_rigidBody.m_height * p_object.m_rigidBody.m_length;
+    return fabs(p_object.m_rigidBody.m_width) * fabs(p_object.m_rigidBody.m_height) * fabs(p_object.m_rigidBody.m_length);
 }
 
 bool PhysicsManager::getShouldCheckCollsion() const

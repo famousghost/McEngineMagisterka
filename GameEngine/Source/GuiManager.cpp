@@ -592,7 +592,7 @@ void GuiManager::choosingObjectMaterialType(std::vector<std::string>& p_material
     {
         for (int i = 0; i < p_materialTypes.size(); i++)
         {
-            bool is_selected = (m_currentObjectToAdd == p_materialTypes.at(i));
+            bool is_selected = (m_materialType == p_materialTypes.at(i));
             if (ImGui::Selectable(p_materialTypes.at(i).c_str(), is_selected))
             {
                 m_materialType = p_materialTypes.at(i);

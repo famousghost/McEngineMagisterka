@@ -34,9 +34,9 @@ void ObjectManager::addObject(const Object& p_object, std::string p_objName)
     m_objects.back().first.m_objectName = p_objName;
     ColiderObserver* l_coliderObserver = new ColiderObserver(m_objects.back().first);
     m_coliderObserver.push_back(l_coliderObserver);
-    Physics::PhysicsManager::getInstance().calculateObjectMass(m_objects.back().first);
     auto l_materialType = Gui::GuiManager::getInstance().getMaterialType();
     m_objects.back().first.m_rigidBody.m_materialProperties.setMaterialType(l_materialType);
+    Physics::PhysicsManager::getInstance().calculateObjectMass(m_objects.back().first);
 }
 
 void ObjectManager::addCustomObject(std::string p_objectLabel,
@@ -82,11 +82,11 @@ void ObjectManager::addSkyBox()
 
 void ObjectManager::update(Object& p_object)
 {
+    resetValues(p_object);
     setMaterialForObjectObject(p_object);
     moveObject(p_object);
     setModelMatrixForObject(p_object);
     activeTextures(p_object);
-    p_object.m_rigidBody.m_velocity = glm::vec3();
 }
 
 void ObjectManager::gravity(Object& p_object)
@@ -98,6 +98,11 @@ void ObjectManager::gravity(Object& p_object)
         p_object.m_rigidBody.m_force.y = p_object.m_gravity * p_object.m_rigidBody.m_massProperties.m_mass;
         p_object.m_rigidBody.m_velocity.y += p_object.m_rigidBody.m_force.y * l_timeManager.getDeltaTime();
     }
+}
+
+void ObjectManager::dbgVector(const glm::vec3& p_vec)
+{
+    std::cout << "(" << p_vec.x << ", " << p_vec.y << ", " << p_vec.z << ")" << std::endl;
 }
 
 void ObjectManager::moveObject(Object& p_object)
@@ -151,6 +156,14 @@ void ObjectManager::moveObject(Object& p_object)
     {
         p_object.m_transform.m_position += p_object.m_rigidBody.m_velocity  * static_cast<float>(l_timeManager.getDeltaTime());
     }
+}
+
+void ObjectManager::resetValues(Object& p_object)
+{
+    p_object.m_rigidBody.m_velocity = glm::vec3();
+    p_object.m_rigidBody.m_width = 1.0f;
+    p_object.m_rigidBody.m_height = 1.0f;
+    p_object.m_rigidBody.m_length = 1.0f;
 }
 
 void ObjectManager::updateCollider(Object& p_object,

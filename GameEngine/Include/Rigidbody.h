@@ -22,9 +22,9 @@ struct Rigidbody
 
     Rigidbody()
     {
-        m_width = 2.0f;
-        m_height = 2.0f;
-        m_length = 2.0f;
+        m_width = 1.0f;
+        m_height = 1.0f;
+        m_length = 1.0f;
         m_gravity = -9.87;
     }
 };
