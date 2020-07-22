@@ -123,6 +123,10 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                                         std::vector<std::pair<Meshes::Object, std::string>>& p_objects)
 {
     bool l_isColliding = false;
+    if (not p_object.m_isRigidBody)
+    {
+        return;
+    }
     for (std::size_t i = 0; i < p_objects.size(); ++i)
     {
         if (p_object.m_objectName == p_objects[i].first.m_objectName)
@@ -141,19 +145,24 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                 {
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
 
+                    if (p_object.m_gravityForce and p_object.m_velocity.y < 9.0f)
+                    {
+                        p_object.m_rigidBody.m_velocity.y = 0.0f;
+                    }
+
                     auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
-                    p_object.m_transform.m_position += glm::length(p_object.m_rigidBody.m_velocity) * m_collsionDirection * l_deltaTime;
+                    auto l_collisionDirectionLength = glm::length(p_object.m_rigidBody.m_velocity + p_object.m_velocity);
+                    p_object.m_transform.m_position += (l_collisionDirectionLength != 0.0f ? l_collisionDirectionLength : 1.0f) * m_collsionDirection * l_deltaTime;
+
                     if(p_objects[i].first.m_isRigidBody)
                     {
                         p_objects[i].first.m_rigidBody.m_velocity = p_object.m_rigidBody.m_velocity;
                         p_objects[i].first.m_movementDirection = p_object.m_movementDirection;
-                        p_objects[i].first.m_transform.m_position -= glm::length(p_objects[i].first.m_rigidBody.m_velocity) * m_collsionDirection * l_deltaTime;
+                        l_collisionDirectionLength = glm::length(p_object.m_rigidBody.m_velocity + p_object.m_velocity);
+                        p_objects[i].first.m_transform.m_position -= (l_collisionDirectionLength != 0.0f ? l_collisionDirectionLength : 1.0f) * m_collsionDirection * l_deltaTime;
                     }
+
                     l_isColliding = true;
-                    if (p_object.m_gravityForce)
-                    {
-                        p_object.m_rigidBody.m_velocity.y += 9.87f;
-                    }
                 }
             }
         }

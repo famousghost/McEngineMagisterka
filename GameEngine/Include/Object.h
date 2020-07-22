@@ -22,6 +22,7 @@ struct Object
     std::string m_objectName;
     glm::vec3 m_movementDirection;
     glm::vec3 m_collsionDirection;
+    glm::vec3 m_velocity;
     bool m_isRigidBody;
     bool m_gravityForce;
     glm::vec3 m_acceleration;

@@ -66,6 +66,8 @@ private:
 
     void setMaterialForObjectObject(Object & p_object);
     void setModelMatrixForObject(Object & p_object);
+    glm::vec3 getEulerAngelsFromTransform(const glm::vec3 & p_rotatione);
+    glm::mat4 getRotationeMatrixFromEulerAngels(const glm::vec3 & p_eulerAngels);
     void scaleObjectSize(Object & p_object);
     std::vector<IColiderObserver*> m_coliderObserver;
 
