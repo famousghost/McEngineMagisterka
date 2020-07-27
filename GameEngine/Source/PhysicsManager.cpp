@@ -8,6 +8,11 @@ namespace McEngine
 namespace Physics
 {
 
+namespace
+{
+    constexpr int STATE_SIZE = 18;
+}
+
 void PhysicsManager::start()
 {  
 }
@@ -46,9 +51,169 @@ void PhysicsManager::updatePhysics(Meshes::Object& p_object,
     collisionChecker(p_object, p_objects);
 }
 
+int PhysicsManager::getStateSize() const
+{
+    return m_stateSize;
+}
+
 void PhysicsManager::setShouldCheckCollision(bool p_shouldCheckCollision)
 {
     m_collsionHandler.setShouldCheckCollision(p_shouldCheckCollision);
+}
+
+void PhysicsManager::stateToArray(Meshes::Rigidbody& p_rigidBody, std::vector<double>& p_y)
+{
+    auto l_it = p_y.begin();
+    *l_it++ = p_rigidBody.m_x.x;
+    *l_it++ = p_rigidBody.m_x.y;
+    *l_it++ = p_rigidBody.m_x.z;
+
+    for (auto i = 0; i < 3; i++)
+    {
+        for (auto j = 0; j < 3; j++)
+        {
+            *l_it++ = p_rigidBody.m_R[i][j];
+        }
+    }
+
+    *l_it++ = p_rigidBody.m_P.x;
+    *l_it++ = p_rigidBody.m_P.y;
+    *l_it++ = p_rigidBody.m_P.z;
+
+    *l_it++ = p_rigidBody.m_L.x;
+    *l_it++ = p_rigidBody.m_L.y;
+    *l_it++ = p_rigidBody.m_L.z;
+}
+
+void PhysicsManager::arrayToState(Meshes::Rigidbody& p_rigidBody, std::vector<double>& p_y)
+{
+    auto l_it = p_y.begin();
+    auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
+    p_rigidBody.m_x.x = *l_it++;
+    p_rigidBody.m_x.y = *l_it++;
+    p_rigidBody.m_x.z = *l_it++;
+
+    for (auto i = 0; i < 3; i++)
+    {
+        for (auto j = 0; j < 3; j++)
+        {
+            p_rigidBody.m_R[i][j] = *l_it++;
+        }
+    }
+
+    p_rigidBody.m_P.x = *l_it++;
+    p_rigidBody.m_P.y = *l_it++;
+    p_rigidBody.m_P.z = *l_it++;
+
+    p_rigidBody.m_L.x = *l_it++;
+    p_rigidBody.m_L.y = *l_it++;
+    p_rigidBody.m_L.z = *l_it++;
+
+    dbgVector(p_rigidBody.m_x, "x(t) = ");
+
+    p_rigidBody.m_velocity = glm::vec3(p_rigidBody.m_P) * p_rigidBody.m_massProperties.m_inverseMass * l_deltaTime;
+
+    p_rigidBody.m_iInv = p_rigidBody.m_R * p_rigidBody.m_inverseIbody * glm::transpose(p_rigidBody.m_R);
+
+    p_rigidBody.m_angularVelocity = p_rigidBody.m_iInv * p_rigidBody.m_L;
+}
+
+void PhysicsManager::dbgVector(const glm::vec3& p_vec, const std::string& p_msg)
+{
+    std::cout << p_msg << "(" << p_vec.x << ", " << p_vec.y << ", " << p_vec.z << ")" << std::endl;
+}
+
+void PhysicsManager::arrayToBody(Meshes::Rigidbody& p_rigidBody, std::vector<double>& p_y)
+{
+    arrayToState(p_rigidBody, p_y);
+}
+
+void PhysicsManager::bodyToArray(Meshes::Rigidbody& p_rigidBody, std::vector<double>& p_y)
+{
+    stateToArray(p_rigidBody, p_y);
+}
+
+void PhysicsManager::dydt(Meshes::Object& p_rigidBody, double p_t)
+{
+    auto& l_rigidBody = p_rigidBody.m_rigidBody;
+    arrayToBody(l_rigidBody, l_rigidBody.m_y);
+    computeForceAndTorque(p_t, p_rigidBody);
+    ddtStateToArray(l_rigidBody, l_rigidBody.m_yFinal);
+}
+
+void PhysicsManager::ode(Meshes::Object& p_object)
+{
+    auto l_deltaTime = Time::TimeManager::getInstance().getDeltaTime();
+    dydt(p_object, l_deltaTime);
+}
+
+void PhysicsManager::computeForceAndTorque(double p_t, Meshes::Object& p_object)
+{
+    if (p_object.m_isRigidBody and p_object.m_gravityForce)
+    {
+        auto& l_rigidBody = p_object.m_rigidBody;
+        l_rigidBody.m_force.y += l_rigidBody.m_gravity * l_rigidBody.m_massProperties.m_mass;
+        auto& l_collider = p_object.m_colider.at(0);
+        auto& l_colliderVerticies = p_object.m_colider.at(0).m_meshes.at(0)->m_verticies;
+        l_rigidBody.m_torque = glm::dvec3();
+        for (auto i = 0; i < l_colliderVerticies.size(); ++i)
+        {
+            glm::vec3 l_centerOfMass = p_object.m_transform.m_position + l_collider.m_transform.m_position;
+            glm::vec3 l_vertexPos = glm::vec3(l_collider.m_modelMatrix * glm::vec4(l_colliderVerticies[i].m_position, 1.0f));
+            l_rigidBody.m_torque += glm::cross(l_vertexPos - l_centerOfMass, glm::vec3(l_rigidBody.m_force));
+        }
+    }
+}
+
+glm::dmat3 PhysicsManager::starOperatorMatrix(const glm::vec3& p_vec)
+{
+    glm::mat3 l_result;
+    
+    l_result[0][1] = -p_vec.z;
+    l_result[0][2] = p_vec.y;
+    l_result[1][0] = p_vec.z;
+    l_result[1][2] = -p_vec.x;
+    l_result[2][0] = -p_vec.y;
+    l_result[2][1] = p_vec.x;
+
+    return l_result;
+}
+
+void PhysicsManager::debugMatrix(const glm::dmat3& p_mat)
+{
+    for (auto i = 0; i < 3; ++i)
+    {
+        for (auto j = 0; j < 3; ++j)
+        {
+            std::cout <<"R["<< i << "]" << "[" << j << "] = " << p_mat[i][j];
+        }
+        std::cout << std::endl;
+    }
+}
+
+void PhysicsManager::ddtStateToArray(Meshes::Rigidbody& p_rigidBody, std::vector<double>& p_y)
+{
+    auto l_it = p_y.begin();
+    *l_it++ = p_rigidBody.m_velocity.x;
+    *l_it++ = p_rigidBody.m_velocity.y;
+    *l_it++ = p_rigidBody.m_velocity.z;
+
+    if(p_rigidBody.m_R * glm::transpose(p_rigidBody.m_R) != glm::dmat3())
+    {
+        glm::mat3 l_rDot = starOperatorMatrix(p_rigidBody.m_angularVelocity) * p_rigidBody.m_R;
+
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                *l_it++ = l_rDot[i][j];
+    }
+
+    *l_it++ = p_rigidBody.m_force.x;
+    *l_it++ = p_rigidBody.m_force.y;
+    *l_it++ = p_rigidBody.m_force.z;
+
+    *l_it++ = p_rigidBody.m_torque.x;
+    *l_it++ = p_rigidBody.m_torque.y;
+    *l_it++ = p_rigidBody.m_torque.z;
 }
 
 void PhysicsManager::collisionChecker(Meshes::Object& p_object,

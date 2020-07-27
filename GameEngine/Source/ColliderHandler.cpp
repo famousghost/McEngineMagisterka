@@ -145,9 +145,10 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                 {
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
 
-                    if (p_object.m_gravityForce and p_object.m_velocity.y < 9.0f)
+                    if (p_object.m_gravityForce)
                     {
                         p_object.m_rigidBody.m_velocity.y = 0.0f;
+                        p_object.m_rigidBody.m_force.y = 0.0f;
                     }
 
                     auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());

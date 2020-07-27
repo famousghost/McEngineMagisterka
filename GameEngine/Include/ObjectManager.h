@@ -59,13 +59,14 @@ private:
 
     void gravity(Object & p_object);
 
-    void dbgVector(const glm::vec3 & p_vec);
+    void dbgVector(const glm::vec3 & p_vec, const std::string & p_msg);
 
     std::vector<std::pair<Object, std::string>> m_objects;
     Object m_skyBox;
 
     void setMaterialForObjectObject(Object & p_object);
     void setModelMatrixForObject(Object & p_object);
+    void initState(Object & p_object);
     glm::vec3 getEulerAngelsFromTransform(const glm::vec3 & p_rotatione);
     glm::mat4 getRotationeMatrixFromEulerAngels(const glm::vec3 & p_eulerAngels);
     void scaleObjectSize(Object & p_object);

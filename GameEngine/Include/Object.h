@@ -15,6 +15,7 @@ struct Object
     std::list<IColiderObserver*> m_collsionObservers;
     std::vector<Collider> m_colider;
     Rigidbody m_rigidBody;
+    glm::mat4 m_modelMatrix;
     int m_colliderNumber;
     std::string m_currentAvaiableTexture;
     Material m_material;

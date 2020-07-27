@@ -58,7 +58,8 @@ float SphereVOBBCollisionHandler::calculateDistanceBetweenClosestPointAndSphereC
             std::max(l_localYSectionMin.y, std::min(l_localSphereCenter.y, l_localYSectionMax.y)),
             std::min(l_localZSectionMin.z, std::max(l_localSphereCenter.z, l_localZSectionMax.z)));
     l_distance = glm::distance(l_closestPointOnOBBCube, glm::vec3(l_localSphereCenter));
-    m_collsionDirection = glm::normalize(l_closestPointOnOBBCube - p_sphereCoolider.m_transform.m_position);
+    l_closestPointOnOBBCube = glm::vec3(p_sphereCoolider.m_modelMatrix * glm::vec4(l_closestPointOnOBBCube, 1.0f));
+    m_collsionDirection = glm::normalize(p_sphereCenter - l_closestPointOnOBBCube);
 
     return l_distance;
 }
