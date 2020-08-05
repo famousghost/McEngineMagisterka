@@ -38,6 +38,8 @@ public:
 
     void deleteObject(std::string p_objName);
 
+    std::string cloneObject(std::string p_objName);
+
     Object & getSkybox();
 
     void update(Object & object);

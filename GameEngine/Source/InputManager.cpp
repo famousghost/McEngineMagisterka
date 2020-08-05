@@ -25,7 +25,6 @@ int InputManager::s_cameraBackKey = 0;
 int InputManager::s_cameraLeftKey = 0;
 int InputManager::s_cameraRightKey = 0;
 
-bool InputManager::s_keyClicked = false;
 std::map<int, bool> InputManager::s_keyValues = std::map<int, bool>();
 
 bool InputManager::s_canMoveCamera = false;
@@ -50,9 +49,13 @@ bool InputManager::getKeyDown(int p_keyValue)
     return s_keyValues[p_keyValue];
 }
 
+void InputManager::setKeyUp(int p_keyValue)
+{
+    s_keyValues[p_keyValue] = false;
+}
+
 void InputManager::keyCallBack(GLFWwindow * p_window, int p_key, int p_scancode, int p_state, int p_mods)
 {
-    std::cout << s_keyValues.size() << std::endl;
     if (p_state == GLFW_PRESS)
     {
         if (p_key == GLFW_KEY_ESCAPE)

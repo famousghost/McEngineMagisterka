@@ -109,13 +109,11 @@ void PhysicsManager::arrayToState(Meshes::Rigidbody& p_rigidBody, std::vector<do
     p_rigidBody.m_L.y = *l_it++;
     p_rigidBody.m_L.z = *l_it++;
 
-    dbgVector(p_rigidBody.m_x, "x(t) = ");
-
     p_rigidBody.m_velocity = glm::vec3(p_rigidBody.m_P) * p_rigidBody.m_massProperties.m_inverseMass * l_deltaTime;
 
     p_rigidBody.m_iInv = p_rigidBody.m_R * p_rigidBody.m_inverseIbody * glm::transpose(p_rigidBody.m_R);
 
-    p_rigidBody.m_angularVelocity = p_rigidBody.m_iInv * p_rigidBody.m_L;
+    p_rigidBody.m_angularVelocity = p_rigidBody.m_iInv * p_rigidBody.m_L * static_cast<double>(l_deltaTime);
 }
 
 void PhysicsManager::dbgVector(const glm::vec3& p_vec, const std::string& p_msg)
@@ -138,7 +136,7 @@ void PhysicsManager::dydt(Meshes::Object& p_rigidBody, double p_t)
     auto& l_rigidBody = p_rigidBody.m_rigidBody;
     arrayToBody(l_rigidBody, l_rigidBody.m_y);
     computeForceAndTorque(p_t, p_rigidBody);
-    ddtStateToArray(l_rigidBody, l_rigidBody.m_yFinal);
+    calculateDerivates(l_rigidBody, l_rigidBody.m_yFinal);
 }
 
 void PhysicsManager::ode(Meshes::Object& p_object)
@@ -154,14 +152,9 @@ void PhysicsManager::computeForceAndTorque(double p_t, Meshes::Object& p_object)
         auto& l_rigidBody = p_object.m_rigidBody;
         l_rigidBody.m_force.y += l_rigidBody.m_gravity * l_rigidBody.m_massProperties.m_mass;
         auto& l_collider = p_object.m_colider.at(0);
-        auto& l_colliderVerticies = p_object.m_colider.at(0).m_meshes.at(0)->m_verticies;
-        l_rigidBody.m_torque = glm::dvec3();
-        for (auto i = 0; i < l_colliderVerticies.size(); ++i)
-        {
-            glm::vec3 l_centerOfMass = p_object.m_transform.m_position + l_collider.m_transform.m_position;
-            glm::vec3 l_vertexPos = glm::vec3(l_collider.m_modelMatrix * glm::vec4(l_colliderVerticies[i].m_position, 1.0f));
-            l_rigidBody.m_torque += glm::cross(l_vertexPos - l_centerOfMass, glm::vec3(l_rigidBody.m_force));
-        }
+        glm::vec3 l_centerOfMass = p_object.m_transform.m_position + l_collider.m_transform.m_position;
+        auto r = l_rigidBody.m_x + (l_rigidBody.m_R * l_centerOfMass);
+        l_rigidBody.m_torque = glm::cross(r - l_rigidBody.m_x, l_rigidBody.m_force);
     }
 }
 
@@ -191,21 +184,21 @@ void PhysicsManager::debugMatrix(const glm::dmat3& p_mat)
     }
 }
 
-void PhysicsManager::ddtStateToArray(Meshes::Rigidbody& p_rigidBody, std::vector<double>& p_y)
+void PhysicsManager::calculateDerivates(Meshes::Rigidbody& p_rigidBody, std::vector<double>& p_y)
 {
     auto l_it = p_y.begin();
     *l_it++ = p_rigidBody.m_velocity.x;
     *l_it++ = p_rigidBody.m_velocity.y;
     *l_it++ = p_rigidBody.m_velocity.z;
 
-    if(p_rigidBody.m_R * glm::transpose(p_rigidBody.m_R) != glm::dmat3())
-    {
-        glm::mat3 l_rDot = starOperatorMatrix(p_rigidBody.m_angularVelocity) * p_rigidBody.m_R;
+    glm::mat3 l_rDot = starOperatorMatrix(p_rigidBody.m_angularVelocity) * p_rigidBody.m_R;
 
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 3; j++)
-                *l_it++ = l_rDot[i][j];
-    }
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            *l_it++ = l_rDot[i][j];
+
+    debugMatrix(l_rDot);
+
 
     *l_it++ = p_rigidBody.m_force.x;
     *l_it++ = p_rigidBody.m_force.y;

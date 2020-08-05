@@ -42,6 +42,8 @@ void ObjectManager::addObject(const Object& p_object, std::string p_objName)
     Physics::PhysicsManager::getInstance().calculateObjectMass(m_objects.back().first);
     m_objects.back().first.m_rigidBody.m_y = std::vector<double>(l_physicsManager.getStateSize());
     m_objects.back().first.m_rigidBody.m_yFinal = std::vector<double>(l_physicsManager.getStateSize());
+
+    initState(m_objects.back().first);
 }
 
 void ObjectManager::addCustomObject(std::string p_objectLabel,
@@ -56,8 +58,8 @@ void ObjectManager::addCustomObject(std::string p_objectLabel,
 }
 
 void ObjectManager::addCustomObject(std::string p_objectLabel,
-    std::string p_objectName,
-    std::string p_shaderLabel)
+                                    std::string p_objectName,
+                                    std::string p_shaderLabel)
 {
     LoadedObjectBuilder l_loadedObjectBuilder(p_objectName, p_objectLabel);
     l_loadedObjectBuilder.addShaderProgram(p_shaderLabel).addMesh();
@@ -143,15 +145,6 @@ void ObjectManager::moveObject(Object& p_object)
         }
     }
 
-    /*p_object.m_rigidBody.m_velocity += (glm::vec3(p_object.m_rigidBody.m_force) * p_object.m_rigidBody.m_massProperties.m_inverseMass) * static_cast<float>(l_timeManager.getDeltaTime());
-
-    if (p_object.m_isRigidBody and p_object.m_gravityForce)
-    {
-        gravity(p_object);
-    }*/
-
-    initState(p_object);
-
     p_object.m_velocity = p_object.m_movementDirection * static_cast<float>(l_timeManager.getDeltaTime());
 
     auto& l_rigidBody = p_object.m_rigidBody;
@@ -166,7 +159,6 @@ void ObjectManager::moveObject(Object& p_object)
     if(not p_object.m_isColliding)
     {
         p_object.m_transform.m_position += (p_object.m_rigidBody.m_velocity + p_object.m_velocity)  * static_cast<float>(l_timeManager.getDeltaTime());
-        p_object.m_transform.m_rotatione += p_object.m_rigidBody.m_angularVelocity * l_timeManager.getDeltaTime();
     }
 }
 
@@ -323,6 +315,32 @@ void ObjectManager::deleteObject(std::string p_objName)
         return;
     }
     m_objects.erase(objectToDeleteIt);
+}
+
+std::string ObjectManager::cloneObject(std::string p_objName)
+{
+    std::string l_newName = p_objName;
+    auto& l_inputManager = Inputs::InputManager::getInstance();
+    auto l_keys = l_inputManager.getKeyDown(GLFW_KEY_LEFT_SHIFT) * l_inputManager.getKeyDown(GLFW_KEY_C);
+    if(l_keys)
+    {
+        auto objectToClone = std::find_if(m_objects.begin(), m_objects.end(),
+            [&](auto& object)
+        {
+            return object.second == p_objName;
+        });
+
+        if (objectToClone == m_objects.end())
+        {
+            LOG("Object with this name does not exist", LogType::WARN);
+            return "";
+        }
+
+        l_newName = p_objName + "(clone" + std::to_string(objectToClone->first.m_cloneNum++) + ")";
+        addObject(objectToClone->first, l_newName);
+        l_inputManager.setKeyUp(GLFW_KEY_LEFT_SHIFT);
+    }
+    return l_newName;
 }
 
 Object& ObjectManager::getSkybox()

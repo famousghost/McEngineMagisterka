@@ -21,8 +21,6 @@ public:
     static bool s_canRotateCamera;
     static bool s_onClickMouse;
 
-    static bool s_keyClicked;
-
     static int s_cameraFrontKey;
     static int s_cameraBackKey;
     static int s_cameraLeftKey;
@@ -44,6 +42,8 @@ public:
     static InputManager& getInstance();
 
     static bool getKeyDown(int p_keyValue);
+
+    void setKeyUp(int p_keyValue);
 
     void start();
 

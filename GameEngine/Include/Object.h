@@ -29,6 +29,7 @@ struct Object
     glm::vec3 m_acceleration;
     bool m_isColliding;
     float m_gravity;
+    int m_cloneNum;
 
     void attach(IColiderObserver* p_coliderObserver)
     {
@@ -57,6 +58,7 @@ struct Object
         m_gravity = -9.87f;
         m_currentAvaiableTexture = "texture";
         m_movementDirection = glm::vec3();
+        m_cloneNum = 0;
     }
 };
 

@@ -28,7 +28,7 @@ public:
     void computeForceAndTorque(double p_t, Meshes::Object & p_object);
     glm::dmat3 starOperatorMatrix(const glm::vec3 & p_vec);
     void debugMatrix(const glm::dmat3& p_mat);
-    void ddtStateToArray(Meshes::Rigidbody & p_rigidBody, std::vector<double>& p_y);
+    void calculateDerivates(Meshes::Rigidbody & p_rigidBody, std::vector<double>& p_y);
     bool getShouldCheckCollsion() const;
     void updatePhysics(Meshes::Object & p_object, std::vector<std::pair<Meshes::Object, std::string>>& p_objects);
 

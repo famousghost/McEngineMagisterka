@@ -7,6 +7,7 @@
 #include "RenderManager.h"
 #include "FilePathParser.h"
 #include "PhysicsManager.h"
+#include "InputManager.h"
 #include <algorithm>
 #include "Logger.h"
 
@@ -114,6 +115,7 @@ void GuiManager::meshGui()
     updateListOfObjects(objectsToAdd);
     updateListOfShaders(shadersItems);
     updateObjectMassProperties();
+    m_currentObject = l_objectManager.cloneObject(m_currentObject);
 
     static std::string buttonName = "show collider";
     if (ImGui::Button(buttonName.c_str()))
@@ -430,7 +432,7 @@ void GuiManager::deleteObject(std::vector<std::string>& p_items,
             m_objectElementSize = l_objects.size();
         }
     }
-    if (ImGui::Button("Delete Object"))
+    if (ImGui::Button("Delete Object") or Inputs::InputManager::getInstance().getKeyDown(GLFW_KEY_DELETE))
     {
         auto objIt = std::find_if(l_objects.begin(), l_objects.end(),
             [&](auto& label)
