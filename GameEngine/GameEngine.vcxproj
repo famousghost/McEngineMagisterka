@@ -179,6 +179,7 @@
     <ClCompile Include="Source\ObjectManager.cpp" />
     <ClCompile Include="Source\PhysicsManager.cpp" />
     <ClCompile Include="Source\RenderManager.cpp" />
+    <ClCompile Include="Source\RigidBodyDynamics.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\ScenesManager.cpp" />
     <ClCompile Include="Source\ScreenQuadBuilder.cpp" />
@@ -243,6 +244,7 @@
     <ClInclude Include="Include\PhysicsManager.h" />
     <ClInclude Include="Include\RenderManager.h" />
     <ClInclude Include="Include\Rigidbody.h" />
+    <ClInclude Include="Include\RigidBodyDynamics.h" />
     <ClInclude Include="Include\Scene.h" />
     <ClInclude Include="Include\ScenesManager.h" />
     <ClInclude Include="Include\ScreenQuadBuilder.h" />

@@ -40,8 +40,6 @@ void ObjectManager::addObject(const Object& p_object, std::string p_objName)
     auto l_materialType = Gui::GuiManager::getInstance().getMaterialType();
     m_objects.back().first.m_rigidBody.m_materialProperties.setMaterialType(l_materialType);
     Physics::PhysicsManager::getInstance().calculateObjectMass(m_objects.back().first);
-    m_objects.back().first.m_rigidBody.m_y = std::vector<double>(l_physicsManager.getStateSize());
-    m_objects.back().first.m_rigidBody.m_yFinal = std::vector<double>(l_physicsManager.getStateSize());
 
     initState(m_objects.back().first);
 }
@@ -147,15 +145,8 @@ void ObjectManager::moveObject(Object& p_object)
 
     p_object.m_velocity = p_object.m_movementDirection * static_cast<float>(l_timeManager.getDeltaTime());
 
-    auto& l_rigidBody = p_object.m_rigidBody;
-    l_physicsManager.bodyToArray(l_rigidBody, l_rigidBody.m_yFinal);
-
-    for (int i = 0; i < l_physicsManager.getStateSize(); i++)
-        l_rigidBody.m_y[i] = l_rigidBody.m_yFinal[i];
-
     l_physicsManager.ode(p_object);
 
-    l_physicsManager.arrayToBody(l_rigidBody, l_rigidBody.m_yFinal);
     if(not p_object.m_isColliding)
     {
         p_object.m_transform.m_position += (p_object.m_rigidBody.m_velocity + p_object.m_velocity)  * static_cast<float>(l_timeManager.getDeltaTime());

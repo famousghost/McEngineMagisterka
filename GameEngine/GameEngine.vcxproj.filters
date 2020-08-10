@@ -261,6 +261,9 @@
     <ClCompile Include="Source\SphereVOBBCollisionHandler.cpp">
       <Filter>Pliki źródłowe\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\RigidBodyDynamics.cpp">
+      <Filter>Pliki źródłowe\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Defines.h">
@@ -460,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="Include\MaterialProperties.h">
       <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\RigidBodyDynamics.h">
+      <Filter>Pliki nagłówkowe\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
