@@ -3,6 +3,8 @@
 #include "MaterialProperties.h"
 #include <matrix_transform.hpp>
 #include <type_ptr.hpp>
+#include "../glm-0.9.6.3/glm/glm/gtx/quaternion.hpp"
+#include "../glm-0.9.6.3/glm/glm/common.hpp"
 
 namespace McEngine
 {
@@ -16,14 +18,14 @@ struct Rigidbody
     glm::mat3 m_inverseIbody;
 
     glm::vec3 m_x; /*x(t)*/
-    glm::mat3 m_R; /*R(t)*/
     glm::vec3 m_P; /*P(t)*/
     glm::vec3 m_L; /*L(t)*/
+    glm::quat m_quat; /*quaternion rotatione*/
 
     glm::vec3 m_dx;
-    glm::mat3 m_dR;
     glm::vec3 m_dP;
     glm::vec3 m_dL;
+    glm::quat m_quatDt; /*derived from quaternion rotatione*/
 
     glm::mat3 m_iInv;
     glm::vec3 m_velocity;
@@ -45,6 +47,7 @@ struct Rigidbody
         m_height = 1.0f;
         m_length = 1.0f;
         m_gravity = -9.87;
+        m_velocity = glm::vec3();
     }
 };
 

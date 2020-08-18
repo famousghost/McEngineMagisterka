@@ -94,17 +94,6 @@ void ObjectManager::update(Object& p_object)
     activeTextures(p_object);
 }
 
-void ObjectManager::gravity(Object& p_object)
-{
-    auto& l_timeManager = Time::TimeManager::getInstance();
-
-    if(not p_object.m_isColliding)
-    {
-        p_object.m_rigidBody.m_force.y = p_object.m_gravity * p_object.m_rigidBody.m_massProperties.m_mass;
-        p_object.m_rigidBody.m_velocity.y += p_object.m_rigidBody.m_force.y * l_timeManager.getDeltaTime();
-    }
-}
-
 void ObjectManager::dbgVector(const glm::vec3& p_vec, const std::string& p_msg)
 {
     std::cout << p_msg << "(" << p_vec.x << ", " << p_vec.y << ", " << p_vec.z << ")" << std::endl;
@@ -145,7 +134,10 @@ void ObjectManager::moveObject(Object& p_object)
 
     p_object.m_velocity = p_object.m_movementDirection * static_cast<float>(l_timeManager.getDeltaTime());
 
-    l_physicsManager.ode(p_object);
+    if(p_object.m_isRigidBody)
+    {
+        l_physicsManager.ode(p_object);
+    }
 
     if(not p_object.m_isColliding)
     {
@@ -164,6 +156,7 @@ void ObjectManager::resetValues(Object& p_object)
 void ObjectManager::updateCollider(Object& p_object,
     Cameras::Camera& p_camera)
 {
+    auto& l_rigidbody = p_object.m_rigidBody;
     for (auto& l_collider : p_object.m_colider)
     {
         l_collider.m_shaderProgram->uniformVec3(l_collider.m_coliderColor, "coliderColor");
@@ -175,6 +168,7 @@ void ObjectManager::updateCollider(Object& p_object,
         auto l_colliderRotationeZ = p_object.m_transform.m_rotatione.z + l_collider.m_transform.m_rotatione.z;
         auto l_colliderSacale = p_object.m_transform.m_scale + l_collider.m_transform.m_scale;
         l_collider.m_radius = l_colliderSacale.x;
+        l_colliderModel *= glm::toMat4(glm::normalize(l_rigidbody.m_quat));
         l_colliderModel = glm::translate(l_colliderModel, l_colliderTranslate);
         l_colliderModel = glm::rotate(l_colliderModel,
             glm::radians(l_colliderRotationeX),
@@ -227,6 +221,9 @@ void ObjectManager::setModelMatrixForObject(Object& p_object)
     auto& l_transform = p_object.m_transform;
     l_physcis.updatePhysics(p_object, m_objects);
 
+    auto& l_rigidBody = p_object.m_rigidBody;
+
+    l_model *= glm::toMat4(glm::normalize(l_rigidBody.m_quat));
     l_model = glm::translate(l_model, l_transform.m_position);
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.y), glm::vec3(0.0f, 1.0f, 0.0f));

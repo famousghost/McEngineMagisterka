@@ -22,8 +22,10 @@ public:
     void dbgVector(const glm::vec3 & p_vec, const std::string & p_msg);
     void ode(Meshes::Object & p_object);
     void computeForceAndTorque(Meshes::Object & p_object);
-    glm::mat3 starOperatorMatrix(const glm::vec3 & p_vec);
-    void debugMatrix(const glm::dmat3& p_mat);
+    void computeGravityForceWithTorque(Meshes::Object & p_object);
+    glm::mat4 starOperatorMatrix(const glm::vec3 & p_vec);
+    void debugMatrix(const glm::mat4& p_mat);
+    void debugQuat(const glm::quat & p_quat);
     void calculateDerivates(Meshes::Rigidbody & p_rigidBody);
     bool getShouldCheckCollsion() const;
     void updatePhysics(Meshes::Object & p_object, std::vector<std::pair<Meshes::Object, std::string>>& p_objects);

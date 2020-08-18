@@ -59,8 +59,6 @@ public:
 private:
     void resetValues(Object & p_object);
 
-    void gravity(Object & p_object);
-
     void dbgVector(const glm::vec3 & p_vec, const std::string & p_msg);
 
     std::vector<std::pair<Object, std::string>> m_objects;
