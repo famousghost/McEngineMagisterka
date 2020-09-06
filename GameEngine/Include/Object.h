@@ -25,7 +25,6 @@ struct Object
     glm::vec3 m_collsionDirection;
     glm::vec3 m_velocity;
     bool m_isRigidBody;
-    bool m_gravityForce;
     glm::vec3 m_acceleration;
     bool m_isColliding;
     float m_gravity;
@@ -52,7 +51,6 @@ struct Object
     Object()
     {
         m_isRigidBody = false;
-        m_gravityForce = false;
         m_isColliding = false;
         m_colliderNumber = 1;
         m_gravity = -9.87f;

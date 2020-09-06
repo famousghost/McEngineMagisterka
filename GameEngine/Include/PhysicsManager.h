@@ -22,7 +22,7 @@ public:
     void dbgVector(const glm::vec3 & p_vec, const std::string & p_msg);
     void ode(Meshes::Object & p_object);
     void computeForceAndTorque(Meshes::Object & p_object);
-    void computeGravityForceWithTorque(Meshes::Object & p_object);
+    void computeTorque(Meshes::Object & p_object);
     glm::mat4 starOperatorMatrix(const glm::vec3 & p_vec);
     void debugMatrix(const glm::mat4& p_mat);
     void debugQuat(const glm::quat & p_quat);

@@ -141,7 +141,8 @@ void ObjectManager::moveObject(Object& p_object)
 
     if(not p_object.m_isColliding)
     {
-        p_object.m_transform.m_position += (p_object.m_rigidBody.m_velocity + p_object.m_velocity)  * static_cast<float>(l_timeManager.getDeltaTime());
+        p_object.m_rigidBody.m_rigidbodyPosition += p_object.m_velocity  * static_cast<float>(l_timeManager.getDeltaTime());
+        p_object.m_transform.m_position = p_object.m_rigidBody.m_rigidbodyPosition;
     }
 }
 

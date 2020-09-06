@@ -1,5 +1,6 @@
 #include "PhysicsManager.h"
 #include "TimeManager.h"
+#include "RigidbodyHandlerOBB.h"
 #include <algorithm>
 #include <math.h>
 
@@ -59,16 +60,18 @@ void PhysicsManager::setShouldCheckCollision(bool p_shouldCheckCollision)
 void PhysicsManager::updateBodyState(Meshes::Rigidbody& p_rigidBody)
 {
     auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
-    p_rigidBody.m_x += p_rigidBody.m_dx * l_deltaTime;
+    p_rigidBody.m_oldPosition = p_rigidBody.m_rigidbodyPosition;
+    p_rigidBody.m_rigidbodyPosition += p_rigidBody.m_dx * l_deltaTime;
     p_rigidBody.m_P += p_rigidBody.m_dP * l_deltaTime;
     p_rigidBody.m_L += p_rigidBody.m_dL * l_deltaTime;
     p_rigidBody.m_quat += glm::normalize(p_rigidBody.m_quatDt) * l_deltaTime;
 
+    p_rigidBody.m_oldVelocity = p_rigidBody.m_velocity;
     p_rigidBody.m_velocity = glm::vec3(p_rigidBody.m_P) * p_rigidBody.m_massProperties.m_inverseMass;
 
-    p_rigidBody.m_iInv = glm::toMat3(p_rigidBody.m_quat) * p_rigidBody.m_inverseIbody * glm::transpose(glm::toMat3(p_rigidBody.m_quat));
+    p_rigidBody.m_iWordlInv = glm::toMat3(p_rigidBody.m_quat) * p_rigidBody.m_inverseIbody * glm::transpose(glm::toMat3(p_rigidBody.m_quat));
 
-    p_rigidBody.m_angularVelocity = p_rigidBody.m_iInv * p_rigidBody.m_L;
+    p_rigidBody.m_angularVelocity = p_rigidBody.m_iWordlInv * p_rigidBody.m_L;
 }
 
 void PhysicsManager::dbgVector(const glm::vec3& p_vec, const std::string& p_msg)
@@ -86,21 +89,29 @@ void PhysicsManager::ode(Meshes::Object& p_object)
 
 void PhysicsManager::computeForceAndTorque(Meshes::Object& p_object)
 {
-    if(p_object.m_gravityForce)
+    std::shared_ptr<IRigidbodyHandler> m_rigidbodyHandler;
+
+    if (p_object.m_colider.at(0).m_colliderType == Meshes::ColliderType::CUBE_OBB)
     {
-        computeGravityForceWithTorque(p_object);
+        m_rigidbodyHandler = std::make_shared<RigidbodyHandlerOBB>(&p_object.m_rigidBody);
     }
+    else if (p_object.m_colider.at(0).m_colliderType == Meshes::ColliderType::SPHERE)
+    {
+        m_rigidbodyHandler = std::make_shared<RigidbodyHandlerOBB>(&p_object.m_rigidBody);
+    }
+    
+    //m_rigidbodyHandler->update();
+    computeTorque(p_object);
 }
 
-void PhysicsManager::computeGravityForceWithTorque(Meshes::Object& p_object)
+void PhysicsManager::computeTorque(Meshes::Object& p_object)
 {
     auto l_deltaTime = Time::TimeManager::getInstance().getDeltaTime();
     auto& l_rigidBody = p_object.m_rigidBody;
-    l_rigidBody.m_force.y = l_rigidBody.m_gravity * l_rigidBody.m_massProperties.m_mass;
-    auto& l_collider = p_object.m_colider.at(0);
-    glm::vec3 l_centerOfMass = p_object.m_transform.m_position + l_collider.m_transform.m_position;
-    auto r = l_rigidBody.m_x + (glm::toMat3(l_rigidBody.m_quat) * l_centerOfMass);
-    l_rigidBody.m_torque = glm::cross(r - l_rigidBody.m_x, l_rigidBody.m_force);
+    glm::vec3 l_centerOfMass = glm::vec3(0.0f, 0.5f*l_rigidBody.m_height, 0.0f);
+    auto r = l_rigidBody.m_rigidbodyPosition + (glm::toMat3(l_rigidBody.m_quat) * l_centerOfMass);
+    l_rigidBody.m_torque = glm::cross(r - l_rigidBody.m_rigidbodyPosition, l_rigidBody.m_force);
+    l_rigidBody.m_torque = glm::vec3();
 }
 
 glm::mat4 PhysicsManager::starOperatorMatrix(const glm::vec3& p_vec)
@@ -141,7 +152,7 @@ void PhysicsManager::debugQuat(const glm::quat& p_quat)
 
 void PhysicsManager::calculateDerivates(Meshes::Rigidbody& p_rigidBody)
 {
-    p_rigidBody.m_dx = p_rigidBody.m_velocity;
+    p_rigidBody.m_dx = (p_rigidBody.m_velocity + p_rigidBody.m_oldVelocity) * 0.5f;
     p_rigidBody.m_dP = p_rigidBody.m_force;
     p_rigidBody.m_dL = p_rigidBody.m_torque;
     p_rigidBody.m_quatDt = 0.5f * (glm::quat(p_rigidBody.m_angularVelocity) * p_rigidBody.m_quat);

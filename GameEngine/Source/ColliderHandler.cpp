@@ -6,6 +6,7 @@
 #include "SphereVOBBCollisionHandler.h"
 #include <algorithm>
 #include "TimeManager.h"
+#include "Geometry3dUtils.h"
 #include <math.h>
 
 namespace McEngine
@@ -157,7 +158,7 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                         p_objects[i].first.m_transform.m_position -= (l_collisionDirectionLength != 0.0f ? l_collisionDirectionLength : 1.0f) * m_collsionDirection * l_deltaTime;
                     }
 
-                    if (p_object.m_gravityForce)
+                    if (p_object.m_rigidBody.m_gravityForce)
                     {
                         p_object.m_rigidBody.m_velocity.y = 0.0f;
                         p_object.m_rigidBody.m_dP = glm::vec3();
@@ -175,6 +176,7 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
             collider.m_coliderColor = glm::vec3(0.0f, 1.0f, 0.0f);
         }
     }
+
 }
 
 }//Physics

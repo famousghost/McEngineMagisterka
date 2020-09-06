@@ -166,6 +166,7 @@
     <ClCompile Include="Source\CubeAABBCollisionHandler.cpp" />
     <ClCompile Include="Source\CubeOBBCollsionHandler.cpp" />
     <ClCompile Include="Source\FilePathParser.cpp" />
+    <ClCompile Include="Source\Geometry3dUtils.cpp" />
     <ClCompile Include="Source\LightBuilder.cpp" />
     <ClCompile Include="Source\LoadedObjectBuilder.cpp" />
     <ClCompile Include="Source\MouseRay.cpp" />
@@ -178,8 +179,9 @@
     <ClCompile Include="Source\Logger.cpp" />
     <ClCompile Include="Source\ObjectManager.cpp" />
     <ClCompile Include="Source\PhysicsManager.cpp" />
+    <ClCompile Include="Source\Ray.cpp" />
     <ClCompile Include="Source\RenderManager.cpp" />
-    <ClCompile Include="Source\RigidBodyDynamics.cpp" />
+    <ClCompile Include="Source\RigidbodyHandlerOBB.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\ScenesManager.cpp" />
     <ClCompile Include="Source\ScreenQuadBuilder.cpp" />
@@ -218,6 +220,7 @@
     <ClInclude Include="Include\CollisionHandler.h" />
     <ClInclude Include="Include\CubeAABBCollisionHandler.h" />
     <ClInclude Include="Include\CubeOBBCollsionHandler.h" />
+    <ClInclude Include="Include\Geometry3dUtils.h" />
     <ClInclude Include="Include\IColiderObserver.h" />
     <ClInclude Include="Include\CubeColiderBuilder.h" />
     <ClInclude Include="Include\FilePathParser.h" />
@@ -242,9 +245,11 @@
     <ClInclude Include="Include\ObjectBuilder.h" />
     <ClInclude Include="Include\ObjectManager.h" />
     <ClInclude Include="Include\PhysicsManager.h" />
+    <ClInclude Include="Include\Ray.h" />
     <ClInclude Include="Include\RenderManager.h" />
     <ClInclude Include="Include\Rigidbody.h" />
-    <ClInclude Include="Include\RigidBodyDynamics.h" />
+    <ClInclude Include="Include\IRigidbodyHandler.h" />
+    <ClInclude Include="Include\RigidbodyHandlerOBB.h" />
     <ClInclude Include="Include\Scene.h" />
     <ClInclude Include="Include\ScenesManager.h" />
     <ClInclude Include="Include\ScreenQuadBuilder.h" />

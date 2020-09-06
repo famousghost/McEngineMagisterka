@@ -17,19 +17,21 @@ struct Rigidbody
     glm::mat3 m_ibody;
     glm::mat3 m_inverseIbody;
 
-    glm::vec3 m_x; /*x(t)*/
+    glm::vec3 m_rigidbodyPosition; /*x(t)*/
+    glm::vec3 m_oldPosition; /*prev x(t)*/
     glm::vec3 m_P; /*P(t)*/
     glm::vec3 m_L; /*L(t)*/
     glm::quat m_quat; /*quaternion rotatione*/
 
-    glm::vec3 m_dx;
-    glm::vec3 m_dP;
-    glm::vec3 m_dL;
+    glm::vec3 m_dx /*dx/dt -> changing position in time (velocity)*/;
+    glm::vec3 m_dP /*dP/dt -> changnig forces in time*/;
+    glm::vec3 m_dL /*dL/dt -> torque*/;
     glm::quat m_quatDt; /*derived from quaternion rotatione*/
 
-    glm::mat3 m_iInv;
+    glm::mat3 m_iWordlInv;
     glm::vec3 m_velocity;
     glm::vec3 m_angularVelocity;
+    glm::vec3 m_oldVelocity;
 
     glm::vec3 m_force;
     glm::vec3 m_torque;
@@ -40,6 +42,8 @@ struct Rigidbody
     float m_height;
     float m_length;
 
+    bool m_gravityForce;
+
 
     Rigidbody()
     {
@@ -48,6 +52,7 @@ struct Rigidbody
         m_length = 1.0f;
         m_gravity = -9.87;
         m_velocity = glm::vec3();
+        m_gravityForce = false;
     }
 };
 

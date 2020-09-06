@@ -115,6 +115,12 @@
     <Filter Include="Pliki źródłowe\ExternalClasses">
       <UniqueIdentifier>{47de9397-4a9a-4ae4-a15e-5c1fba714937}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pliki nagłówkowe\MESHES\Utils">
+      <UniqueIdentifier>{3b82daac-d3a3-4277-bc05-d4d901806cfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\MESHES\Utils">
+      <UniqueIdentifier>{9b8a6c37-ae54-4b14-a5c2-5beff96327b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\glad.c">
@@ -198,9 +204,6 @@
     <ClCompile Include="Source\ShaderLoader.cpp">
       <Filter>Pliki źródłowe\Loaders</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MouseRay.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="Source\WindowManager.cpp">
       <Filter>Pliki źródłowe\Managers</Filter>
     </ClCompile>
@@ -261,8 +264,17 @@
     <ClCompile Include="Source\SphereVOBBCollisionHandler.cpp">
       <Filter>Pliki źródłowe\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\RigidBodyDynamics.cpp">
+    <ClCompile Include="Source\MouseRay.cpp">
       <Filter>Pliki źródłowe\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RigidbodyHandlerOBB.cpp">
+      <Filter>Pliki źródłowe\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Ray.cpp">
+      <Filter>Pliki źródłowe\MESHES</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Geometry3dUtils.cpp">
+      <Filter>Pliki źródłowe\MESHES\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -365,9 +377,6 @@
     <ClInclude Include="Include\TextureLoader.h">
       <Filter>Pliki nagłówkowe\Loaders</Filter>
     </ClInclude>
-    <ClInclude Include="Include\MouseRay.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="Include\WindowManager.h">
       <Filter>Pliki nagłówkowe\Managers</Filter>
     </ClInclude>
@@ -464,8 +473,20 @@
     <ClInclude Include="Include\MaterialProperties.h">
       <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
     </ClInclude>
-    <ClInclude Include="Include\RigidBodyDynamics.h">
+    <ClInclude Include="Include\IRigidbodyHandler.h">
       <Filter>Pliki nagłówkowe\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MouseRay.h">
+      <Filter>Pliki nagłówkowe\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\RigidbodyHandlerOBB.h">
+      <Filter>Pliki nagłówkowe\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Ray.h">
+      <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Geometry3dUtils.h">
+      <Filter>Pliki nagłówkowe\MESHES\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
