@@ -181,11 +181,27 @@ void ObjectManager::updateCollider(Object& p_object,
             glm::radians(l_colliderRotationeZ),
             glm::vec3(0.0f, 0.0f, 1.0f));
 
+        p_object.m_transform.m_orientation = glm::mat3(l_colliderModel);
+
         l_colliderModel = glm::scale(l_colliderModel, l_colliderSacale);
         l_collider.m_shaderProgram->uniformMatrix4(l_colliderModel, "model");
         transformCollider(l_collider, l_colliderModel);
         p_camera.updateShaderProgram(*l_collider.m_shaderProgram, "cameraPos", "view", "projection");
     }
+}
+
+void ObjectManager::debugMatrix(const glm::mat4& p_mat)
+{
+    std::cout << "-----------------------------------" << std::endl;
+    for (auto i = 0; i < 3; ++i)
+    {
+        for (auto j = 0; j < 3; ++j)
+        {
+            std::cout << "R[" << i << "]" << "[" << j << "] = " << p_mat[i][j];
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "-----------------------------------" << std::endl;
 }
 
 void ObjectManager::transformCollider(Collider& p_collider, const glm::mat4& p_colliderModel)

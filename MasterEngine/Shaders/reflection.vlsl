@@ -31,7 +31,7 @@ void main()
 	vec3 unitNormal = normalize(normalCoords);
 
 	
-	vec3 viewVector = normalize(worldPosition.xyz - cameraPos);
+	vec3 viewVector = normalize(wPos - cameraPos);
 	reflectedVector = reflect(viewVector, unitNormal);
-	refractedVector = refract(viewVector, unitNormal,1.0f);
+	refractedVector = refract(viewVector, unitNormal, 1.0f);
 }

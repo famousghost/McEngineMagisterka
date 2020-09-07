@@ -200,23 +200,16 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
 
         if (Inputs::InputManager::getInstance().s_onClickMouse)
         {
-            if (l_object.m_colider.size())
-            {
-                for(auto& l_collider : l_object.m_colider)
-                {
-                    Inputs::MouseRay l_mouseRay;
+            Inputs::MouseRay l_mouseRay;
 
-                    if (l_mouseRay.checkIntersectionWithCube(glm::vec3(l_collider.m_minVertex),
-                                                             glm::vec3(l_collider.m_maxVertex)))
-                    {
-                        Gui::GuiManager::getInstance().chooseObjectViaMouse(l_object.m_objectName);
-                        l_object.m_material.m_highlightColor = glm::vec3(0.0f, 1.0f, 0.0f);
-                    }
-                    else
-                    {
-                        l_object.m_material.m_highlightColor = l_object.m_material.m_objectColor;
-                    }
-                }
+            if (l_mouseRay.checkIntersectionWithCube(l_object))
+            {
+                Gui::GuiManager::getInstance().chooseObjectViaMouse(l_object.m_objectName);
+                l_object.m_material.m_highlightColor = glm::vec3(0.0f, 1.0f, 0.0f);
+            }
+            else
+            {
+                l_object.m_material.m_highlightColor = l_object.m_material.m_objectColor;
             }
         }
     }
@@ -236,7 +229,7 @@ void RenderManager::drawMeshes(Meshes::Object& p_object)
     }
 }
 
-RenderManager & RenderManager::getInstance()
+RenderManager& RenderManager::getInstance()
 {
     static RenderManager renderManager;
     return renderManager;

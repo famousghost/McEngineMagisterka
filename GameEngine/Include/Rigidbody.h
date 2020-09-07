@@ -1,5 +1,6 @@
 #pragma once
 #include "Mass.h"
+#include "Ray.h"
 #include "MaterialProperties.h"
 #include <matrix_transform.hpp>
 #include <type_ptr.hpp>
@@ -43,7 +44,7 @@ struct Rigidbody
     float m_length;
 
     bool m_gravityForce;
-
+    bool m_isOnGrounded;
 
     Rigidbody()
     {
@@ -53,6 +54,7 @@ struct Rigidbody
         m_gravity = -9.87;
         m_velocity = glm::vec3();
         m_gravityForce = false;
+        m_isOnGrounded = false;
     }
 };
 

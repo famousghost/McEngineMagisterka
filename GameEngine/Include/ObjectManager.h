@@ -48,6 +48,8 @@ public:
 
     void updateCollider(Object & p_object, Cameras::Camera & p_camera);
 
+    void debugMatrix(const glm::mat4 & p_mat);
+
     void transformCollider(Collider & p_collider, const glm::mat4 & p_colliderModel);
 
     void setTexture(Mesh & p_mesh, const Texture & p_texture);

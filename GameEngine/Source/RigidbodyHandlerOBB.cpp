@@ -1,4 +1,5 @@
 #include "RigidbodyHandlerOBB.h"
+#include "Ray.h"
 
 namespace McEngine
 {
@@ -16,6 +17,7 @@ RigidbodyHandlerOBB::~RigidbodyHandlerOBB()
 
 void RigidbodyHandlerOBB::update()
 {
+    m_forces = glm::vec3();
     applyForces();
     m_rigidbody->m_force = m_forces;
     //solveConstraints();
@@ -27,15 +29,20 @@ void RigidbodyHandlerOBB::solveConstraints(const std::vector<std::pair<Meshes::O
 
 void RigidbodyHandlerOBB::applyForces()
 {
-    applyGravityForce();
+    m_forces += applyGravityForce();
 }
 
-void RigidbodyHandlerOBB::applyGravityForce()
+glm::vec3 RigidbodyHandlerOBB::applyGravityForce()
 {
+    if (m_rigidbody->m_isOnGrounded)
+    {
+        return glm::vec3(0.0f, 0.0f, 0.0f);
+    }
     if (m_rigidbody->m_gravityForce)
     {
-        m_forces.y = m_rigidbody->m_gravity * m_rigidbody->m_massProperties.m_mass;
+        return glm::vec3(0.0f, -9.82f, 0.0f);
     }
+    return glm::vec3();
 }
 
 }

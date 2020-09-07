@@ -8,6 +8,7 @@ struct Transform
         m_position = glm::vec3(0.0f, 0.0f, 0.0f);
         m_rotatione = glm::vec3(0.0f, 0.0f, 0.0f);
         m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
+        m_orientation = glm::mat3();
         m_radiusScale = 1.0f;
     }
 
@@ -26,5 +27,6 @@ struct Transform
     glm::vec3 m_position;
     glm::vec3 m_rotatione;
     glm::vec3 m_scale;
+    glm::mat3 m_orientation;
     float m_radiusScale;
 };

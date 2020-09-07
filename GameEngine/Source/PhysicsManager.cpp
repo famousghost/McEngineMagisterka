@@ -99,8 +99,8 @@ void PhysicsManager::computeForceAndTorque(Meshes::Object& p_object)
     {
         m_rigidbodyHandler = std::make_shared<RigidbodyHandlerOBB>(&p_object.m_rigidBody);
     }
-    
-    //m_rigidbodyHandler->update();
+
+    m_rigidbodyHandler->update();
     computeTorque(p_object);
 }
 

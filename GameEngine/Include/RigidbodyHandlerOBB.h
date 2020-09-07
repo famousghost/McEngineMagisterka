@@ -23,7 +23,7 @@ public:
     void applyForces() override;
 
 private:
-    void applyGravityForce();
+    glm::vec3 applyGravityForce();
 
     Meshes::Rigidbody* m_rigidbody;
     glm::vec3 m_forces;

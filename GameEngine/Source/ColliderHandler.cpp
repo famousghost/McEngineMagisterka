@@ -149,6 +149,15 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                     auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
                     auto l_collisionDirectionLength = glm::length(p_object.m_rigidBody.m_velocity + p_object.m_velocity);
                     p_object.m_transform.m_position += (l_collisionDirectionLength != 0.0f ? l_collisionDirectionLength : 1.0f) * m_collsionDirection * l_deltaTime;
+                    Meshes::Ray l_ray = Meshes::Ray(p_object.m_transform.m_position, glm::vec3(0.0f, -1.0f, 0.0f));
+                    if (Utils::Geometry3dUtils::raycast(p_objects[i].first, l_ray) > 0.0f)
+                    {
+                        p_object.m_rigidBody.m_isOnGrounded = true;
+                    }
+                    else
+                    {
+                        p_object.m_rigidBody.m_isOnGrounded = false;
+                    }
 
                     if(p_objects[i].first.m_isRigidBody)
                     {
@@ -158,11 +167,12 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                         p_objects[i].first.m_transform.m_position -= (l_collisionDirectionLength != 0.0f ? l_collisionDirectionLength : 1.0f) * m_collsionDirection * l_deltaTime;
                     }
 
-                    if (p_object.m_rigidBody.m_gravityForce)
+                    if (p_object.m_rigidBody.m_gravityForce or p_object.m_rigidBody.m_isOnGrounded)
                     {
                         p_object.m_rigidBody.m_velocity.y = 0.0f;
                         p_object.m_rigidBody.m_dP = glm::vec3();
                         p_object.m_rigidBody.m_force.y = 0.0f;
+                        p_object.m_rigidBody.m_oldVelocity.y = 0.0f;
                     }
                 }
             }

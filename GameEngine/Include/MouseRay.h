@@ -13,7 +13,7 @@ public:
 
     glm::vec3 getMousePosition();
 
-    bool checkIntersectionWithCube(glm::vec3 p_min, glm::vec3 p_max);
+    bool checkIntersectionWithCube(const Meshes::Object& p_object);
 
 private:
     glm::vec3 convertToWorldSpace(const glm::vec4 p_viewSpace);
