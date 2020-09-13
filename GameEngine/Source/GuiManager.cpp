@@ -371,9 +371,8 @@ void GuiManager::objectMoveOperations()
     {
         auto& l_obj = objIt->first;
         auto& l_transform = l_obj.m_transform;
-        auto& l_rigidbodyPosition = l_obj.m_rigidBody.m_rigidbodyPosition;
         auto& l_radius = l_obj.m_transform.m_radiusScale;
-        ImGui::SliderFloat3("Translation", &l_rigidbodyPosition.x, -10.0f, 10.0f);
+        ImGui::SliderFloat3("Translation", &l_transform.m_position.x, -10.0f, 10.0f);
         ImGui::SliderFloat3("Rotatione", &l_transform.m_rotatione.x, -360.0f, 360.0f);
         if (objIt->first.m_colider.at(0).m_colliderType == Meshes::ColliderType::SPHERE)
         {

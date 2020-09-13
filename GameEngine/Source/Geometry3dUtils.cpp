@@ -1,16 +1,10 @@
 #include "Geometry3dUtils.h"
-#include <array>
 #include <math.h>
 
 namespace McEngine
 {
 namespace Utils
 { 
-
-namespace
-{
-    constexpr std::size_t MAX_MIN_VALUES_SIZE = 6;
-}
 
 float Geometry3dUtils::cmp(float x, float y)
 {
@@ -46,9 +40,10 @@ glm::vec3 Geometry3dUtils::closestPoint(const Ray& p_ray, const glm::vec3& p_poi
     return p_ray.m_origin + p_ray.m_direction * l_t;
 }
 
-float Geometry3dUtils::raycastSphere(const Meshes::Object& p_object, 
+bool Geometry3dUtils::raycastSphere(const Meshes::Object& p_object, 
                                      const Meshes::Collider& p_collider, 
-                                     const Ray& p_ray)
+                                     const Ray& p_ray,
+                                     Physics::RaycastResult* p_raycastResult)
 {
     auto l_vecFromOriginToSphereCenter = p_object.m_transform.m_position - p_ray.m_origin;
 
@@ -59,40 +54,128 @@ float Geometry3dUtils::raycastSphere(const Meshes::Object& p_object,
 
     auto l_bSq = l_magnitudeOfVecSquare - l_castVecToRay * l_castVecToRay;
     auto l_f = std::sqrt(l_radiusSquare - l_bSq);
+    float l_t = l_castVecToRay - l_f;
     if (l_radiusSquare - l_bSq < 0.0f)
     {
-        return -1.0f;
+        return false;
     }
     if (l_magnitudeOfVecSquare < l_radiusSquare)
     {
-        return l_castVecToRay + l_f;
+        l_t = l_castVecToRay + l_f;
     }
-    return l_castVecToRay - l_f;
+    if (p_raycastResult)
+    {
+        p_raycastResult->m_t = l_t;
+        p_raycastResult->m_hit = true;
+        p_raycastResult->m_point = p_ray.m_origin + p_ray.m_direction * l_t;
+        p_raycastResult->m_normal = 
+            glm::normalize(p_raycastResult->m_point - p_object.m_transform.m_position);
+    }
+
+    return true;
 }
 
-float Geometry3dUtils::findClosestPointOnCube(glm::vec3 p_max, glm::vec3 p_min)
+bool Geometry3dUtils::findClosestPointOnCubeAABB(glm::vec3 p_max,
+                                             glm::vec3 p_min, 
+                                             const Ray& p_ray,
+                                             Physics::RaycastResult* p_raycastResult)
 {
     float l_maxMin = std::fmax(std::fmax(std::fmin(p_min.x, p_max.x), std::fmin(p_min.y, p_max.y)), std::fmin(p_min.z, p_max.z));
     float l_minMax = std::fmin(std::fmin(std::fmax(p_min.x, p_max.x), std::fmax(p_min.y, p_max.y)), std::fmax(p_min.z, p_max.z));
+    float l_t[] = {p_min.x, p_max.x, p_min.y, p_max.y, p_min.z, p_max.z};
 
     if (l_minMax < 0.0f)
     {
-        return -1.0f;
+        return false;
     }
     if (l_maxMin > l_minMax)
     {
-        return -1.0f;
+        return false;
     }
+    float l_tResult = l_maxMin;
     if (l_maxMin < 0.0f)
     {
-        return l_minMax;
+        l_tResult = l_minMax;
     }
-    return l_maxMin;
+    if (p_raycastResult)
+    {
+        p_raycastResult->m_point = p_ray.m_origin + p_ray.m_direction * l_tResult;
+        p_raycastResult->m_hit = true;
+        p_raycastResult->m_t = l_tResult;
+        glm::vec3 l_normals[] = 
+        {
+            glm::vec3(-1, 0, 0), 
+            glm::vec3(1, 0, 0),
+            glm::vec3(0, -1, 0), 
+            glm::vec3(0, 1, 0),
+            glm::vec3(0, 0, -1),
+            glm::vec3(0, 0, 1)
+        };
+        for (int i = 0; i < 6; ++i) 
+        {
+            if (cmp(l_tResult, l_t[i]))
+            {
+                    p_raycastResult->m_normal = l_normals[i];
+            }
+        }
+    }
+
+    return true;
 }
 
-float Geometry3dUtils::raycastAABB(const Meshes::Object & p_object, 
+bool Geometry3dUtils::findClosestPointOnCubeOBB(const glm::vec3& p_orientationX,
+                                                const glm::vec3& p_orientationY,
+                                                const glm::vec3& p_orientationZ,
+                                                const std::array<float, MAX_MIN_VALUES_SIZE>& p_t,
+                                                const Ray & p_ray,
+                                                Physics::RaycastResult * p_raycastResult)
+{
+    float l_maxMin = std::fmax(std::fmax(std::fmin(p_t[0], p_t[1]), std::fmin(p_t[2], p_t[3])), std::fmin(p_t[4], p_t[5]));
+    float l_minMax = std::fmin(std::fmin(std::fmax(p_t[0], p_t[1]), std::fmax(p_t[2], p_t[3])), std::fmax(p_t[4], p_t[5]));
+
+    if (l_minMax < 0.0f)
+    {
+        return false;
+    }
+    if (l_maxMin > l_minMax)
+    {
+        return false;
+    }
+    float l_tResult = l_maxMin;
+    if (l_maxMin < 0.0f)
+    {
+        l_tResult = l_minMax;
+    }
+    if (p_raycastResult)
+    {
+        p_raycastResult->m_point = p_ray.m_origin + p_ray.m_direction * l_tResult;
+        p_raycastResult->m_hit = true;
+        p_raycastResult->m_t = l_tResult;
+        glm::vec3 l_normals[] =
+        {
+            p_orientationX,
+            p_orientationX * -1.0f,
+            p_orientationY,
+            p_orientationY * -1.0f,
+            p_orientationZ,
+            p_orientationZ * -1.0f
+        };
+        for (int i = 0; i < 6; ++i)
+        {
+            if (cmp(l_tResult, p_t[i]))
+            {
+                p_raycastResult->m_normal = glm::normalize(l_normals[i]);
+            }
+        }
+    }
+
+    return true;
+}
+
+bool Geometry3dUtils::raycastAABB(const Meshes::Object & p_object, 
                                    const Meshes::Collider& p_collider, 
-                                   const Ray & p_ray)
+                                   const Ray & p_ray,
+                                   Physics::RaycastResult* p_raycastResult)
 {
     auto l_min = p_collider.m_minVertex;
     auto l_max = p_collider.m_maxVertex;
@@ -118,12 +201,16 @@ float Geometry3dUtils::raycastAABB(const Meshes::Object & p_object,
         tzmax = (l_max.z - p_ray.m_origin.z) / p_ray.m_direction.z;
     }
 
-    return findClosestPointOnCube(glm::vec3(txmax, tymax, tzmax), glm::vec3(txmin, tymin, tzmin));
+    return findClosestPointOnCubeAABB(glm::vec3(txmax, tymax, tzmax), 
+                                      glm::vec3(txmin, tymin, tzmin),
+                                      p_ray,
+                                      p_raycastResult);
 }
 
-float Geometry3dUtils::raycastOBB(const Meshes::Object & p_object,
+bool Geometry3dUtils::raycastOBB(const Meshes::Object & p_object,
                                   const Meshes::Collider& p_collider,
-                                  const Ray & p_ray)
+                                  const Ray & p_ray,
+                                  Physics::RaycastResult* p_raycastResult)
 {
     glm::vec3 l_size = glm::vec3(p_object.m_rigidBody.m_width, 
                                  p_object.m_rigidBody.m_height, 
@@ -164,25 +251,33 @@ float Geometry3dUtils::raycastOBB(const Meshes::Object & p_object,
             (l_projectionOfPToEachAxis[i] - l_size[i]) / l_projectionOfDirectionToEachAxis[i]; // max
     }
 
-    return findClosestPointOnCube(glm::vec3(l_t[0], l_t[2], l_t[4]), glm::vec3(l_t[1], l_t[3], l_t[5]));
+    return findClosestPointOnCubeOBB(l_x, 
+                                     l_y,
+                                     l_z,
+                                     l_t,
+                                     p_ray,
+                                     p_raycastResult);
 }
 
-float Geometry3dUtils::raycast(const Meshes::Object & p_object, const Ray & p_ray)
+bool Geometry3dUtils::raycast(const Meshes::Object & p_object, 
+                               const Ray & p_ray, 
+                               Physics::RaycastResult* p_raycastResult)
 {
+    Physics::RaycastResultHandler::raycastResultReset(p_raycastResult);
     auto& l_collider = p_object.m_colider.at(0);
     if (l_collider.m_colliderType == Meshes::ColliderType::SPHERE)
     {
-        return raycastSphere(p_object, l_collider, p_ray);
+        return raycastSphere(p_object, l_collider, p_ray, p_raycastResult);
     }
     if(l_collider.m_colliderType == Meshes::ColliderType::CUBE_AABB)
     {
-        return raycastAABB(p_object, l_collider, p_ray);
+        return raycastAABB(p_object, l_collider, p_ray, p_raycastResult);
     }
     if (l_collider.m_colliderType == Meshes::ColliderType::CUBE_OBB)
     {
-        return raycastOBB(p_object, l_collider, p_ray);
+        return raycastOBB(p_object, l_collider, p_ray, p_raycastResult);
     }
-    return -1.0f;
+    return false;
 }
 
 }//Utils

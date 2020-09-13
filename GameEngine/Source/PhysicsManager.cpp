@@ -60,8 +60,9 @@ void PhysicsManager::setShouldCheckCollision(bool p_shouldCheckCollision)
 void PhysicsManager::updateBodyState(Meshes::Rigidbody& p_rigidBody)
 {
     auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
-    p_rigidBody.m_oldPosition = p_rigidBody.m_rigidbodyPosition;
-    p_rigidBody.m_rigidbodyPosition += p_rigidBody.m_dx * l_deltaTime;
+    p_rigidBody.m_prevPosition = *p_rigidBody.m_position;
+    *p_rigidBody.m_position += p_rigidBody.m_dx * l_deltaTime;
+    dbgVector(*p_rigidBody.m_position, "RIGIDBODY POS = ");
     p_rigidBody.m_P += p_rigidBody.m_dP * l_deltaTime;
     p_rigidBody.m_L += p_rigidBody.m_dL * l_deltaTime;
     p_rigidBody.m_quat += glm::normalize(p_rigidBody.m_quatDt) * l_deltaTime;
@@ -109,9 +110,9 @@ void PhysicsManager::computeTorque(Meshes::Object& p_object)
     auto l_deltaTime = Time::TimeManager::getInstance().getDeltaTime();
     auto& l_rigidBody = p_object.m_rigidBody;
     glm::vec3 l_centerOfMass = glm::vec3(0.0f, 0.5f*l_rigidBody.m_height, 0.0f);
-    auto r = l_rigidBody.m_rigidbodyPosition + (glm::toMat3(l_rigidBody.m_quat) * l_centerOfMass);
-    l_rigidBody.m_torque = glm::cross(r - l_rigidBody.m_rigidbodyPosition, l_rigidBody.m_force);
-    l_rigidBody.m_torque = glm::vec3();
+    auto r = *l_rigidBody.m_position + (glm::toMat3(l_rigidBody.m_quat) * l_centerOfMass);
+    l_rigidBody.m_torque = 
+    glm::cross(r - *l_rigidBody.m_position, l_rigidBody.m_force);
 }
 
 glm::mat4 PhysicsManager::starOperatorMatrix(const glm::vec3& p_vec)

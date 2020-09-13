@@ -180,6 +180,7 @@
     <ClCompile Include="Source\ObjectManager.cpp" />
     <ClCompile Include="Source\PhysicsManager.cpp" />
     <ClCompile Include="Source\Ray.cpp" />
+    <ClCompile Include="Source\RaycastResult.cpp" />
     <ClCompile Include="Source\RenderManager.cpp" />
     <ClCompile Include="Source\RigidbodyHandlerOBB.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="Include\ObjectManager.h" />
     <ClInclude Include="Include\PhysicsManager.h" />
     <ClInclude Include="Include\Ray.h" />
+    <ClInclude Include="Include\RaycastResult.h" />
     <ClInclude Include="Include\RenderManager.h" />
     <ClInclude Include="Include\Rigidbody.h" />
     <ClInclude Include="Include\IRigidbodyHandler.h" />

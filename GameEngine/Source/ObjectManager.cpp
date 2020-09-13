@@ -141,8 +141,7 @@ void ObjectManager::moveObject(Object& p_object)
 
     if(not p_object.m_isColliding)
     {
-        p_object.m_rigidBody.m_rigidbodyPosition += p_object.m_velocity  * static_cast<float>(l_timeManager.getDeltaTime());
-        p_object.m_transform.m_position = p_object.m_rigidBody.m_rigidbodyPosition;
+        p_object.m_transform.m_position += p_object.m_velocity  * static_cast<float>(l_timeManager.getDeltaTime());
     }
 }
 
@@ -261,6 +260,7 @@ void ObjectManager::initState(Object& p_object)
     p_object.m_rigidBody.m_ibody[2][2] = l_massDivision * std::pow(p_object.m_rigidBody.m_width, 2.0) * std::pow(p_object.m_rigidBody.m_height, 2.0);
 
     p_object.m_rigidBody.m_inverseIbody = glm::inverse(p_object.m_rigidBody.m_ibody);
+    p_object.m_rigidBody.m_position = &p_object.m_transform.m_position;
 }
 
 glm::vec3 ObjectManager::getEulerAngelsFromTransform(const glm::vec3& p_rotatione)

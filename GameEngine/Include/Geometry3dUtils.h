@@ -1,6 +1,7 @@
 #pragma once
 #include "Ray.h"
 #include "Object.h"
+#include <array>
 
 namespace McEngine
 {
@@ -8,6 +9,7 @@ namespace Utils
 {
 namespace
 {
+    constexpr std::size_t MAX_MIN_VALUES_SIZE = 6;
     using Ray = Meshes::Ray;
 }
 class Geometry3dUtils
@@ -18,18 +20,39 @@ public:
     static bool pointOnRay(const glm::vec3 & p_point, const Ray & p_ray);
     static glm::vec3 closestPoint(const Ray & p_ray, const glm::vec3 & p_point);
 
-    static float raycast(const Meshes::Object& p_object, const Ray& p_ray);
+    static bool raycast(const Meshes::Object & p_object, 
+                         const Ray & p_ray,
+                         Physics::RaycastResult * p_raycastResult = nullptr);
 private:
 
-    static float raycastSphere(const Meshes::Object & p_object, const Meshes::Collider& p_collider, const Ray & p_ray);
+    static bool raycastSphere(const Meshes::Object & p_object, 
+                               const Meshes::Collider& p_collider, 
+                               const Ray & p_ray,
+                               Physics::RaycastResult* p_raycastResult = nullptr);
 
-    static float findClosestPointOnCube(glm::vec3 p_max, glm::vec3 p_min);
+    static bool findClosestPointOnCubeAABB(glm::vec3 p_max,
+                                           glm::vec3 p_min, 
+                                           const Ray& p_ray,
+                                           Physics::RaycastResult* p_raycastResult);
 
-    static float raycastAABB(const Meshes::Object & p_object, const Meshes::Collider& p_collider, const Ray & p_ray);
+    static bool findClosestPointOnCubeOBB(const glm::vec3& p_orientationX,
+                                          const glm::vec3& p_orientationY,
+                                          const glm::vec3& p_orientationZ,
+                                          const std::array<float, MAX_MIN_VALUES_SIZE>& p_t,
+                                          const Ray & p_ray,
+                                          Physics::RaycastResult * p_raycastResult);
+
+    static bool raycastAABB(const Meshes::Object & p_object, 
+                            const Meshes::Collider& p_collider, 
+                            const Ray & p_ray,
+                            Physics::RaycastResult* p_raycastResult = nullptr);
 
     static std::vector<float> getObjectOrientation(const Meshes::Object & p_object);
 
-    static float raycastOBB(const Meshes::Object & p_object, const Meshes::Collider& p_collider, const Ray & p_ray);
+    static bool raycastOBB(const Meshes::Object & p_object, 
+                           const Meshes::Collider& p_collider, 
+                           const Ray & p_ray,
+                           Physics::RaycastResult* p_raycastResult = nullptr);
     
 };
 

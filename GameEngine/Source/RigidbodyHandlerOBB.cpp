@@ -29,10 +29,10 @@ void RigidbodyHandlerOBB::solveConstraints(const std::vector<std::pair<Meshes::O
 
 void RigidbodyHandlerOBB::applyForces()
 {
-    m_forces += applyGravityForce();
+    m_forces += gravityForce();
 }
 
-glm::vec3 RigidbodyHandlerOBB::applyGravityForce()
+glm::vec3 RigidbodyHandlerOBB::gravityForce()
 {
     if (m_rigidbody->m_isOnGrounded)
     {

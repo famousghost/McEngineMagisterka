@@ -276,6 +276,9 @@
     <ClCompile Include="Source\Geometry3dUtils.cpp">
       <Filter>Pliki źródłowe\MESHES\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\RaycastResult.cpp">
+      <Filter>Pliki źródłowe\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Defines.h">
@@ -487,6 +490,9 @@
     </ClInclude>
     <ClInclude Include="Include\Geometry3dUtils.h">
       <Filter>Pliki nagłówkowe\MESHES\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\RaycastResult.h">
+      <Filter>Pliki nagłówkowe\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

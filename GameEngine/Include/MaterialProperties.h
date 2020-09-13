@@ -21,11 +21,13 @@ struct MaterialProperties
     MaterialType m_materialType;
     float m_density;
     float m_restitution;
+    float m_bounces;
 
     MaterialProperties()
     {
         m_density = 0.6f;
         m_restitution = 0.1f;
+        m_bounces = 0.65f;
     }
 
     void setMaterialType(const std::string& p_materialTypeName)

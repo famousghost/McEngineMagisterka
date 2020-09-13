@@ -18,8 +18,8 @@ struct Rigidbody
     glm::mat3 m_ibody;
     glm::mat3 m_inverseIbody;
 
-    glm::vec3 m_rigidbodyPosition; /*x(t)*/
-    glm::vec3 m_oldPosition; /*prev x(t)*/
+    glm::vec3* m_position; /*x(t)*/
+    glm::vec3 m_prevPosition; /*prev x(t)*/
     glm::vec3 m_P; /*P(t)*/
     glm::vec3 m_L; /*L(t)*/
     glm::quat m_quat; /*quaternion rotatione*/
@@ -46,6 +46,7 @@ struct Rigidbody
     bool m_gravityForce;
     bool m_isOnGrounded;
 
+
     Rigidbody()
     {
         m_width = 1.0f;
@@ -56,6 +57,7 @@ struct Rigidbody
         m_gravityForce = false;
         m_isOnGrounded = false;
     }
+
 };
 
 }//Meshes

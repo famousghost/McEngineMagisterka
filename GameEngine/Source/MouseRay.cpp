@@ -34,8 +34,7 @@ bool MouseRay::checkIntersectionWithCube(const Meshes::Object& p_object)
 {
     Meshes::Ray l_ray(Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getEditorCamera()->getCameraPosition(), 
                       getMousePosition());
-
-    if (Utils::Geometry3dUtils::raycast(p_object, l_ray) > 0.0f)
+    if (Utils::Geometry3dUtils::raycast(p_object, l_ray))
     {
         return true;
     }

@@ -50,6 +50,7 @@ struct Object
 
     Object()
     {
+        m_rigidBody.m_position = &m_transform.m_position;
         m_isRigidBody = false;
         m_isColliding = false;
         m_colliderNumber = 1;
@@ -58,6 +59,7 @@ struct Object
         m_movementDirection = glm::vec3();
         m_cloneNum = 0;
     }
+
 };
 
 }//Meshes

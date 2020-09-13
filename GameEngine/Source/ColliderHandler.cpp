@@ -144,13 +144,8 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                                                                     p_object.m_transform.m_position, 
                                                                     p_objects[i].first.m_transform.m_position))
                 {
-                    colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
-
-                    auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
-                    auto l_collisionDirectionLength = glm::length(p_object.m_rigidBody.m_velocity + p_object.m_velocity);
-                    p_object.m_transform.m_position += (l_collisionDirectionLength != 0.0f ? l_collisionDirectionLength : 1.0f) * m_collsionDirection * l_deltaTime;
                     Meshes::Ray l_ray = Meshes::Ray(p_object.m_transform.m_position, glm::vec3(0.0f, -1.0f, 0.0f));
-                    if (Utils::Geometry3dUtils::raycast(p_objects[i].first, l_ray) > 0.0f)
+                    if (Utils::Geometry3dUtils::raycast(p_objects[i].first, l_ray))
                     {
                         p_object.m_rigidBody.m_isOnGrounded = true;
                     }
@@ -158,8 +153,16 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                     {
                         p_object.m_rigidBody.m_isOnGrounded = false;
                     }
+                    colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
 
-                    if(p_objects[i].first.m_isRigidBody)
+                    auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
+                    auto l_collisionDirectionLength = glm::length(p_object.m_rigidBody.m_velocity + p_object.m_velocity);
+                    if(p_object.m_rigidBody.m_isOnGrounded)
+                    {
+                        p_object.m_transform.m_position += (l_collisionDirectionLength != 0.0f ? l_collisionDirectionLength : 1.0f) * m_collsionDirection * l_deltaTime;
+                    }
+
+                    if(p_objects[i].first.m_isRigidBody or not p_object.m_rigidBody.m_isOnGrounded)
                     {
                         p_objects[i].first.m_rigidBody.m_velocity = p_object.m_rigidBody.m_velocity;
                         p_objects[i].first.m_movementDirection = p_object.m_movementDirection;
