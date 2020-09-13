@@ -43,5 +43,10 @@ bool SphereVAABBCollsionHandler::checkCollision(const Meshes::Collider & p_colid
     return l_distance < l_radius;
 }
 
+Meshes::ColMainfold SphereVAABBCollsionHandler::getColMainfold() const
+{
+    return Meshes::ColMainfold();
+}
+
 }//Physics
 }//McEngine

@@ -180,7 +180,6 @@
     <ClCompile Include="Source\ObjectManager.cpp" />
     <ClCompile Include="Source\PhysicsManager.cpp" />
     <ClCompile Include="Source\Ray.cpp" />
-    <ClCompile Include="Source\RaycastResult.cpp" />
     <ClCompile Include="Source\RenderManager.cpp" />
     <ClCompile Include="Source\RigidbodyHandlerOBB.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
@@ -219,6 +218,7 @@
     <ClInclude Include="Include\ColiderStates.h" />
     <ClInclude Include="Include\Collider.h" />
     <ClInclude Include="Include\CollisionHandler.h" />
+    <ClInclude Include="Include\ColMainfold.h" />
     <ClInclude Include="Include\CubeAABBCollisionHandler.h" />
     <ClInclude Include="Include\CubeOBBCollsionHandler.h" />
     <ClInclude Include="Include\Geometry3dUtils.h" />
@@ -228,6 +228,7 @@
     <ClInclude Include="Include\ColiderObserver.h" />
     <ClInclude Include="Include\Light.h" />
     <ClInclude Include="Include\LightBuilder.h" />
+    <ClInclude Include="Include\LineSegment.h" />
     <ClInclude Include="Include\LoadedObjectBuilder.h" />
     <ClInclude Include="Include\Mass.h" />
     <ClInclude Include="Include\MaterialProperties.h" />
@@ -246,6 +247,7 @@
     <ClInclude Include="Include\ObjectBuilder.h" />
     <ClInclude Include="Include\ObjectManager.h" />
     <ClInclude Include="Include\PhysicsManager.h" />
+    <ClInclude Include="Include\Plane.h" />
     <ClInclude Include="Include\Ray.h" />
     <ClInclude Include="Include\RaycastResult.h" />
     <ClInclude Include="Include\RenderManager.h" />

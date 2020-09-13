@@ -15,5 +15,10 @@ bool CubeAABBCollisionHandler::checkCollision(const Meshes::Collider& p_coliderA
             and p_coliderA.m_zSection.max.z <= p_coliderB.m_zSection.min.z);
 }
 
+Meshes::ColMainfold CubeAABBCollisionHandler::getColMainfold() const
+{
+    return Meshes::ColMainfold();
+}
+
 }//Physics
 }//McEngine

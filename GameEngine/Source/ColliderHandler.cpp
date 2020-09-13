@@ -70,7 +70,9 @@ glm::vec3 CollisionHandler::calculateRealCollsionDirection(const glm::vec3& p_co
 bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_colliderA,
                                               const Meshes::Collider& p_ColliderB,
                                               const glm::vec3& p_objectCenterA,
-                                              const glm::vec3& p_objectCenterB)
+                                              const glm::vec3& p_objectCenterB,
+                                              const Meshes::Object* p_objectA,
+                                              const Meshes::Object* p_objectB)
 {
     std::unique_ptr<MeshCollisionHandler> m_meshCollisionHandler;
 
@@ -81,8 +83,12 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
     {
         m_meshCollisionHandler = std::make_unique<CubeOBBCollsionHandler>(m_collsionDirection, 
                                                                           p_objectCenterA, 
-                                                                          p_objectCenterB);
-        return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
+                                                                          p_objectCenterB,
+                                                                          p_objectA,
+                                                                          p_objectB);
+        bool l_result = m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
+        m_colMainfold = m_meshCollisionHandler->getColMainfold();
+        return l_result;
     }
     if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
              and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_AABB)
@@ -96,7 +102,9 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
     {
         
         m_meshCollisionHandler = std::make_unique<SphereCollsionHandler>(p_objectCenterA, p_objectCenterB);
-        return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
+        bool l_result = m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
+        m_colMainfold = m_meshCollisionHandler->getColMainfold();
+        return l_result;
     }
     if ((p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
              and p_ColliderB.m_colliderType == Meshes::ColliderType::SPHERE)
@@ -142,7 +150,9 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                 if (p_object.m_isColliding = checkCollsionForObject(colliderA, 
                                                                     colliderB, 
                                                                     p_object.m_transform.m_position, 
-                                                                    p_objects[i].first.m_transform.m_position))
+                                                                    p_objects[i].first.m_transform.m_position,
+                                                                    &p_object,
+                                                                    &p_objects[i].first))
                 {
                     Meshes::Ray l_ray = Meshes::Ray(p_object.m_transform.m_position, glm::vec3(0.0f, -1.0f, 0.0f));
                     if (Utils::Geometry3dUtils::raycast(p_objects[i].first, l_ray))

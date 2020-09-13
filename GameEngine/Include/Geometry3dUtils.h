@@ -1,6 +1,7 @@
 #pragma once
 #include "Ray.h"
 #include "Object.h"
+#include "ColMainfold.h"
 #include <array>
 
 namespace McEngine
@@ -11,6 +12,7 @@ namespace
 {
     constexpr std::size_t MAX_MIN_VALUES_SIZE = 6;
     using Ray = Meshes::Ray;
+    using ColMainfold = Meshes::ColMainfold;
 }
 class Geometry3dUtils
 {
@@ -23,12 +25,15 @@ public:
     static bool raycast(const Meshes::Object & p_object, 
                          const Ray & p_ray,
                          Physics::RaycastResult * p_raycastResult = nullptr);
+
+    static ColMainfold findColFeature(const Meshes::Object& p_objectA, 
+                                      const Meshes::Object& p_objectB);
 private:
 
     static bool raycastSphere(const Meshes::Object & p_object, 
-                               const Meshes::Collider& p_collider, 
-                               const Ray & p_ray,
-                               Physics::RaycastResult* p_raycastResult = nullptr);
+                              const Meshes::Collider& p_collider, 
+                              const Ray & p_ray,
+                              Physics::RaycastResult* p_raycastResult = nullptr);
 
     static bool findClosestPointOnCubeAABB(glm::vec3 p_max,
                                            glm::vec3 p_min, 
