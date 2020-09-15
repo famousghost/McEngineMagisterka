@@ -101,7 +101,7 @@ std::vector<glm::vec3> CubeOBBCollsionHandler::clipEdgesToCube(const std::vector
             }
         }
     }
-
+    
     return l_result;
 }
 
@@ -127,9 +127,7 @@ float CubeOBBCollsionHandler::findPenetrationDepth(const Meshes::Object& p_objec
 
     float l_length = l_max - l_min;
 
-    if (p_shouldFlip != 0) {
-        p_shouldFlip = (l_intervalB.m_min < l_intervalA.m_min);
-    }
+    p_shouldFlip = (l_intervalB.m_min < l_intervalA.m_min);
 
     return (l_lenA + l_lenB) - l_length;
 }
@@ -137,6 +135,7 @@ float CubeOBBCollsionHandler::findPenetrationDepth(const Meshes::Object& p_objec
 bool CubeOBBCollsionHandler::checkCollision(const Meshes::Collider & p_coliderA,
                                             const Meshes::Collider & p_coliderB)
 {
+    Meshes::ColMainfoldHandler::resetColMainfold(&m_colMainfold);
     m_colMainfold = findCollsionFeatures(*m_objectA, *m_objectB);
     return m_colMainfold.m_isColliding;
 }
@@ -153,28 +152,28 @@ Meshes::ColMainfold CubeOBBCollsionHandler::findCollsionFeatures(const Meshes::O
     std::array<glm::vec3, 15> l_test = 
     {
         glm::vec3(p_objectA.m_transform.m_orientation[0][0],
-                                   p_objectA.m_transform.m_orientation[0][1],
-                                   p_objectA.m_transform.m_orientation[0][2]),
+                  p_objectA.m_transform.m_orientation[0][1],
+                  p_objectA.m_transform.m_orientation[0][2]),
 
         glm::vec3(p_objectA.m_transform.m_orientation[1][0],
-                                   p_objectA.m_transform.m_orientation[1][1],
-                                   p_objectA.m_transform.m_orientation[1][2]),
+                  p_objectA.m_transform.m_orientation[1][1],
+                  p_objectA.m_transform.m_orientation[1][2]),
 
         glm::vec3(p_objectA.m_transform.m_orientation[2][0],
-                                   p_objectA.m_transform.m_orientation[2][1],
-                                   p_objectA.m_transform.m_orientation[2][2]),
+                  p_objectA.m_transform.m_orientation[2][1],
+                  p_objectA.m_transform.m_orientation[2][2]),
                                  
         glm::vec3(p_objectB.m_transform.m_orientation[0][0],
-                                   p_objectB.m_transform.m_orientation[0][1],
-                                   p_objectB.m_transform.m_orientation[0][2]),
+                  p_objectB.m_transform.m_orientation[0][1],
+                  p_objectB.m_transform.m_orientation[0][2]),
 
         glm::vec3(p_objectB.m_transform.m_orientation[1][0],
-                                   p_objectB.m_transform.m_orientation[1][1],
-                                   p_objectB.m_transform.m_orientation[1][2]),
+                  p_objectB.m_transform.m_orientation[1][1],
+                  p_objectB.m_transform.m_orientation[1][2]),
 
         glm::vec3(p_objectB.m_transform.m_orientation[2][0],
-                                   p_objectB.m_transform.m_orientation[2][1],
-                                   p_objectB.m_transform.m_orientation[2][2])
+                  p_objectB.m_transform.m_orientation[2][1],
+                  p_objectB.m_transform.m_orientation[2][2])
     };
 
     for (int i = 0; i < 3; ++i) {
@@ -208,12 +207,12 @@ Meshes::ColMainfold CubeOBBCollsionHandler::findCollsionFeatures(const Meshes::O
             {
                 l_test[i] *= -1.0f;
             }
+            l_mainfoldResult.m_depth = l_depth;
+            l_hitNormal = &l_test[i];
         }
-        l_mainfoldResult.m_depth = l_depth;
-        l_hitNormal = &l_test[i];
     }
 
-    if (l_hitNormal == 0)
+    if (l_hitNormal == nullptr)
     {
         return l_mainfoldResult;
     }

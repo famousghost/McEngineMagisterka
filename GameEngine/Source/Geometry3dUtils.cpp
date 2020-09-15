@@ -409,53 +409,12 @@ Meshes::Interval Geometry3dUtils::getIntervalABB(const Meshes::Object& p_object,
 Meshes::Interval Geometry3dUtils::getIntervalOBB(const Meshes::Object & p_object, 
                                                  const glm::vec3 & p_axis)
 {
-    std::vector<glm::vec3> l_verticies;
-    glm::vec3 l_pos = p_object.m_transform.m_position;
-    glm::vec3 l_size = glm::vec3(p_object.m_rigidBody.m_width,
-                                 p_object.m_rigidBody.m_height,
-                                 p_object.m_rigidBody.m_length);
-    glm::vec3 l_xOrientation = glm::vec3(p_object.m_transform.m_orientation[0][0],
-                                         p_object.m_transform.m_orientation[0][1],
-                                         p_object.m_transform.m_orientation[0][2]);
-
-    glm::vec3 l_yOrientation = glm::vec3(p_object.m_transform.m_orientation[1][0],
-                                         p_object.m_transform.m_orientation[1][1],
-                                         p_object.m_transform.m_orientation[1][2]);
-
-    glm::vec3 l_zOrientation = glm::vec3(p_object.m_transform.m_orientation[2][0],
-                                         p_object.m_transform.m_orientation[2][1],
-                                         p_object.m_transform.m_orientation[2][2]);
-
-
-    l_verticies.push_back(l_pos + l_xOrientation * l_size[0] +
-        l_yOrientation * l_size[1] +
-        l_zOrientation * l_size[2]);
-    l_verticies.push_back(l_pos - l_xOrientation * l_size[0] +
-        l_yOrientation * l_size[1] +
-        l_zOrientation * l_size[2]);
-    l_verticies.push_back(l_pos + l_xOrientation * l_size[0] -
-        l_yOrientation * l_size[1] +
-        l_zOrientation * l_size[2]);
-    l_verticies.push_back(l_pos + l_xOrientation * l_size[0] +
-        l_yOrientation * l_size[1] -
-        l_zOrientation * l_size[2]);
-    l_verticies.push_back(l_pos - l_xOrientation * l_size[0] -
-        l_yOrientation * l_size[1] -
-        l_zOrientation * l_size[2]);
-    l_verticies.push_back(l_pos + l_xOrientation * l_size[0] -
-        l_yOrientation * l_size[1] -
-        l_zOrientation * l_size[2]);
-    l_verticies.push_back(l_pos - l_xOrientation * l_size[0] +
-        l_yOrientation * l_size[1] -
-        l_zOrientation * l_size[2]);
-    l_verticies.push_back(l_pos - l_xOrientation * l_size[0] -
-        l_yOrientation * l_size[1] +
-        l_zOrientation * l_size[2]);
+    std::vector<glm::vec4> l_verticies = p_object.m_colider.at(0).m_verticies;
 
     Meshes::Interval l_result;
-    l_result.m_min = l_result.m_max = glm::dot(p_axis, l_verticies[0]);
+    l_result.m_min = l_result.m_max = glm::dot(p_axis, glm::vec3(l_verticies[0]));
     for (int i = 1; i < 8; ++i) {
-        float l_projection = glm::dot(p_axis, l_verticies[i]);
+        float l_projection = glm::dot(p_axis, glm::vec3(l_verticies[i]));
         l_result.m_min = (l_projection < l_result.m_min) ?
             l_projection : l_result.m_min;
         l_result.m_max = (l_projection > l_result.m_max) ?
@@ -463,6 +422,74 @@ Meshes::Interval Geometry3dUtils::getIntervalOBB(const Meshes::Object & p_object
     }
 
     return l_result;
+}
+
+void Geometry3dUtils::applyImpulse(Meshes::Object & p_objectA, 
+                                   Meshes::Object & p_objectB, 
+                                   Meshes::ColMainfold & p_mainfold, 
+                                   int p_c)
+{
+    float l_invMassA = p_objectA.m_rigidBody.m_massProperties.m_inverseMass;
+    float l_invMassB = p_objectB.m_rigidBody.m_massProperties.m_inverseMass;
+    float l_invMassSum = l_invMassA + l_invMassB;
+    if (not l_invMassSum) 
+    { 
+        return; 
+    }
+
+    glm::vec3 l_relativeVel = p_objectB.m_rigidBody.m_velocity - p_objectA.m_rigidBody.m_velocity;
+    glm::vec3 l_relativeNorm = glm::normalize(p_mainfold.m_normal);
+    if (glm::dot(l_relativeVel, l_relativeNorm) > 0.0f) {
+        return;
+    }
+
+    float l_e = fminf(p_objectA.m_rigidBody.m_materialProperties.m_restitution,
+                      p_objectB.m_rigidBody.m_materialProperties.m_restitution);
+    float l_numerator = (-(1.0f + l_e) * glm::dot(l_relativeVel, l_relativeNorm));
+    float l_j = l_numerator / l_invMassSum;
+    if (p_mainfold.m_contacts.size() > 0.0f && l_j != 0.0f) {
+        l_j /= (float)p_mainfold.m_contacts.size();
+    }
+
+    glm::vec3 l_impulse = l_relativeNorm * l_j;
+    p_objectA.m_rigidBody.m_velocity -= l_impulse * l_invMassA;
+    if(p_objectB.m_isRigidBody)
+    {
+        p_objectB.m_rigidBody.m_velocity +=  l_impulse * l_invMassB;
+    }
+
+    glm::vec3 l_t = l_relativeVel - (l_relativeNorm *
+        glm::dot(l_relativeVel, l_relativeNorm));
+    if (cmp(glm::length(l_t) * glm::length(l_t), 0.0f)) {
+        return;
+    }
+
+    l_t = glm::normalize(l_t);
+
+    l_numerator = -glm::dot(l_relativeVel, l_t);
+    float l_jt = l_numerator / l_invMassSum;
+    if (p_mainfold.m_contacts.size() > 0.0f and l_jt != 0.0f) {
+        l_jt /= (float)p_mainfold.m_contacts.size();
+    }
+    if (cmp(l_jt, 0.0f)) {
+        return;
+    }
+
+    float l_friction = sqrtf(p_objectA.m_rigidBody.m_materialProperties.m_frction * 
+                             p_objectB.m_rigidBody.m_materialProperties.m_frction);
+    if (l_jt > l_j * l_friction) {
+        l_jt = l_j * l_friction;
+    }
+    else if (l_jt < -l_j * l_friction) {
+        l_jt = -l_j * l_friction;
+    }
+
+    glm::vec3 l_tangentImpuse = l_t * l_jt;
+    p_objectA.m_rigidBody.m_velocity -= l_tangentImpuse * l_invMassA;
+    if(p_objectB.m_isRigidBody)
+    {
+        p_objectB.m_rigidBody.m_velocity += l_tangentImpuse * l_invMassB;
+    }
 }
 
 }//Utils

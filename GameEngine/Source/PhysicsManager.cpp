@@ -62,7 +62,6 @@ void PhysicsManager::updateBodyState(Meshes::Rigidbody& p_rigidBody)
     auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
     p_rigidBody.m_prevPosition = *p_rigidBody.m_position;
     *p_rigidBody.m_position += p_rigidBody.m_dx * l_deltaTime;
-    dbgVector(*p_rigidBody.m_position, "RIGIDBODY POS = ");
     p_rigidBody.m_P += p_rigidBody.m_dP * l_deltaTime;
     p_rigidBody.m_L += p_rigidBody.m_dL * l_deltaTime;
     p_rigidBody.m_quat += glm::normalize(p_rigidBody.m_quatDt) * l_deltaTime;

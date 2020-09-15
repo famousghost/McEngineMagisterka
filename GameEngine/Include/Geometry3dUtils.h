@@ -44,6 +44,11 @@ public:
 
     static Meshes::Interval getIntervalOBB(const Meshes::Object& p_object, 
                                            const glm::vec3& p_axis);
+
+    static void applyImpulse(Meshes::Object& p_objectA, 
+                             Meshes::Object& p_objectB,
+                             Meshes::ColMainfold& p_mainfold,
+                             int p_c);
 private:
 
     static bool raycastSphere(const Meshes::Object & p_object, 

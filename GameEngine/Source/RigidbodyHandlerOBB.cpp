@@ -40,7 +40,7 @@ glm::vec3 RigidbodyHandlerOBB::gravityForce()
     }
     if (m_rigidbody->m_gravityForce)
     {
-        return glm::vec3(0.0f, -9.82f, 0.0f);
+        return glm::vec3(0.0f, -9.82f, 0.0f) * m_rigidbody->m_massProperties.m_mass;
     }
     return glm::vec3();
 }
