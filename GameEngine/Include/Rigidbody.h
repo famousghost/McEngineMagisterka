@@ -52,7 +52,7 @@ struct Rigidbody
         m_width = 1.0f;
         m_height = 1.0f;
         m_length = 1.0f;
-        m_gravity = -9.87;
+        m_gravity = -9.87f;
         m_velocity = glm::vec3();
         m_gravityForce = false;
         m_isOnGrounded = false;

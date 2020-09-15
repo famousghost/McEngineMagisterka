@@ -1,4 +1,5 @@
 #include "CubeOBBCollsionHandler.h"
+#include "Geometry3dUtils.h"
 #include <algorithm>
 #include <math.h>
 
@@ -53,10 +54,10 @@ std::vector<Meshes::Plane> CubeOBBCollsionHandler::getFaces(const Meshes::Collid
 {
     std::vector<Meshes::Plane> l_result;
     l_result.resize(6);
-    auto& l_rigidbody = p_object.m_rigidBody;
-    auto& l_pos = p_object.m_transform.m_position;
+    const auto& l_rigidbody = p_object.m_rigidBody;
+    const auto& l_pos = p_object.m_transform.m_position;
     glm::vec3 l_size = glm::vec3(l_rigidbody.m_width, l_rigidbody.m_height, l_rigidbody.m_length);
-    auto& l_orientation = p_object.m_transform.m_orientation;
+    const auto& l_orientation = p_object.m_transform.m_orientation;
     glm::vec3 l_x = glm::vec3(l_orientation[0][0], l_orientation[0][1], l_orientation[0][2]);
     glm::vec3 l_y = glm::vec3(l_orientation[1][0], l_orientation[1][1], l_orientation[1][2]);
     glm::vec3 l_z = glm::vec3(l_orientation[2][0], l_orientation[2][1], l_orientation[2][2]);
@@ -79,170 +80,182 @@ bool CubeOBBCollsionHandler::clipToPlane(const Meshes::Plane& p_plane,
 }
 
 std::vector<glm::vec3> CubeOBBCollsionHandler::clipEdgesToCube(const std::vector<Meshes::LineSegment>& p_edges,
-                                                               const Meshes::Collider& p_collider)
+                                                               const Meshes::Collider& p_collider,
+                                                               const Meshes::Object& p_object)
 {
-    return std::vector<glm::vec3>();
-}
+    std::vector<glm::vec3> l_result;
+    l_result.reserve(p_edges.size());
+    glm::vec3 l_intersection;
+    std::vector<Meshes::Plane> l_planes = getFaces(p_collider, p_object);
 
-float CubeOBBCollsionHandler::findPenetrationDepth(const Meshes::Collider& p_colliderA,
-                                                   const Meshes::Collider& p_colliderB,
-                                                   const glm::vec3& p_axis,
-                                                   bool& p_shouldFlip)
-{
-    return 0.0f;
-}
-
-bool CubeOBBCollsionHandler::checkCollision(const Meshes::Collider & p_coliderA,
-                                            const Meshes::Collider & p_coliderB)
-{
-    std::vector<Meshes::LineSegment> l_colliderAEdges = getEdges(p_coliderA);
-    std::vector<Meshes::LineSegment> l_colliderBEdges = getEdges(p_coliderB);
-    std::vector<glm::vec3> l_colliderANormals;
-    std::vector<glm::vec3> l_colliderBNormals;
-
-    l_colliderANormals.push_back(glm::vec3(p_coliderA.m_normals.x));
-    l_colliderANormals.push_back(glm::vec3(p_coliderA.m_normals.y));
-    l_colliderANormals.push_back(glm::vec3(p_coliderA.m_normals.z));
-
-    l_colliderBNormals.push_back(glm::vec3(p_coliderB.m_normals.x));
-    l_colliderBNormals.push_back(glm::vec3(p_coliderB.m_normals.y));
-    l_colliderBNormals.push_back(glm::vec3(p_coliderB.m_normals.z));
-
-    if (not checkCollisionForNormalsAxis(p_coliderA, 
-                                         p_coliderB, 
-                                         l_colliderANormals,
-                                         l_colliderBNormals))
+    for (int i = 0; i < l_planes.size(); ++i)
     {
-        return false;
-    }
-
-    for (const auto& vertexA : l_colliderANormals)
-    {
-        for (const auto& vertexB : l_colliderBNormals)
+        for (int j = 0; j < p_edges.size(); ++j)
         {
-            auto l_normal = glm::cross(vertexA, vertexB);
-
-            if (l_normal == glm::vec3())
+            if (Utils::Geometry3dUtils::clipToPlane(l_planes[i], p_edges[j], &l_intersection))
             {
-                continue;
-            }
-
-            auto l_projectedColiderA = getProjectedPointsToAxis(p_coliderA.m_verticies, l_normal);
-            auto l_projectedColiderB = getProjectedPointsToAxis(p_coliderB.m_verticies, l_normal);
-
-            auto l_overlap = checkCollisionForAxis(l_projectedColiderA,
-                                                   l_projectedColiderB);
-
-            if (not l_overlap)
-            {
-                return false;
-            }
-            else
-            {
-                if (m_minOverlap > l_overlap)
+                if (Utils::Geometry3dUtils::checkIfPointIsOnCubeOBB(p_object, l_intersection))
                 {
-                    m_minOverlap = l_overlap;
-                    m_minimumTranslationVector = l_normal;
+                    l_result.push_back(l_intersection);
                 }
             }
         }
     }
 
-    if (glm::dot(m_objectCenterA - m_objectCenterB, m_minimumTranslationVector) < 0)
-    {
-        m_minimumTranslationVector = -m_minimumTranslationVector;
+    return l_result;
+}
+
+float CubeOBBCollsionHandler::findPenetrationDepth(const Meshes::Object& p_objectA,
+                                                   const Meshes::Object& p_objectB,
+                                                   const glm::vec3& p_axis,
+                                                   bool& p_shouldFlip)
+{
+    Meshes::Interval l_intervalA = Utils::Geometry3dUtils::getIntervalOBB(p_objectA, p_axis);
+    Meshes::Interval l_intervalB = Utils::Geometry3dUtils::getIntervalOBB(p_objectB, p_axis);
+
+    if (!((l_intervalB.m_min <= l_intervalA.m_max) && (l_intervalA.m_min <= l_intervalB.m_max))) {
+        return 0.0f;
     }
 
-    return true;
+    float l_lenA = l_intervalA.m_max - l_intervalA.m_min;
+    float l_lenB = l_intervalB.m_max - l_intervalB.m_min;
+
+
+    float l_min = fminf(l_intervalA.m_min, l_intervalB.m_min);
+    float l_max = fmaxf(l_intervalA.m_max, l_intervalB.m_max);
+
+
+    float l_length = l_max - l_min;
+
+    if (p_shouldFlip != 0) {
+        p_shouldFlip = (l_intervalB.m_min < l_intervalA.m_min);
+    }
+
+    return (l_lenA + l_lenB) - l_length;
+}
+
+bool CubeOBBCollsionHandler::checkCollision(const Meshes::Collider & p_coliderA,
+                                            const Meshes::Collider & p_coliderB)
+{
+    m_colMainfold = findCollsionFeatures(*m_objectA, *m_objectB);
+    return m_colMainfold.m_isColliding;
+}
+
+Meshes::ColMainfold CubeOBBCollsionHandler::findCollsionFeatures(const Meshes::Object & p_objectA, 
+                                                                 const Meshes::Object & p_objectB)
+{
+    Meshes::ColMainfold l_mainfoldResult;
+
+    const auto& l_colliderA = p_objectA.m_colider.at(0);
+    const auto& l_colliderB = p_objectB.m_colider.at(0);
+
+    Meshes::ColMainfoldHandler::resetColMainfold(&l_mainfoldResult);
+    std::array<glm::vec3, 15> l_test = 
+    {
+        glm::vec3(p_objectA.m_transform.m_orientation[0][0],
+                                   p_objectA.m_transform.m_orientation[0][1],
+                                   p_objectA.m_transform.m_orientation[0][2]),
+
+        glm::vec3(p_objectA.m_transform.m_orientation[1][0],
+                                   p_objectA.m_transform.m_orientation[1][1],
+                                   p_objectA.m_transform.m_orientation[1][2]),
+
+        glm::vec3(p_objectA.m_transform.m_orientation[2][0],
+                                   p_objectA.m_transform.m_orientation[2][1],
+                                   p_objectA.m_transform.m_orientation[2][2]),
+                                 
+        glm::vec3(p_objectB.m_transform.m_orientation[0][0],
+                                   p_objectB.m_transform.m_orientation[0][1],
+                                   p_objectB.m_transform.m_orientation[0][2]),
+
+        glm::vec3(p_objectB.m_transform.m_orientation[1][0],
+                                   p_objectB.m_transform.m_orientation[1][1],
+                                   p_objectB.m_transform.m_orientation[1][2]),
+
+        glm::vec3(p_objectB.m_transform.m_orientation[2][0],
+                                   p_objectB.m_transform.m_orientation[2][1],
+                                   p_objectB.m_transform.m_orientation[2][2])
+    };
+
+    for (int i = 0; i < 3; ++i) {
+        l_test[6 + i * 3 + 0] = glm::cross(l_test[i], l_test[0]);
+        l_test[6 + i * 3 + 1] = glm::cross(l_test[i], l_test[1]);
+        l_test[6 + i * 3 + 2] = glm::cross(l_test[i], l_test[2]);
+    }
+
+    glm::vec3* l_hitNormal = nullptr;
+    bool l_shouldFlip;
+
+    for (int i = 0; i < 15; ++i)
+    {
+        if (glm::length(l_test[i]) * glm::length(l_test[i]) < 0.001f) 
+        {
+            continue;
+        }
+
+        float l_depth = findPenetrationDepth(p_objectA, 
+                                             p_objectB, 
+                                             l_test[i], 
+                                             l_shouldFlip);
+
+        if (l_depth <= 0.0f) {
+            return l_mainfoldResult;
+        }
+
+        else if (l_depth < l_mainfoldResult.m_depth) 
+        {
+            if (l_shouldFlip) 
+            {
+                l_test[i] *= -1.0f;
+            }
+        }
+        l_mainfoldResult.m_depth = l_depth;
+        l_hitNormal = &l_test[i];
+    }
+
+    if (l_hitNormal == 0)
+    {
+        return l_mainfoldResult;
+    }
+
+    glm::vec3 l_axis = glm::normalize(*l_hitNormal);
+
+    std::vector<glm::vec3> l_clipEdgesA = clipEdgesToCube(getEdges(l_colliderB), l_colliderA, p_objectA);
+    std::vector<glm::vec3> l_clipEdgesB = clipEdgesToCube(getEdges(l_colliderA), l_colliderB, p_objectB);
+    l_mainfoldResult.m_contacts.reserve(l_clipEdgesA.size() + l_clipEdgesB.size());
+    l_mainfoldResult.m_contacts.insert(l_mainfoldResult.m_contacts.end(),
+        l_clipEdgesA.begin(), l_clipEdgesA.end());
+    l_mainfoldResult.m_contacts.insert(l_mainfoldResult.m_contacts.end(),
+        l_clipEdgesB.begin(), l_clipEdgesB.end());
+
+
+    Meshes::Interval l_interval = Utils::Geometry3dUtils::getIntervalOBB(p_objectA, l_axis);
+    float l_distance = (l_interval.m_max - l_interval.m_min) * 0.5f - l_mainfoldResult.m_depth * 0.5f;
+    glm::vec3 l_pointOnPlane = p_objectA.m_transform.m_position + l_axis * l_distance;
+    for (int i = l_mainfoldResult.m_contacts.size() - 1; i >= 0; --i) 
+    {
+        glm::vec3 l_contact = l_mainfoldResult.m_contacts[i];
+        l_mainfoldResult.m_contacts[i] = l_contact + (l_axis * glm::dot(l_axis, l_pointOnPlane - l_contact));
+        for (int j = l_mainfoldResult.m_contacts.size() - 1; j > i; --j) 
+        {
+            if ((glm::length(l_mainfoldResult.m_contacts[j] - l_mainfoldResult.m_contacts[i]) 
+                * glm::length(l_mainfoldResult.m_contacts[j] - l_mainfoldResult.m_contacts[i])) < 0.0001f) 
+            {
+                l_mainfoldResult.m_contacts.erase(l_mainfoldResult.m_contacts.begin() + j);
+                break;
+            }
+        }
+    }
+
+    l_mainfoldResult.m_isColliding = true;
+    l_mainfoldResult.m_normal = l_axis;
+    return l_mainfoldResult;
 }
 
 Meshes::ColMainfold CubeOBBCollsionHandler::getColMainfold() const
 {
-    return Meshes::ColMainfold();
+    return m_colMainfold;
 }
 
-std::vector<double> CubeOBBCollsionHandler::getProjectedPointsToAxis(const std::vector<glm::vec4>& p_listOfVec,
-    const glm::vec3& p_normals)
-{
-    std::vector<double> l_result;
-    for (const auto& vec : p_listOfVec)
-    {
-        auto value = glm::dot(glm::vec3(vec), glm::normalize(p_normals));
-
-        l_result.push_back(value);
-    }
-    return l_result;
-}
-
-double CubeOBBCollsionHandler::checkCollisionForAxis(const std::vector<double>& p_projectedColliderA,
-                                                     const std::vector<double>& p_projectedColliderB)
-{
-    auto minA = std::min_element(p_projectedColliderA.begin(), p_projectedColliderA.end());
-    auto maxA = std::max_element(p_projectedColliderA.begin(), p_projectedColliderA.end());
-
-    auto minB = std::min_element(p_projectedColliderB.begin(), p_projectedColliderB.end());
-    auto maxB = std::max_element(p_projectedColliderB.begin(), p_projectedColliderB.end());
-
-    auto l_longSpan = std::abs(std::max(*maxA, *maxB) - std::min(*minA, *minB));
-    auto l_sumSpan = std::abs(*maxA - *minA + *maxB - *minB);
-    return (l_longSpan < l_sumSpan) ? std::abs(l_longSpan - l_sumSpan) : 0.0;
-}
-
-bool CubeOBBCollsionHandler::checkCollisionForNormalsAxis(const Meshes::Collider & p_coliderA,
-                                                          const Meshes::Collider & p_coliderB,
-                                                          const std::vector<glm::vec3>& p_colliderAEdges,
-                                                          const std::vector<glm::vec3>& p_colliderBEdges)
-{
-    for(std::size_t i = 0; i < 3; ++i)
-    {
-        auto l_overlap = checkCollisionForNormalAxis(getProjectedPointsToAxis(p_coliderA.m_verticies, p_colliderAEdges[i]),
-                                                     getProjectedPointsToAxis(p_coliderB.m_verticies, p_colliderAEdges[i]));
-        if (not l_overlap)
-        {
-            return false;
-        }
-        else
-        {
-            if (m_minOverlap > l_overlap)
-            {
-                m_minOverlap = l_overlap;
-                m_minimumTranslationVector = p_colliderAEdges[i];
-            }
-        }
-    }
-    for (std::size_t i = 0; i < 3; ++i)
-    {
-        auto l_overlap = checkCollisionForNormalAxis(getProjectedPointsToAxis(p_coliderA.m_verticies, p_colliderBEdges[i]),
-                                                     getProjectedPointsToAxis(p_coliderB.m_verticies, p_colliderBEdges[i]));
-        if (not l_overlap)
-        {
-            return false;
-        }
-        else
-        {
-            if (m_minOverlap > l_overlap)
-            {
-                m_minOverlap = l_overlap;
-                m_minimumTranslationVector = p_colliderBEdges[i];
-            }
-        }
-    }
-    return true;
-}
-
-double CubeOBBCollsionHandler::checkCollisionForNormalAxis(const std::vector<double>& p_projectedColliderA, 
-                                                           const std::vector<double>& p_projectedColliderB)
-{
-    auto minA = std::min_element(p_projectedColliderA.begin(), p_projectedColliderA.end());
-    auto maxA = std::max_element(p_projectedColliderA.begin(), p_projectedColliderA.end());
-
-    auto minB = std::min_element(p_projectedColliderB.begin(), p_projectedColliderB.end());
-    auto maxB = std::max_element(p_projectedColliderB.begin(), p_projectedColliderB.end());
-
-    auto l_longSpan = std::abs(std::max(*maxA, *maxB) - std::min(*minA, *minB));
-    auto l_sumSpan = std::abs(*maxA - *minA + *maxB - *minB);
-
-    return (l_longSpan >= l_sumSpan) ? 0.0 : std::abs(l_longSpan - l_sumSpan);
-}
 }//Physics
 }//McEngine

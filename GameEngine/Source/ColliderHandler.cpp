@@ -39,7 +39,7 @@ glm::vec3 CollisionHandler::calculateRealCollsionDirection(const glm::vec3& p_co
     for(std::size_t i = 0; i < 3; ++i)
     {
         auto l_maxElementIt = std::max_element(l_directions.begin(), l_directions.end());
-        auto l_maxElemIndex = std::distance(l_directions.begin(), l_maxElementIt);
+        int l_maxElemIndex = std::distance(l_directions.begin(), l_maxElementIt);
         if (l_maxElem <= *l_maxElementIt)
         {
             l_maxElem = *l_maxElementIt;
@@ -88,6 +88,10 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
                                                                           p_objectB);
         bool l_result = m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
         m_colMainfold = m_meshCollisionHandler->getColMainfold();
+        for (auto& elem : m_colMainfold.m_contacts)
+        {
+            std::cout << "Contact point = " << "(" << elem.x << ", " << elem.y << ", " << elem.z << ")" << std::endl;
+        }
         return l_result;
     }
     if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
@@ -126,6 +130,7 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
                                                                               m_collsionDirection);
         return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
     }
+    return false;
 }
 
 void CollisionHandler::collisionChecker(Meshes::Object& p_object,
@@ -165,7 +170,7 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                     }
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
 
-                    auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
+                   /* auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
                     auto l_collisionDirectionLength = glm::length(p_object.m_rigidBody.m_velocity + p_object.m_velocity);
                     if(p_object.m_rigidBody.m_isOnGrounded)
                     {
@@ -186,7 +191,7 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                         p_object.m_rigidBody.m_dP = glm::vec3();
                         p_object.m_rigidBody.m_force.y = 0.0f;
                         p_object.m_rigidBody.m_oldVelocity.y = 0.0f;
-                    }
+                    }*/
                 }
             }
         }

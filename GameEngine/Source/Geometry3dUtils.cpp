@@ -241,7 +241,7 @@ bool Geometry3dUtils::raycastOBB(const Meshes::Object & p_object,
             if (-l_projectionOfPToEachAxis[i] - l_size[i] > 0 
                 || -l_projectionOfPToEachAxis[i] + l_size[i] < 0) 
             {
-                return -1;
+                return false;
             }
             l_projectionOfDirectionToEachAxis[i] = 0.00001f;
         }
@@ -278,6 +278,191 @@ bool Geometry3dUtils::raycast(const Meshes::Object & p_object,
         return raycastOBB(p_object, l_collider, p_ray, p_raycastResult);
     }
     return false;
+}
+
+bool Geometry3dUtils::clipToPlane(const Meshes::Plane& p_plane,
+                                  const Meshes::LineSegment& p_line,
+                                  glm::vec3* p_outPoint)
+{
+    glm::vec3 l_line = p_line.m_endPoint - p_line.m_startPoint;
+    float l_nAB = glm::dot(p_plane.m_normal, l_line);
+    if (cmp(l_nAB, 0)) {
+        return false;
+    }
+    float l_nA = glm::dot(p_plane.m_normal, p_line.m_startPoint);
+    float l_t = (p_plane.m_distance - l_nA) / l_nAB;
+
+    if (l_t >= 0.0f && l_t <= 1.0f)
+    {
+        if (p_outPoint != 0)
+        {
+            *p_outPoint = p_line.m_startPoint + l_line * l_t;
+        }
+        return true;
+    }
+    return false;
+}
+
+
+
+bool Geometry3dUtils::checkIfPointIsOnCubeOBB(const Meshes::Object& p_object,
+                                              const glm::vec3& p_point)
+{
+    glm::vec3 l_dir = p_point - p_object.m_transform.m_position;
+
+    glm::vec3 l_size = glm::vec3(p_object.m_rigidBody.m_width,
+        p_object.m_rigidBody.m_height,
+        p_object.m_rigidBody.m_length);
+
+    for (int i = 0; i < 3; ++i)
+    {
+        glm::vec3 l_axis =
+            glm::vec3(p_object.m_transform.m_orientation[i][0],
+                      p_object.m_transform.m_orientation[i][1],
+                      p_object.m_transform.m_orientation[i][2]);
+
+        float l_distance = glm::dot(l_dir, l_axis);
+
+        if (l_distance > l_size[i])
+        {
+            return false;
+        }
+        if (l_distance < -l_size[i])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+glm::vec3 Geometry3dUtils::findClosestPointOnCubeOBB(const Meshes::Object& p_object,
+                                                     const glm::vec3& p_point)
+{
+    glm::vec3 l_result = p_object.m_transform.m_position;
+
+    glm::vec3 l_dir = p_point - p_object.m_transform.m_position;
+
+    glm::vec3 l_size = glm::vec3(p_object.m_rigidBody.m_width,
+        p_object.m_rigidBody.m_height,
+        p_object.m_rigidBody.m_length);
+
+    for (int i = 0; i < 3; ++i)
+    {
+        glm::vec3 l_axis =
+            glm::vec3(p_object.m_transform.m_orientation[i][0],
+                p_object.m_transform.m_orientation[i][1],
+                p_object.m_transform.m_orientation[i][2]);
+
+        float l_distance = glm::dot(l_dir, l_axis);
+
+        if (l_distance > l_size[i])
+        {
+            l_distance = l_size[i];
+        }
+        if (l_distance < -l_size[i])
+        {
+            l_distance = -l_size[i];
+        }
+
+        l_result += l_axis * l_distance;
+    }
+
+    return l_result;
+}
+
+Meshes::Interval Geometry3dUtils::getIntervalABB(const Meshes::Object& p_object,
+                                                 const glm::vec3& p_axis)
+{
+    auto& l_collider = p_object.m_colider.at(0);
+    glm::vec3 l_min = glm::vec3(l_collider.m_minVertex.x, 
+                                l_collider.m_minVertex.y, 
+                                l_collider.m_minVertex.z);
+    glm::vec3 l_max = glm::vec3(l_collider.m_maxVertex.x, 
+                                l_collider.m_maxVertex.y, 
+                                l_collider.m_maxVertex.z);
+
+    std::vector<glm::vec3> l_verticies =
+    {
+        glm::vec3(l_min.x, l_max.y, l_max.z),
+        glm::vec3(l_min.x, l_max.y, l_min.z),
+        glm::vec3(l_min.x, l_min.y, l_max.z),
+        glm::vec3(l_min.x, l_min.y, l_min.z),
+        glm::vec3(l_max.x, l_max.y, l_max.z),
+        glm::vec3(l_max.x, l_max.y, l_min.z),
+        glm::vec3(l_max.x, l_min.y, l_max.z),
+        glm::vec3(l_max.x, l_min.y, l_min.z)
+    };
+
+    Meshes::Interval l_result;
+    l_result.m_min = l_result.m_max = glm::dot(p_axis, l_verticies[0]);
+    for (int i = 1; i < 8; ++i) {
+        float l_projection = glm::dot(p_axis, l_verticies[i]);
+        l_result.m_min = (l_projection < l_result.m_min) ?
+            l_projection : l_result.m_min;
+        l_result.m_max = (l_projection > l_result.m_max) ?
+            l_projection : l_result.m_max;
+    }
+    return l_result;
+}
+
+Meshes::Interval Geometry3dUtils::getIntervalOBB(const Meshes::Object & p_object, 
+                                                 const glm::vec3 & p_axis)
+{
+    std::vector<glm::vec3> l_verticies;
+    glm::vec3 l_pos = p_object.m_transform.m_position;
+    glm::vec3 l_size = glm::vec3(p_object.m_rigidBody.m_width,
+                                 p_object.m_rigidBody.m_height,
+                                 p_object.m_rigidBody.m_length);
+    glm::vec3 l_xOrientation = glm::vec3(p_object.m_transform.m_orientation[0][0],
+                                         p_object.m_transform.m_orientation[0][1],
+                                         p_object.m_transform.m_orientation[0][2]);
+
+    glm::vec3 l_yOrientation = glm::vec3(p_object.m_transform.m_orientation[1][0],
+                                         p_object.m_transform.m_orientation[1][1],
+                                         p_object.m_transform.m_orientation[1][2]);
+
+    glm::vec3 l_zOrientation = glm::vec3(p_object.m_transform.m_orientation[2][0],
+                                         p_object.m_transform.m_orientation[2][1],
+                                         p_object.m_transform.m_orientation[2][2]);
+
+
+    l_verticies.push_back(l_pos + l_xOrientation * l_size[0] +
+        l_yOrientation * l_size[1] +
+        l_zOrientation * l_size[2]);
+    l_verticies.push_back(l_pos - l_xOrientation * l_size[0] +
+        l_yOrientation * l_size[1] +
+        l_zOrientation * l_size[2]);
+    l_verticies.push_back(l_pos + l_xOrientation * l_size[0] -
+        l_yOrientation * l_size[1] +
+        l_zOrientation * l_size[2]);
+    l_verticies.push_back(l_pos + l_xOrientation * l_size[0] +
+        l_yOrientation * l_size[1] -
+        l_zOrientation * l_size[2]);
+    l_verticies.push_back(l_pos - l_xOrientation * l_size[0] -
+        l_yOrientation * l_size[1] -
+        l_zOrientation * l_size[2]);
+    l_verticies.push_back(l_pos + l_xOrientation * l_size[0] -
+        l_yOrientation * l_size[1] -
+        l_zOrientation * l_size[2]);
+    l_verticies.push_back(l_pos - l_xOrientation * l_size[0] +
+        l_yOrientation * l_size[1] -
+        l_zOrientation * l_size[2]);
+    l_verticies.push_back(l_pos - l_xOrientation * l_size[0] -
+        l_yOrientation * l_size[1] +
+        l_zOrientation * l_size[2]);
+
+    Meshes::Interval l_result;
+    l_result.m_min = l_result.m_max = glm::dot(p_axis, l_verticies[0]);
+    for (int i = 1; i < 8; ++i) {
+        float l_projection = glm::dot(p_axis, l_verticies[i]);
+        l_result.m_min = (l_projection < l_result.m_min) ?
+            l_projection : l_result.m_min;
+        l_result.m_max = (l_projection > l_result.m_max) ?
+            l_projection : l_result.m_max;
+    }
+
+    return l_result;
 }
 
 }//Utils

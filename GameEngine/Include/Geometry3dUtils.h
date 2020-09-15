@@ -2,6 +2,9 @@
 #include "Ray.h"
 #include "Object.h"
 #include "ColMainfold.h"
+#include "LineSegment.h"
+#include "Plane.h"
+#include "Interval.h"
 #include <array>
 
 namespace McEngine
@@ -26,8 +29,21 @@ public:
                          const Ray & p_ray,
                          Physics::RaycastResult * p_raycastResult = nullptr);
 
-    static ColMainfold findColFeature(const Meshes::Object& p_objectA, 
-                                      const Meshes::Object& p_objectB);
+    static bool clipToPlane(const Meshes::Plane & p_plane, 
+                            const Meshes::LineSegment & p_line, 
+                            glm::vec3 * p_outPoint);
+
+    static bool checkIfPointIsOnCubeOBB(const Meshes::Object & p_object, 
+                                        const glm::vec3 & p_point);
+
+    static glm::vec3 findClosestPointOnCubeOBB(const Meshes::Object & p_object, 
+                                               const glm::vec3 & p_point);
+
+    static Meshes::Interval getIntervalABB(const Meshes::Object & p_object, 
+                                           const glm::vec3 & p_axis);
+
+    static Meshes::Interval getIntervalOBB(const Meshes::Object& p_object, 
+                                           const glm::vec3& p_axis);
 private:
 
     static bool raycastSphere(const Meshes::Object & p_object, 

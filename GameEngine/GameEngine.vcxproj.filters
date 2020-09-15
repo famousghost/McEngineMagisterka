@@ -500,5 +500,8 @@
     <ClInclude Include="Include\LineSegment.h">
       <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Interval.h">
+      <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

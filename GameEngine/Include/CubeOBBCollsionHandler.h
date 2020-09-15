@@ -27,15 +27,19 @@ public:
                      glm::vec3 * p_outPoint);
 
     std::vector<glm::vec3> clipEdgesToCube(const std::vector<Meshes::LineSegment>& p_edges, 
-                                           const Meshes::Collider & p_collider);
+                                           const Meshes::Collider & p_collider,
+                                           const Meshes::Object& p_object);
 
-    float findPenetrationDepth(const Meshes::Collider & p_colliderA,
-                               const Meshes::Collider & p_colliderB, 
+    float findPenetrationDepth(const Meshes::Object & p_colliderA,
+                               const Meshes::Object & p_colliderB,
                                const glm::vec3 & p_axis, 
                                bool & p_shouldFlip);
 
     bool checkCollision(const Meshes::Collider & p_coliderA, 
                         const Meshes::Collider & p_coliderB) override;
+
+    Meshes::ColMainfold findCollsionFeatures(const Meshes::Object& p_objectA,
+                                             const Meshes::Object& p_objectB);
 
     Meshes::ColMainfold getColMainfold() const override;
 private:
