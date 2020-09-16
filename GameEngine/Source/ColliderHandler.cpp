@@ -90,16 +90,6 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
         bool l_result = m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
         m_colMainfold = m_meshCollisionHandler->getColMainfold();
 
-        //DEBUG FOR CONTACT POINTS AND NORMAL VEC FROM COLLISION
-        //for (auto& elem : m_colMainfold.m_contacts)
-        //{
-            //std::cout << "Contact point = " << "(" << elem.x << ", " << elem.y << ", " << elem.z << ")" << std::endl;
-
-        //}
-        //std::cout << "NEXT" << std::endl << std::endl << std::endl;
-
-        //std::cout << "normal = " << "(" << m_colMainfold.m_normal.x << ", " << m_colMainfold.m_normal.y << ", " << m_colMainfold.m_normal.z << ")" << std::endl;
-
         return l_result;
     }
     if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
@@ -177,30 +167,17 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                         p_object.m_rigidBody.m_isOnGrounded = false;
                     }
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
-                    Utils::Geometry3dUtils::applyImpulse(p_object, p_objects[i].first, m_colMainfold, 0);
-
-                    /*auto l_deltaTime = static_cast<float>(Time::TimeManager::getInstance().getDeltaTime());
-                    auto l_collisionDirectionLength = glm::length(p_object.m_rigidBody.m_velocity + p_object.m_velocity);
-                    if(p_object.m_rigidBody.m_isOnGrounded)
+                    for(int j = 0; j < m_colMainfold.m_contacts.size(); ++j)
                     {
-                        p_object.m_transform.m_position -= (l_collisionDirectionLength != 0.0f ? l_collisionDirectionLength : 1.0f) * m_colMainfold.m_normal * l_deltaTime;
+                        Utils::Geometry3dUtils::applyImpulse(p_object, p_objects[i].first, m_colMainfold, i);
                     }
 
-                    if(p_objects[i].first.m_isRigidBody or not p_object.m_rigidBody.m_isOnGrounded)
-                    {
-                        p_objects[i].first.m_rigidBody.m_velocity = p_object.m_rigidBody.m_velocity;
-                        p_objects[i].first.m_movementDirection = p_object.m_movementDirection;
-                        l_collisionDirectionLength = glm::length(p_object.m_rigidBody.m_velocity + p_object.m_velocity);
-                        p_objects[i].first.m_transform.m_position += (l_collisionDirectionLength != 0.0f ? l_collisionDirectionLength : 1.0f) * m_colMainfold.m_normal * l_deltaTime;
-                    }
+                    p_object.m_transform.m_position -= m_colMainfold.m_normal * m_colMainfold.m_depth;
 
-                    if (p_object.m_rigidBody.m_gravityForce or p_object.m_rigidBody.m_isOnGrounded)
+                    if(p_objects[i].first.m_isRigidBody)
                     {
-                        p_object.m_rigidBody.m_velocity.y = 0.0f;
-                        p_object.m_rigidBody.m_dP = glm::vec3();
-                        p_object.m_rigidBody.m_force.y = 0.0f;
-                        p_object.m_rigidBody.m_oldVelocity.y = 0.0f;
-                    }*/
+                        p_objects[i].first.m_transform.m_position += m_colMainfold.m_normal * m_colMainfold.m_depth;;
+                    }
                 }
             }
         }

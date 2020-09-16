@@ -181,6 +181,8 @@ void GuiManager::meshGui()
         }
     }
 
+    applyForce();
+
     refreshShader();
     
     ImGui::SliderFloat3("LightPosition", &l_objectManager.m_lightPosition.x, -10.0f, 10.0f);
@@ -266,6 +268,21 @@ void GuiManager::updateObjectTetxture()
                 LOG("Cannot find texture, there is no texture with this name", LogType::WARN);
             }
         }
+    }
+}
+
+void GuiManager::applyForce()
+{
+    static glm::vec3 l_force;
+    ImGui::SliderFloat3("force", &l_force.x, -10.0f, 10.0f);
+
+    if (ImGui::Button("applyForce"))
+    {
+        if(m_force != nullptr)
+        {
+            *m_force += l_force;
+        }
+
     }
 }
 
@@ -520,8 +537,9 @@ void GuiManager::objectChoosingComboBox(std::vector<std::string>& p_items,
                 {
                     return m_currentObject == label.second;
                 });
-
+            
                 m_currentObject = l_item;
+                setForce(objIt->first.m_rigidBody.m_force);
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();
             }
@@ -651,6 +669,11 @@ void GuiManager::updateObjectShader()
             }
         }
     }
+}
+
+void GuiManager::setForce(glm::vec3& p_force)
+{
+    m_force = &p_force;
 }
 
 void GuiManager::refreshShader()

@@ -49,6 +49,9 @@ public:
                              Meshes::Object& p_objectB,
                              Meshes::ColMainfold& p_mainfold,
                              int p_c);
+    static void applyRotationeImpulse(Meshes::Object & p_object, 
+                                      const glm::vec3 & p_point, 
+                                      const glm::vec3 & p_impulse);
 private:
 
     static bool raycastSphere(const Meshes::Object & p_object, 
@@ -72,8 +75,6 @@ private:
                             const Meshes::Collider& p_collider, 
                             const Ray & p_ray,
                             Physics::RaycastResult* p_raycastResult = nullptr);
-
-    static std::vector<float> getObjectOrientation(const Meshes::Object & p_object);
 
     static bool raycastOBB(const Meshes::Object & p_object, 
                            const Meshes::Collider& p_collider, 

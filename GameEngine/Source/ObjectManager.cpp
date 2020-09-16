@@ -40,6 +40,7 @@ void ObjectManager::addObject(const Object& p_object, std::string p_objName)
     auto l_materialType = Gui::GuiManager::getInstance().getMaterialType();
     m_objects.back().first.m_rigidBody.m_materialProperties.setMaterialType(l_materialType);
     Physics::PhysicsManager::getInstance().calculateObjectMass(m_objects.back().first);
+    Gui::GuiManager::getInstance().setForce(m_objects.back().first.m_rigidBody.m_force);
 
     initState(m_objects.back().first);
 }
@@ -139,10 +140,9 @@ void ObjectManager::moveObject(Object& p_object)
         l_physicsManager.ode(p_object);
     }
 
-    if(not p_object.m_isColliding)
-    {
-        p_object.m_transform.m_position += (p_object.m_velocity + p_object.m_rigidBody.m_velocity)  * static_cast<float>(l_timeManager.getDeltaTime());
-    }
+    p_object.m_transform.m_position += (p_object.m_velocity + p_object.m_rigidBody.m_velocity)  * static_cast<float>(l_timeManager.getDeltaTime());
+    p_object.m_transform.m_rotatione += p_object.m_rigidBody.m_angularVelocity * static_cast<float>(l_timeManager.getDeltaTime());
+
 }
 
 void ObjectManager::resetValues(Object& p_object)
@@ -236,6 +236,7 @@ void ObjectManager::setModelMatrixForObject(Object& p_object)
     glm::mat4 l_model;
     auto& l_transform = p_object.m_transform;
     l_physcis.updatePhysics(p_object, m_objects);
+    float l_deltaTime = Time::TimeManager::getInstance().getDeltaTime();
 
     auto& l_rigidBody = p_object.m_rigidBody;
 
@@ -255,11 +256,11 @@ void ObjectManager::initState(Object& p_object)
     auto& l_physicsManager = Physics::PhysicsManager::getInstance();
 
     auto l_massDivision = p_object.m_rigidBody.m_massProperties.m_mass / 12.0f;
-    p_object.m_rigidBody.m_ibody[0][0] = l_massDivision * std::pow(p_object.m_rigidBody.m_height, 2.0) * std::pow(p_object.m_rigidBody.m_length, 2.0);
-    p_object.m_rigidBody.m_ibody[1][1] = l_massDivision * std::pow(p_object.m_rigidBody.m_width, 2.0) * std::pow(p_object.m_rigidBody.m_length, 2.0);
-    p_object.m_rigidBody.m_ibody[2][2] = l_massDivision * std::pow(p_object.m_rigidBody.m_width, 2.0) * std::pow(p_object.m_rigidBody.m_height, 2.0);
+    p_object.m_rigidBody.m_bodyTensorOfInertia[0][0] = l_massDivision * std::pow(p_object.m_rigidBody.m_height, 2.0) * std::pow(p_object.m_rigidBody.m_length, 2.0);
+    p_object.m_rigidBody.m_bodyTensorOfInertia[1][1] = l_massDivision * std::pow(p_object.m_rigidBody.m_width, 2.0) * std::pow(p_object.m_rigidBody.m_length, 2.0);
+    p_object.m_rigidBody.m_bodyTensorOfInertia[2][2] = l_massDivision * std::pow(p_object.m_rigidBody.m_width, 2.0) * std::pow(p_object.m_rigidBody.m_height, 2.0);
 
-    p_object.m_rigidBody.m_inverseIbody = glm::inverse(p_object.m_rigidBody.m_ibody);
+    p_object.m_rigidBody.m_invBodyTensorOfInteria = glm::inverse(p_object.m_rigidBody.m_bodyTensorOfInertia);
     p_object.m_rigidBody.m_position = &p_object.m_transform.m_position;
 }
 

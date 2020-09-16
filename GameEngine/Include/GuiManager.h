@@ -29,6 +29,8 @@ public:
 
     std::string getMaterialType() const;
 
+    void setForce(glm::vec3 & p_force);
+
     static GuiManager& getInstance()
     {
         static GuiManager guiManager;
@@ -50,6 +52,7 @@ private:
     std::string m_colliderTypeName;
     std::string m_materialType;
     Meshes::ColliderType m_colliderType;
+    glm::vec3* m_force;
     std::size_t m_elementNumber;
     bool m_colidersVisiblity;
 
@@ -69,6 +72,7 @@ private:
     void updateListOfObjects(std::vector<std::string>& p_shaderItems);
     void updateListOfShaders(std::vector<std::string>& p_shadersToAdd);
     void updateObjectShader();
+    void applyForce();
     void refreshShader();
 };
 }//Gui

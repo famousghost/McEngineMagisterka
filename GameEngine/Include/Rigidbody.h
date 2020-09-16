@@ -15,8 +15,8 @@ struct Rigidbody
 {
     Mass m_massProperties;
 
-    glm::mat3 m_ibody;
-    glm::mat3 m_inverseIbody;
+    glm::mat3 m_bodyTensorOfInertia;
+    glm::mat3 m_invBodyTensorOfInteria;
 
     glm::vec3* m_position; /*x(t)*/
     glm::vec3 m_prevPosition; /*prev x(t)*/

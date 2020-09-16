@@ -432,12 +432,22 @@ void Geometry3dUtils::applyImpulse(Meshes::Object & p_objectA,
     float l_invMassA = p_objectA.m_rigidBody.m_massProperties.m_inverseMass;
     float l_invMassB = p_objectB.m_rigidBody.m_massProperties.m_inverseMass;
     float l_invMassSum = l_invMassA + l_invMassB;
+
     if (not l_invMassSum) 
     { 
         return; 
     }
 
-    glm::vec3 l_relativeVel = p_objectB.m_rigidBody.m_velocity - p_objectA.m_rigidBody.m_velocity;
+    glm::vec3 l_rA = p_mainfold.m_contacts[p_c] - p_objectA.m_transform.m_position;
+    glm::vec3 l_rB = p_mainfold.m_contacts[p_c] - p_objectB.m_transform.m_position;
+
+    glm::mat3 l_interiaTensorA = p_objectA.m_rigidBody.m_invBodyTensorOfInteria;
+    glm::mat3 l_interiaTensorB = p_objectB.m_rigidBody.m_invBodyTensorOfInteria;
+
+    glm::vec3 l_relativeVel = 
+        (p_objectB.m_rigidBody.m_velocity + glm::cross(p_objectB.m_rigidBody.m_angularVelocity, l_rB))
+        - (p_objectA.m_rigidBody.m_velocity + glm::cross(p_objectA.m_rigidBody.m_angularVelocity, l_rA));
+
     glm::vec3 l_relativeNorm = glm::normalize(p_mainfold.m_normal);
     if (glm::dot(l_relativeVel, l_relativeNorm) > 0.0f) {
         return;
@@ -446,16 +456,28 @@ void Geometry3dUtils::applyImpulse(Meshes::Object & p_objectA,
     float l_e = fminf(p_objectA.m_rigidBody.m_materialProperties.m_restitution,
                       p_objectB.m_rigidBody.m_materialProperties.m_restitution);
     float l_numerator = (-(1.0f + l_e) * glm::dot(l_relativeVel, l_relativeNorm));
-    float l_j = l_numerator / l_invMassSum;
+
+    float l_d = l_invMassSum;
+
+    glm::vec3 l_dvecA = glm::cross(glm::cross(l_rA, l_relativeNorm) * l_interiaTensorA, l_rA);
+    glm::vec3 l_dvecB = glm::cross(glm::cross(l_rB, l_relativeNorm) * l_interiaTensorB, l_rB);
+
+    float l_denominator = l_d + glm::dot(l_relativeNorm, l_dvecA + l_dvecB);
+
+    float l_j = (l_denominator == 0.0f) ? 0.0f : l_numerator / l_denominator;
+
+
     if (p_mainfold.m_contacts.size() > 0.0f && l_j != 0.0f) {
         l_j /= (float)p_mainfold.m_contacts.size();
     }
 
     glm::vec3 l_impulse = l_relativeNorm * l_j;
     p_objectA.m_rigidBody.m_velocity -= l_impulse * l_invMassA;
+    //p_objectA.m_rigidBody.m_angularVelocity -= glm::cross(l_rA, l_impulse) * l_interiaTensorA;
     if(p_objectB.m_isRigidBody)
     {
         p_objectB.m_rigidBody.m_velocity +=  l_impulse * l_invMassB;
+        //p_objectB.m_rigidBody.m_angularVelocity += glm::cross(l_rB, l_impulse) * l_interiaTensorB;
     }
 
     glm::vec3 l_t = l_relativeVel - (l_relativeNorm *
@@ -466,8 +488,21 @@ void Geometry3dUtils::applyImpulse(Meshes::Object & p_objectA,
 
     l_t = glm::normalize(l_t);
 
+
+
     l_numerator = -glm::dot(l_relativeVel, l_t);
-    float l_jt = l_numerator / l_invMassSum;
+
+    l_d = l_invMassSum;
+    l_dvecA = glm::cross(glm::cross(l_rA, l_t) * l_interiaTensorA, l_rA);
+    l_dvecB = glm::cross(glm::cross(l_rB, l_t) * l_interiaTensorB, l_rB);
+    l_denominator = l_d + glm::dot(l_t, l_dvecA + l_dvecB);
+
+    if (l_denominator == 0.0f)
+    {
+        return;
+    }
+
+    float l_jt = l_numerator / l_denominator;
     if (p_mainfold.m_contacts.size() > 0.0f and l_jt != 0.0f) {
         l_jt /= (float)p_mainfold.m_contacts.size();
     }
@@ -486,10 +521,28 @@ void Geometry3dUtils::applyImpulse(Meshes::Object & p_objectA,
 
     glm::vec3 l_tangentImpuse = l_t * l_jt;
     p_objectA.m_rigidBody.m_velocity -= l_tangentImpuse * l_invMassA;
+    //p_objectA.m_rigidBody.m_angularVelocity -= glm::cross(l_rA, l_tangentImpuse) * l_interiaTensorA;
     if(p_objectB.m_isRigidBody)
     {
         p_objectB.m_rigidBody.m_velocity += l_tangentImpuse * l_invMassB;
+        //p_objectB.m_rigidBody.m_angularVelocity += glm::cross(l_rB, l_tangentImpuse) * l_interiaTensorB;
     }
+}
+
+void Geometry3dUtils::applyRotationeImpulse(Meshes::Object & p_object,
+                                            const glm::vec3& p_point, 
+                                            const glm::vec3& p_impulse)
+{
+    glm::vec3 l_centerMass = p_object.m_transform.m_position;
+
+    glm::vec3 l_torque = glm::cross(p_point - l_centerMass, p_impulse);
+
+    p_object.m_rigidBody.m_torque = l_torque;
+
+    glm::vec3 l_angularAcceleration = 
+        l_torque * glm::mat3(p_object.m_rigidBody.m_invBodyTensorOfInteria);
+
+    p_object.m_rigidBody.m_angularVelocity += l_angularAcceleration;
 }
 
 }//Utils
