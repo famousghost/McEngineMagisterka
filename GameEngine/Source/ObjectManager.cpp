@@ -10,6 +10,7 @@
 #include "GuiManager.h"
 #include <quaternion.hpp>
 #include "../glm-0.9.6.3/glm/glm/gtx/quaternion.hpp"
+#include "Geometry3dUtils.h"
 #include <math.h>
 #include <algorithm>
 

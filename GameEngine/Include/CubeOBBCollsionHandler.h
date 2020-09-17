@@ -43,16 +43,6 @@ public:
 
     Meshes::ColMainfold getColMainfold() const override;
 private:
-    std::vector<double> getProjectedPointsToAxis(const std::vector<glm::vec4>& p_listOfVec, 
-                                                 const glm::vec3 & p_normals);
-    bool checkCollisionForNormalsAxis(const Meshes::Collider & p_coliderA, 
-                                      const Meshes::Collider & p_coliderB, 
-                                      const std::vector<glm::vec3>& p_colliderAEdges, 
-                                      const std::vector<glm::vec3>& p_colliderBEdges);
-    double checkCollisionForNormalAxis(const std::vector<double>& p_projectedColliderA, 
-                                       const std::vector<double>& p_projectedColliderB);
-    double checkCollisionForAxis(const std::vector<double>& p_projectedColliderA, 
-                                 const std::vector<double>& p_projectedColliderB);
     glm::vec3& m_minimumTranslationVector;
     float m_minOverlap;
 

@@ -19,7 +19,7 @@ bool SphereCollsionHandler::checkCollision(const Meshes::Collider & p_coliderA,
     auto l_radiusCombination = p_coliderA.m_radius + p_coliderB.m_radius;
     auto l_dir = glm::normalize(l_distanceVec);
     m_colMainfold.m_isColliding = true;
-    m_colMainfold.m_normal = l_dir;
+    m_colMainfold.m_normal = -l_dir;
     m_colMainfold.m_depth = fabsf(l_distance - l_radiusCombination) * 0.5f;
     float l_distanceToPoint = p_coliderA.m_radius - m_colMainfold.m_depth;
     glm::vec3 l_contactPoint = m_objectCenterA + l_dir * l_distanceToPoint;

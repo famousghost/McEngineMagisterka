@@ -11,7 +11,8 @@ class SphereVOBBCollisionHandler : public MeshCollisionHandler
 public:
     SphereVOBBCollisionHandler(const glm::vec3 & p_objectCenterA,
                                const glm::vec3 & p_objectCenterB,
-                               glm::vec3& p_collisionDirection);
+                               glm::vec3& p_collisionDirection,
+                               const Meshes::Object* p_cube);
 
     bool checkCollision(const Meshes::Collider & p_coliderA,
                         const Meshes::Collider & p_coliderB) override;
@@ -30,6 +31,7 @@ private:
     glm::vec3 m_objectCenterB;
     glm::vec3 m_collsionDirection;
     Meshes::ColMainfold m_colMainfold;
+    const Meshes::Object* m_cube;
 
 };
 

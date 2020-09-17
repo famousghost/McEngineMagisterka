@@ -69,7 +69,7 @@ glm::vec3 CollisionHandler::calculateRealCollsionDirection(const glm::vec3& p_co
 }
 
 bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_colliderA,
-                                              const Meshes::Collider& p_ColliderB,
+                                              const Meshes::Collider& p_colliderB,
                                               const glm::vec3& p_objectCenterA,
                                               const glm::vec3& p_objectCenterB,
                                               const Meshes::Object* p_objectA,
@@ -80,53 +80,64 @@ bool CollisionHandler::checkCollsionForObject(const Meshes::Collider& p_collider
     m_collsionDirection = -calculateRealCollsionDirection(glm::normalize(p_objectCenterB - p_objectCenterA));
 
     if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_OBB
-        and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_OBB)
+        and p_colliderB.m_colliderType == Meshes::ColliderType::CUBE_OBB)
     {
         m_meshCollisionHandler = std::make_unique<CubeOBBCollsionHandler>(m_collsionDirection, 
                                                                           p_objectCenterA, 
                                                                           p_objectCenterB,
                                                                           p_objectA,
                                                                           p_objectB);
-        bool l_result = m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
+        bool l_result = m_meshCollisionHandler->checkCollision(p_colliderA, p_colliderB);
         m_colMainfold = m_meshCollisionHandler->getColMainfold();
 
         return l_result;
     }
     if (p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
-             and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_AABB)
+             and p_colliderB.m_colliderType == Meshes::ColliderType::CUBE_AABB)
 
     {
         m_meshCollisionHandler = std::make_unique<CubeAABBCollisionHandler>();
-        return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);;
+        return m_meshCollisionHandler->checkCollision(p_colliderA, p_colliderB);;
     }
     if (p_colliderA.m_colliderType == Meshes::ColliderType::SPHERE
-              and p_ColliderB.m_colliderType == Meshes::ColliderType::SPHERE)
+              and p_colliderB.m_colliderType == Meshes::ColliderType::SPHERE)
     {
         
         m_meshCollisionHandler = std::make_unique<SphereCollsionHandler>(p_objectCenterA, p_objectCenterB);
-        bool l_result = m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
+        bool l_result = m_meshCollisionHandler->checkCollision(p_colliderA, p_colliderB);
         m_colMainfold = m_meshCollisionHandler->getColMainfold();
         return l_result;
     }
     if ((p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB
-             and p_ColliderB.m_colliderType == Meshes::ColliderType::SPHERE)
+             and p_colliderB.m_colliderType == Meshes::ColliderType::SPHERE)
              or 
              (p_colliderA.m_colliderType == Meshes::ColliderType::SPHERE
-             and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_AABB))
+             and p_colliderB.m_colliderType == Meshes::ColliderType::CUBE_AABB))
     {
         m_meshCollisionHandler = std::make_unique<SphereVAABBCollsionHandler>(p_objectCenterA, p_objectCenterB);
-        return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
+        return m_meshCollisionHandler->checkCollision(p_colliderA, p_colliderB);
     }
     if ((p_colliderA.m_colliderType == Meshes::ColliderType::CUBE_OBB
-             and p_ColliderB.m_colliderType == Meshes::ColliderType::SPHERE)
-             or 
-             (p_colliderA.m_colliderType == Meshes::ColliderType::SPHERE
-             and p_ColliderB.m_colliderType == Meshes::ColliderType::CUBE_OBB))
+         and p_colliderB.m_colliderType == Meshes::ColliderType::SPHERE))
     {
         m_meshCollisionHandler = std::make_unique<SphereVOBBCollisionHandler>(p_objectCenterA, 
                                                                               p_objectCenterB, 
-                                                                              m_collsionDirection);
-        return m_meshCollisionHandler->checkCollision(p_colliderA, p_ColliderB);
+                                                                              m_collsionDirection,
+                                                                              p_objectA);
+        bool l_result = m_meshCollisionHandler->checkCollision(p_colliderA, p_colliderB);
+        m_colMainfold = m_meshCollisionHandler->getColMainfold();
+        return l_result;
+    }
+    if ((p_colliderA.m_colliderType == Meshes::ColliderType::SPHERE
+         and p_colliderB.m_colliderType == Meshes::ColliderType::CUBE_OBB))
+    {
+        m_meshCollisionHandler = std::make_unique<SphereVOBBCollisionHandler>(p_objectCenterB,
+                                                                              p_objectCenterA,
+                                                                              m_collsionDirection,
+                                                                              p_objectB);
+        bool l_result = m_meshCollisionHandler->checkCollision(p_colliderB, p_colliderA);
+        m_colMainfold = m_meshCollisionHandler->getColMainfold();
+        return l_result;
     }
     return false;
 }
@@ -138,7 +149,6 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
     {
         return;
     }
-
     for (std::size_t i = 0; i < p_objects.size(); ++i)
     {
         if (p_object.m_objectName == p_objects[i].first.m_objectName)
@@ -166,7 +176,11 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                     {
                         p_object.m_rigidBody.m_isOnGrounded = false;
                     }
+
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
+
+                    std::cout << "Contact points: " << m_colMainfold.m_contacts.size() << std::endl;
+
                     for(int j = 0; j < m_colMainfold.m_contacts.size(); ++j)
                     {
                         Utils::Geometry3dUtils::applyImpulse(p_object, p_objects[i].first, m_colMainfold, i);
@@ -176,7 +190,7 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
 
                     if(p_objects[i].first.m_isRigidBody)
                     {
-                        p_objects[i].first.m_transform.m_position += m_colMainfold.m_normal * m_colMainfold.m_depth;;
+                        p_objects[i].first.m_transform.m_position += m_colMainfold.m_normal * m_colMainfold.m_depth;
                     }
                 }
             }

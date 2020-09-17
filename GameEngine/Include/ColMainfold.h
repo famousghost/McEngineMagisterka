@@ -23,7 +23,7 @@ struct ColMainfoldHandler
         if (p_colMainfold)
         {
             p_colMainfold->m_isColliding = false;
-            p_colMainfold->m_normal = glm::vec3(0.0f, 0.0f, 1.0f);
+            p_colMainfold->m_normal = glm::vec3(0.0f, 0.0f, -1.0f);
             p_colMainfold->m_depth = std::numeric_limits<float>::max();
             p_colMainfold->m_contacts.clear();
         }

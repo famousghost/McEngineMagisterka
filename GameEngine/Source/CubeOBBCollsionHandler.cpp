@@ -55,7 +55,7 @@ std::vector<Meshes::Plane> CubeOBBCollsionHandler::getFaces(const Meshes::Collid
     std::vector<Meshes::Plane> l_result;
     l_result.resize(6);
     const auto& l_rigidbody = p_object.m_rigidBody;
-    const auto& l_pos = p_object.m_transform.m_position;
+    const auto& l_pos = p_object.m_transform.m_position + p_collider.m_transform.m_position;
     glm::vec3 l_size = glm::vec3(l_rigidbody.m_width, l_rigidbody.m_height, l_rigidbody.m_length);
     const auto& l_orientation = p_object.m_transform.m_orientation;
     glm::vec3 l_x = glm::vec3(l_orientation[0][0], l_orientation[0][1], l_orientation[0][2]);
