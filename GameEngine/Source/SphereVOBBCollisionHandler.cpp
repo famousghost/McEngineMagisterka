@@ -21,13 +21,8 @@ SphereVOBBCollisionHandler::SphereVOBBCollisionHandler(const glm::vec3 & p_objec
 
 bool SphereVOBBCollisionHandler::checkCollision(const Meshes::Collider & p_coliderA, const Meshes::Collider & p_coliderB)
 {
-    glm::vec3 l_closestPointOnOBBCube;
-    float l_distance = 0.0f;
-    float l_radius = 0.0f;
-    l_distance = calculateDistanceBetweenClosestPointAndSphereCeneter(p_coliderA, p_coliderB, m_sphereCenter, m_cubeCenter);
-    l_radius = p_coliderB.m_radius;
-
-    return l_distance < l_radius;
+    calculateDistanceBetweenClosestPointAndSphereCeneter(p_coliderA, p_coliderB, m_sphereCenter, m_cubeCenter);
+    return m_colMainfold.m_isColliding;
 }
 
 Meshes::ColMainfold SphereVOBBCollisionHandler::getColMainfold() const
@@ -35,10 +30,10 @@ Meshes::ColMainfold SphereVOBBCollisionHandler::getColMainfold() const
     return m_colMainfold;
 }
 
-float SphereVOBBCollisionHandler::calculateDistanceBetweenClosestPointAndSphereCeneter(const Meshes::Collider & p_cubeCollider, 
-                                                                                       const Meshes::Collider & p_sphereCoolider,
-                                                                                       const glm::vec3& p_sphereCenter,
-                                                                                       const glm::vec3& p_cubePosition)
+void SphereVOBBCollisionHandler::calculateDistanceBetweenClosestPointAndSphereCeneter(const Meshes::Collider & p_cubeCollider, 
+                                                                                      const Meshes::Collider & p_sphereCoolider,
+                                                                                      const glm::vec3& p_sphereCenter,
+                                                                                      const glm::vec3& p_cubePosition)
 {
     glm::vec3 l_closestPointOnOBBCube =  Utils::Geometry3dUtils::findClosestPointOnCubeOBB(*m_cube, p_sphereCenter);
 
@@ -48,7 +43,7 @@ float SphereVOBBCollisionHandler::calculateDistanceBetweenClosestPointAndSphereC
 
     if (l_distanceSq > (p_sphereCoolider.m_radius * p_sphereCoolider.m_radius)) 
     {
-        return -1.0f;
+        return;
     }
 
     glm::vec3 l_normal;
@@ -58,7 +53,7 @@ float SphereVOBBCollisionHandler::calculateDistanceBetweenClosestPointAndSphereC
                       glm::length(l_closestPointOnOBBCube - p_cubePosition);
         if (Utils::Geometry3dUtils::cmp(l_mSq, 0.0f))
         {
-            return -1.0f;
+            return;
         }
         l_normal = glm::normalize(l_closestPointOnOBBCube - p_cubePosition);
     }
@@ -71,10 +66,8 @@ float SphereVOBBCollisionHandler::calculateDistanceBetweenClosestPointAndSphereC
     float l_distanceBetweenOutsidePointAndClosestPoint = glm::length(l_closestPointOnOBBCube - l_outsidePoint);
     m_colMainfold.m_isColliding = true;
     m_colMainfold.m_contacts.push_back(l_closestPointOnOBBCube + (l_outsidePoint - l_closestPointOnOBBCube) * 0.5f);
-    m_colMainfold.m_normal = l_normal;
+    m_colMainfold.m_normal = -l_normal;
     m_colMainfold.m_depth = l_distanceBetweenOutsidePointAndClosestPoint * 0.5f;
-
-    return l_distanceBetweenOutsidePointAndClosestPoint;
 }
 
 }//Physics

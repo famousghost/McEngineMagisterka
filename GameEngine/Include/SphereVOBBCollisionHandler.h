@@ -21,14 +21,14 @@ public:
 
 
 private:
-    float calculateDistanceBetweenClosestPointAndSphereCeneter(const Meshes::Collider & p_cubeCollider, 
-                                                               const Meshes::Collider & p_sphereCoolider, 
-                                                               const glm::vec3 & p_sphereCenter, 
-                                                               const glm::vec3 & p_cubePosition);
+    void calculateDistanceBetweenClosestPointAndSphereCeneter(const Meshes::Collider & p_cubeCollider, 
+                                                              const Meshes::Collider & p_sphereCoolider, 
+                                                              const glm::vec3 & p_sphereCenter, 
+                                                              const glm::vec3 & p_cubePosition);
 
 
-    glm::vec3 m_objectCenterA;
-    glm::vec3 m_objectCenterB;
+    glm::vec3 m_cubeCenter;
+    glm::vec3 m_sphereCenter;
     glm::vec3 m_collsionDirection;
     Meshes::ColMainfold m_colMainfold;
     const Meshes::Object* m_cube;
