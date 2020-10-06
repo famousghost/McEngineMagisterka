@@ -41,9 +41,9 @@ glm::vec3 Geometry3dUtils::closestPoint(const Ray& p_ray, const glm::vec3& p_poi
 }
 
 bool Geometry3dUtils::raycastSphere(const Meshes::Object& p_object, 
-                                     const Meshes::Collider& p_collider, 
-                                     const Ray& p_ray,
-                                     Physics::RaycastResult* p_raycastResult)
+                                    const Meshes::Collider& p_collider, 
+                                    const Ray& p_ray,
+                                    Physics::RaycastResult* p_raycastResult)
 {
     auto l_vecFromOriginToSphereCenter = p_object.m_transform.m_position - p_ray.m_origin;
 
@@ -115,7 +115,7 @@ bool Geometry3dUtils::findClosestPointOnCubeAABB(glm::vec3 p_max,
         {
             if (cmp(l_tResult, l_t[i]))
             {
-                    p_raycastResult->m_normal = l_normals[i];
+                p_raycastResult->m_normal = l_normals[i];
             }
         }
     }
@@ -212,9 +212,10 @@ bool Geometry3dUtils::raycastOBB(const Meshes::Object & p_object,
                                   const Ray & p_ray,
                                   Physics::RaycastResult* p_raycastResult)
 {
-    glm::vec3 l_size = glm::vec3(p_object.m_rigidBody.m_width, 
-                                 p_object.m_rigidBody.m_height, 
-                                 p_object.m_rigidBody.m_length);
+    auto& l_collider = p_object.m_colider.at(0);
+    glm::vec3 l_size = glm::vec3(l_collider.m_width,
+                                 l_collider.m_height,
+                                 l_collider.m_length);
 
     auto& l_orientation = p_object.m_transform.m_orientation;
     glm::vec3 l_x = glm::vec3(l_orientation[0][0], l_orientation[0][1], l_orientation[0][2]);
@@ -286,13 +287,16 @@ bool Geometry3dUtils::clipToPlane(const Meshes::Plane& p_plane,
 {
     glm::vec3 l_line = p_line.m_endPoint - p_line.m_startPoint;
     float l_nAB = glm::dot(p_plane.m_normal, l_line);
-    if (cmp(l_nAB, 0)) {
+
+    if (cmp(l_nAB, 0)) 
+    {
         return false;
     }
+
     float l_nA = glm::dot(p_plane.m_normal, p_line.m_startPoint);
     float l_t = (p_plane.m_distance - l_nA) / l_nAB;
 
-    if (l_t >= 0.0f && l_t <= 1.0f)
+    if (l_t >= 0.0f and l_t <= 1.0f)
     {
         if (p_outPoint != 0)
         {
@@ -323,11 +327,7 @@ bool Geometry3dUtils::checkIfPointIsOnCubeOBB(const Meshes::Object& p_object,
 
         float l_distance = glm::dot(l_dir, l_axis);
 
-        if (l_distance > l_size[i])
-        {
-            return false;
-        }
-        if (l_distance < -l_size[i])
+        if (l_distance > l_size[i] or l_distance < -l_size[i])
         {
             return false;
         }
@@ -415,10 +415,8 @@ Meshes::Interval Geometry3dUtils::getIntervalOBB(const Meshes::Object & p_object
     l_result.m_min = l_result.m_max = glm::dot(p_axis, glm::vec3(l_verticies[0]));
     for (int i = 1; i < 8; ++i) {
         float l_projection = glm::dot(p_axis, glm::vec3(l_verticies[i]));
-        l_result.m_min = (l_projection < l_result.m_min) ?
-            l_projection : l_result.m_min;
-        l_result.m_max = (l_projection > l_result.m_max) ?
-            l_projection : l_result.m_max;
+        l_result.m_min = (l_projection < l_result.m_min) ? l_projection : l_result.m_min;
+        l_result.m_max = (l_projection > l_result.m_max) ? l_projection : l_result.m_max;
     }
 
     return l_result;
@@ -449,6 +447,7 @@ void Geometry3dUtils::applyImpulse(Meshes::Object & p_objectA,
         - (p_objectA.m_rigidBody.m_velocity + glm::cross(p_objectA.m_rigidBody.m_angularVelocity, l_rA));
 
     glm::vec3 l_relativeNorm = glm::normalize(p_mainfold.m_normal);
+
     if (glm::dot(l_relativeVel, l_relativeNorm) > 0.0f) {
         return;
     }
@@ -488,8 +487,6 @@ void Geometry3dUtils::applyImpulse(Meshes::Object & p_objectA,
 
     l_t = glm::normalize(l_t);
 
-
-
     l_numerator = -glm::dot(l_relativeVel, l_t);
 
     l_d = l_invMassSum;
@@ -503,10 +500,13 @@ void Geometry3dUtils::applyImpulse(Meshes::Object & p_objectA,
     }
 
     float l_jt = l_numerator / l_denominator;
-    if (p_mainfold.m_contacts.size() > 0.0f and l_jt != 0.0f) {
+    if (p_mainfold.m_contacts.size() > 0.0f and l_jt != 0.0f) 
+    {
         l_jt /= (float)p_mainfold.m_contacts.size();
     }
-    if (cmp(l_jt, 0.0f)) {
+
+    if (cmp(l_jt, 0.0f)) 
+    {
         return;
     }
 

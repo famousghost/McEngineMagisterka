@@ -187,12 +187,8 @@ void GuiManager::meshGui()
     
     ImGui::SliderFloat3("LightPosition", &l_objectManager.m_lightPosition.x, -10.0f, 10.0f);
 
-
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::Text("@copyright Marcin Czekaj");
-
-    ImGui::Text(Logger::getInstance().fetchConsoleLogs().c_str());
-
 
     ImGui::End();
     ImGui::Render();
@@ -539,7 +535,10 @@ void GuiManager::objectChoosingComboBox(std::vector<std::string>& p_items,
                 });
             
                 m_currentObject = l_item;
-                setForce(objIt->first.m_rigidBody.m_force);
+                if(objIt != l_objects.end())
+                {
+                    setForce(objIt->first.m_rigidBody.m_force);
+                }
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();
             }

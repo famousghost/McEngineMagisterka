@@ -23,6 +23,9 @@ struct Collider
     std::shared_ptr<Shaders::Shader> m_shaderProgram;
     std::vector<glm::vec4> m_verticies;
     glm::mat4 m_modelMatrix;
+    float m_width;
+    float m_height;
+    float m_length;
     Transform m_transform;
     glm::vec4 m_minVertex;
     glm::vec4 m_maxVertex;
@@ -55,6 +58,10 @@ struct Collider
 
         m_ySection.min = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
         m_ySection.max = glm::vec4(-1.0f, 1.0f, 1.0f, 1.0f);
+
+        m_width = 1.0f;
+        m_height = 1.0f;
+        m_length = 1.0f;
 
         m_zSection.min = glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
         m_zSection.max = glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f);

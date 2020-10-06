@@ -180,17 +180,16 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
 
                     std::cout << "Contact points: " << m_colMainfold.m_contacts.size() << std::endl;
-
-                    for(int j = 0; j < m_colMainfold.m_contacts.size(); ++j)
-                    {
-                        Utils::Geometry3dUtils::applyImpulse(p_object, p_objects[i].first, m_colMainfold, i);
-                    }
-
                     p_object.m_transform.m_position -= m_colMainfold.m_normal * m_colMainfold.m_depth;
 
                     if(p_objects[i].first.m_isRigidBody)
                     {
                         p_objects[i].first.m_transform.m_position += m_colMainfold.m_normal * m_colMainfold.m_depth;
+                    }
+
+                    for (int j = 0; j < m_colMainfold.m_contacts.size(); ++j)
+                    {
+                        Utils::Geometry3dUtils::applyImpulse(p_object, p_objects[i].first, m_colMainfold, j);
                     }
                 }
             }

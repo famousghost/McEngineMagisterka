@@ -22,10 +22,6 @@ public:
     std::vector<Meshes::Plane> getFaces(const Meshes::Collider & p_collider, 
                                         const Meshes::Object & p_object);
 
-    bool clipToPlane(const Meshes::Plane & p_plane, 
-                     const Meshes::LineSegment & p_line, 
-                     glm::vec3 * p_outPoint);
-
     std::vector<glm::vec3> clipEdgesToCube(const std::vector<Meshes::LineSegment>& p_edges, 
                                            const Meshes::Collider & p_collider,
                                            const Meshes::Object& p_object);
