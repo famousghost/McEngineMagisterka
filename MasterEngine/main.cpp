@@ -16,8 +16,6 @@ int main()
 {
     SET_LOG_TYPE(McEngine::LogType::DBG);
     McEngine::Time::TimeManager::getInstance().start();
-    McEngine::Files::FileManager::getInstance().start();
-    McEngine::Physics::PhysicsManager::getInstance().start();
     McEngine::Editor::EditorManager::getInstance().start();
     McEngine::GameWindow::WindowManager::getInstance().start();
     McEngine::Meshes::PrefabManager::getInstance().start();
@@ -25,8 +23,8 @@ int main()
     McEngine::Textures::TextureManager::getInstance().start();
     McEngine::Scenes::ScenesManager::getInstace().start();
     McEngine::Renderer::RenderManager::getInstance().start();
-    McEngine::Editor::EditorManager::getInstance().start();
     McEngine::Inputs::InputManager::getInstance().start();
+    McEngine::Physics::PhysicsManager::getInstance().start();
     McEngine::Gui::GuiManager::getInstance().start();
 
     //-----------------------------------------------------------//
@@ -39,14 +37,12 @@ int main()
     McEngine::Inputs::InputManager::getInstance().shutdown();
     McEngine::Meshes::PrefabManager::getInstance().shutdown();
     McEngine::Renderer::RenderManager::getInstance().shutdown();
-    McEngine::Editor::EditorManager::getInstance().shutdown();
     McEngine::Textures::TextureManager::getInstance().shutdown();
     McEngine::Shaders::ShaderManager::getInstance().shutdown();
     McEngine::Scenes::ScenesManager::getInstace().shutdown();
     McEngine::GameWindow::WindowManager::getInstance().shutdown();
     McEngine::Editor::EditorManager::getInstance().shutdown();
     McEngine::Physics::PhysicsManager::getInstance().shutdown();
-    McEngine::Files::FileManager::getInstance().shutdown();
     McEngine::Time::TimeManager::getInstance().shutdown();
 
     return 0;

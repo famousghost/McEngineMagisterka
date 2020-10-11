@@ -176,7 +176,6 @@ void InputManager::scrollCallBack(GLFWwindow * p_window, double p_xOffset, doubl
 void InputManager::start()
 {
     auto* l_currentWindow = GameWindow::WindowManager::getInstance().getWindow().getGlfwWindow();
-    glfwSetInputMode(l_currentWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetKeyCallback(l_currentWindow, keyCallBack);
     glfwSetCursorPosCallback(l_currentWindow, mouseCallBack);
     glfwSetScrollCallback(l_currentWindow, scrollCallBack);

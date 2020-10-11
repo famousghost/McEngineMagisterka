@@ -38,8 +38,6 @@ void EditorManager::editorLoop()
 
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
-    auto& l_windowManager = GameWindow::WindowManager::getInstance();
-    auto& l_renderManager = Renderer::RenderManager::getInstance();
     double l_currentTime = 0.0;
     while (l_window.isOpen())
     {
@@ -47,10 +45,9 @@ void EditorManager::editorLoop()
         l_currentTime = glfwGetTime();
         auto& l_timeManager = Time::TimeManager::getInstance();
         l_timeManager.setDeltaTime(l_currentTime - l_previousTime);
-        l_timeManager.setAccumulator(l_currentTime - l_previousTime);
 
-        Gui::GuiManager::getInstance().meshGui();
-        l_renderManager.draw(*scene);
+        Gui::GuiManager::getInstance().renderGui();
+        Renderer::RenderManager::getInstance().draw(*scene);
     }
 
     LOG("Application end", McEngine::LogType::INF);

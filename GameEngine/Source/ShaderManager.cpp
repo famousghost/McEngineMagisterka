@@ -46,21 +46,6 @@ bool ShaderManager::addShader(std::string p_shaderLabel,
     return true;
 }
 
-void ShaderManager::resetShaders()
-{
-    m_shaders.clear();
-    addShader("defaultShader", "Shaders/vertexShader.vlsl", "Shaders/fragmentShader.flsl");
-    addShader("diffuseShader", "Shaders/lightCube.vlsl", "Shaders/lightCube.flsl");
-    addShader("textureShader", "Shaders/textureCube.vlsl", "Shaders/textureCube.flsl");
-    addShader("terrainShader", "Shaders/terrain.vlsl", "Shaders/terrain.flsl");
-    addShader("customObjectShader", "Shaders/textureCustom.vlsl", "Shaders/textureCustom.flsl");
-    addShader("windowShader", "Shaders/windowShader.vlsl", "Shaders/windowShader.flsl");
-    addShader("coliderShader", "Shaders/colider.vlsl", "Shaders/colider.flsl");
-    addShader("lightShader", "Shaders/light.vlsl", "Shaders/light.flsl");
-    addShader("skyBoxShader", "Shaders/skybox.vlsl", "Shaders/skybox.flsl");
-    GameWindow::WindowManager::getInstance().createWindowPlane();
-}
-
 std::shared_ptr<Shader> ShaderManager::getShader(const std::string& p_label)
 {
     try

@@ -17,7 +17,7 @@ public:
     
     void shutdown();
 
-    void meshGui();
+    void renderGui();
 
     void updateObjectTetxture();
 

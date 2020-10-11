@@ -17,7 +17,9 @@ void TextureManager::createTexture(std::string p_texturePath,
                                    std::string p_textureLabel)
 {
     TextureLoader l_textureLoader;
-    GLuint l_textureId = l_textureLoader.loadTexture(p_texturePath, p_wrappingType, p_drawingType);
+    GLuint l_textureId = l_textureLoader.loadTexture(p_texturePath, 
+                                                     p_wrappingType, 
+                                                     p_drawingType);
     m_textures[p_textureLabel] = l_textureId;
 }
 
@@ -85,7 +87,9 @@ void TextureManager::createCubeMapTexture(std::vector<std::string> p_texturesPat
                                           GLenum p_drawingType)
 {
     TextureLoader l_textureLoader;
-    m_cubeMapTexture = l_textureLoader.loadCubeMapTexture(p_texturesPath, p_wrappingType, p_drawingType);
+    m_cubeMapTexture = l_textureLoader.loadCubeMapTexture(p_texturesPath, 
+                                                          p_wrappingType, 
+                                                          p_drawingType);
 }
 
 void TextureManager::activeTexturesForCustomObject(Meshes::Mesh& p_mesh,

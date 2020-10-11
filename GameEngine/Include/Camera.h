@@ -32,6 +32,10 @@ public:
     glm::vec3 getCameraPosition() const;
 
     glm::mat4 getViewMatrix() const;
+
+    bool isEditorScene() const;
+
+    void setEditorScene(bool p_isEditorScene);
 private:
     void setProjectionMatrix(float p_fov,
                              float p_near,
@@ -45,6 +49,7 @@ private:
     glm::mat4 m_projectionMatrix;
     float m_yaw;
     float m_pitch;
+    bool m_isEditorScene;
 };
 }//Cameras
 }//McEngine

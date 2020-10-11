@@ -49,7 +49,7 @@ void GuiManager::initImGui()
     ImGui_ImplOpenGL3_Init(l_glsl_version);
 }
 
-void GuiManager::meshGui()
+void GuiManager::renderGui()
 {
     auto& l_objectManager = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager();
     auto& l_objects = l_objectManager.getObjects();

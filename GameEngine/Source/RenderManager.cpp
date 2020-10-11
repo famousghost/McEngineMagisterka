@@ -40,11 +40,6 @@ void RenderManager::drawSkybox(Meshes::ObjectManager& p_objectManager,
     l_shaderProgram->unbindShaderProgram();
 
     glDepthMask(GL_TRUE);
-
-    if (not m_fillMesh)
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
 }
 
 void RenderManager::draw(Scenes::Scene & p_scene)
@@ -55,6 +50,8 @@ void RenderManager::draw(Scenes::Scene & p_scene)
     auto& l_windowManager = GameWindow::WindowManager::getInstance();
     auto& l_objectManager = p_scene.getObjectManager();
     auto& l_window = l_windowManager.getWindow();
+    l_editorCamera->setEditorScene(true);
+    l_gameCamera->setEditorScene(false);
     
     l_windowManager.updateViewPort();
     l_window.poolEvents();
@@ -103,10 +100,6 @@ void RenderManager::drawScene()
     drawEditorWindow();
     drawGameWindow();
 
-    if (not m_fillMesh)
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
 
     glEnable(GL_DEPTH_TEST);
 }
@@ -179,6 +172,17 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
     auto& l_physicsManager = Physics::PhysicsManager::getInstance();
     for (auto& object : l_objects)
     {
+        if (p_camera->isEditorScene())
+        {
+            if (m_fillMesh)
+            {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            }
+            else
+            {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            }
+        }
         auto& l_object = object.first;
         auto& l_shaderProgram = *l_object.m_shaderProgram;
 
@@ -192,11 +196,6 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
         drawMeshes(l_object);
 
         l_shaderProgram.unbindShaderProgram();
-
-        if (m_fillMesh)
-        {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        }
 
         if (Inputs::InputManager::getInstance().s_onClickMouse)
         {

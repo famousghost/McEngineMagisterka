@@ -26,6 +26,7 @@ Camera::Camera()
 
     m_pitch = 0.0f;
     m_yaw = -90.0f;
+    m_isEditorScene = false;
 }
 
 Camera::~Camera()
@@ -168,6 +169,16 @@ glm::vec3 Camera::getCameraPosition() const
 glm::mat4 Camera::getViewMatrix() const
 {
     return m_view;
+}
+
+bool Camera::isEditorScene() const
+{
+    return m_isEditorScene;
+}
+
+void Camera::setEditorScene(bool p_isEditorScene)
+{
+    m_isEditorScene = p_isEditorScene;
 }
 
 }//Cameras

@@ -79,7 +79,6 @@ void PhysicsManager::computeForceAndTorque(Meshes::Object& p_object)
     m_rigidbodyHandler->update();
 }
 
-
 void PhysicsManager::collisionChecker(Meshes::Object& p_object,
                                       std::vector<std::pair<Meshes::Object, std::string>>& p_objects)
 {
