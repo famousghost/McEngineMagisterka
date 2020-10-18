@@ -4,6 +4,7 @@ namespace McEngine
 {
 namespace Physics
 {
+
 bool CubeAABBCollisionHandler::checkCollision(const Meshes::Collider& p_coliderA,
                                               const Meshes::Collider& p_coliderB)
 {
@@ -17,7 +18,7 @@ bool CubeAABBCollisionHandler::checkCollision(const Meshes::Collider& p_coliderA
 
 Meshes::ColMainfold CubeAABBCollisionHandler::getColMainfold() const
 {
-    return Meshes::ColMainfold();
+    return m_mainfold;
 }
 
 }//Physics

@@ -17,6 +17,7 @@ bool SphereVAABBCollsionHandler::checkCollision(const Meshes::Collider & p_colid
     glm::vec3 l_closestPointOnAABBCube;
     float l_distance;
     float l_radius;
+
     if (p_coliderA.m_colliderType == Meshes::ColliderType::CUBE_AABB)
     {
         glm::vec3 l_sphereCenter = m_objectCenterB + p_coliderB.m_transform.m_position;

@@ -101,6 +101,7 @@ void GuiManager::renderGui()
     choosingObjectToAddComboBox(objectsToAdd);
     choosingObjectMaterialType(materialTypes);
     updateShaderComboBox(shadersItems);
+    updateObjectShader();
     updateTextureComboBox(textureItems);
     objectMoveOperations();
     setObjectProperties();
@@ -110,7 +111,6 @@ void GuiManager::renderGui()
 
     addObject(items, colliders);
     deleteObject(items, colliders);
-    updateObjectShader();
     updateObjectTetxture();
     updateListOfObjects(objectsToAdd);
     updateListOfShaders(shadersItems);
@@ -143,7 +143,7 @@ void GuiManager::renderGui()
         l_renderManager.fillMesh();
     }
 
-    static std::string rigidBody = "rigidbody";
+    static std::string rigidBody = "physics_activate";
     if (ImGui::Button(rigidBody.c_str()))
     {
 
