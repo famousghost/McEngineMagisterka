@@ -11,7 +11,7 @@ TextureManager & TextureManager::getInstance()
     return textureManager;
 }
 
-void TextureManager::createTexture(std::string p_texturePath,
+bool TextureManager::createTexture(std::string p_texturePath,
                                    GLenum p_wrappingType,
                                    GLenum p_drawingType,
                                    std::string p_textureLabel)
@@ -20,15 +20,56 @@ void TextureManager::createTexture(std::string p_texturePath,
     GLuint l_textureId = l_textureLoader.loadTexture(p_texturePath, 
                                                      p_wrappingType, 
                                                      p_drawingType);
+    if (l_textureId == -1)
+    {
+        return false;
+    }
     m_textures[p_textureLabel] = l_textureId;
+
+    return true;
+}
+
+bool TextureManager::createNormalTexture(std::string p_texturePath,
+                                         GLenum p_wrappingType,
+                                         GLenum p_drawingType,
+                                         std::string p_textureLabel)
+{
+    TextureLoader l_textureLoader;
+    GLuint l_textureId = l_textureLoader.loadTexture(p_texturePath,
+                                                     p_wrappingType,
+                                                     p_drawingType);
+    if (l_textureId == -1)
+    {
+        return false;
+    }
+
+    m_normalTexture[p_textureLabel] = l_textureId;
+
+    return true;
 }
 
 void TextureManager::start()
 {
-    createTexture("Textures/wall.jpg", GL_REPEAT, GL_LINEAR, "Wall");
-    createTexture("Textures/awesomeface.png", GL_REPEAT, GL_LINEAR, "Awsomeface");
-    createTexture("Textures/Face_Side1.jpg", GL_REPEAT, GL_LINEAR, "Face_Side1");
+    auto wallId = createTexture("Textures/wall.jpg", GL_REPEAT, GL_LINEAR, "Wall");
+    auto awesomefaceId = createTexture("Textures/awesomeface.png", GL_REPEAT, GL_LINEAR, "Awsomeface");
+    auto Face_Side1Id = createTexture("Textures/Face_Side1.jpg", GL_REPEAT, GL_LINEAR, "Face_Side1");
     createCubeMapTexture(prepareDefaultCubemapTextures(), GL_CLAMP_TO_EDGE, GL_LINEAR);
+
+    if (wallId == -1)
+    {
+        LOG("Wall texture not exists", LogType::ERR);
+        exit(0);
+    }
+    if (awesomefaceId == -1)
+    {
+        LOG("awesomefaceId texture not exists", LogType::ERR);
+        exit(0);
+    }
+    if (Face_Side1Id == -1)
+    {
+        LOG("Face_Side1Id texture not exists", LogType::ERR);
+        exit(0);
+    }
 }
 
 std::vector<std::string> TextureManager::prepareDefaultCubemapTextures()
@@ -51,9 +92,37 @@ void TextureManager::setTextureIdInShader(const std::string& p_shaderLabel)
     l_shader->uniform1I(0, "texture1");
 }
 
+void TextureManager::setNormalTextureIdInShader(const std::string& p_shaderLabel)
+{
+    auto l_shader = Shaders::ShaderManager::getInstance().getShader(p_shaderLabel);
+
+    l_shader->uniform1I(1, "normalTexture");
+}
+
 GLuint TextureManager::getTexture(const std::string& p_textureLabel) const
 {
-    return m_textures.at(p_textureLabel);
+    try
+    {
+        return m_textures.at(p_textureLabel);
+    }
+    catch (...)
+    {
+        std::string l_errMsg = "Cannot find texture in texture map";
+        LOG(l_errMsg, LogType::ERR);
+    }
+}
+
+GLuint TextureManager::getNormalTexture(const std::string& p_textureLabel) const
+{
+    try
+    {
+        return m_normalTexture.at(p_textureLabel);
+    }
+    catch (...)
+    {
+        std::string l_errMsg = "Cannot find texture in normal map";
+        LOG(l_errMsg, LogType::ERR);
+    }
 }
 
 void TextureManager::activeTexture(GLenum p_textureId, 
@@ -61,12 +130,30 @@ void TextureManager::activeTexture(GLenum p_textureId,
 {
     try
     {
+        auto l_texture = m_textures.at(p_textureLabel);
         glActiveTexture(p_textureId);
-        glBindTexture(GL_TEXTURE_2D, m_textures.at(p_textureLabel));
+        glBindTexture(GL_TEXTURE_2D, l_texture);
     }
-    catch (std::exception& ex)
+    catch (...)
     {
-        LOG(ex.what(), LogType::WARN);
+        std::string l_errMsg = "Cannot find texture in map textureLabel = " + p_textureLabel;
+        LOG(l_errMsg, LogType::WARN);
+    }
+}
+
+void TextureManager::activeNormalTexture(GLenum p_textureId,
+                                         const std::string& p_textureLabel)
+{
+    try
+    {
+        auto l_texture = m_normalTexture.at(p_textureLabel);
+        glActiveTexture(p_textureId);
+        glBindTexture(GL_TEXTURE_2D, l_texture);
+    }
+    catch (...)
+    {
+        std::string l_errMsg = "Cannot find texture in map textureLabel = " + p_textureLabel;
+        LOG(l_errMsg, LogType::WARN);
     }
 }
 

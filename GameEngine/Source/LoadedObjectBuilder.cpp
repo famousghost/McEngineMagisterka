@@ -56,6 +56,7 @@ ObjectBuilder & LoadedObjectBuilder::addShaderProgram(std::string p_shaderLabel)
     {
         
         m_object.m_shaderProgram = Shaders::ShaderManager::getInstance().getShader(p_shaderLabel);
+        m_object.m_currentActiveShader = p_shaderLabel;
         m_object.m_colider.back().m_shaderProgram = Shaders::ShaderManager::getInstance().getShader("coliderShader");
     }
     catch (std::exception& ex)

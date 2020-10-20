@@ -1,6 +1,7 @@
 #include "TextureLoader.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "Logger.h"
 
 
 namespace McEngine
@@ -73,6 +74,7 @@ GLuint TextureLoader::loadTexture(std::string p_texturePath,
     {
         std::string wrnMsg = "Cannot load texture from path " + p_texturePath;
         LOG(wrnMsg, LogType::WARN);
+        return -1;
     }
     stbi_image_free(l_image);
     glBindTexture(GL_TEXTURE_2D, 0);

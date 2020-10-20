@@ -17,7 +17,9 @@ class TextureManager
 public:
     static TextureManager& getInstance();
 
-    void createTexture(std::string p_texturePath, GLenum p_wrappingType, GLenum p_drawingType, std::string p_textureLabel);
+    bool createTexture(std::string p_texturePath, GLenum p_wrappingType, GLenum p_drawingType, std::string p_textureLabel);
+
+    bool createNormalTexture(std::string p_texturePath, GLenum p_wrappingType, GLenum p_drawingType, std::string p_textureLabel);
 
     void start();
 
@@ -27,9 +29,15 @@ public:
 
     void setTextureIdInShader(const std::string & p_shaderLabel);
 
+    void setNormalTextureIdInShader(const std::string & p_shaderLabel);
+
     GLuint getTexture(const std::string & p_textureLabel) const;
 
+    GLuint getNormalTexture(const std::string & p_textureLabel) const;
+
     void activeTexture(GLenum p_textureId, const std::string & p_textureLabel);
+
+    void activeNormalTexture(GLenum p_textureId, const std::string & p_textureLabel);
 
     void activeCubemapTexture(Meshes::Object & p_object);
 
@@ -43,6 +51,7 @@ private:
     ~TextureManager() = default;
 
     std::map<std::string, GLuint> m_textures;
+    std::map<std::string, GLuint> m_normalTexture;
     GLuint m_cubeMapTexture;
 };
 }//Textures

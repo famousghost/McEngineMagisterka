@@ -47,6 +47,7 @@ private:
     std::string m_currentObjectToAdd;
     std::string m_currentShader;
     std::string m_currentTexture;
+    std::string m_cuurentNormalTexture;
     std::string m_newObjectPath;
     std::string m_logsInformation;
     std::string m_colliderTypeName;
@@ -64,12 +65,15 @@ private:
     void updateShaderComboBox(std::vector<std::string>& p_shaderItems);
     void choosingObjectToAddComboBox(std::vector<std::string>& p_shaderItems);
     void updateTextureComboBox(std::vector<std::string>& p_textureItems);
+    void updateNormalTextureComboBox(std::vector<std::string>& p_textureItems);
     void objectChoosingComboBox(std::vector<std::string>& p_items, std::vector<std::string>& p_colliders);
     void colliderChoosingComboBox(std::vector<std::string>& p_items);
     void colliderTypeChoosingComboBox(std::vector<std::string>& p_items);
     void choosingObjectMaterialType(std::vector<std::string>& p_materialTypes);
     void updateObjectMassProperties();
     void updateListOfObjects(std::vector<std::string>& p_shaderItems);
+    void updateListOfTextures(std::vector<std::string>& p_textruresToAdd);
+    void updateListOfNormalTextures(std::vector<std::string>& p_textruresToAdd);
     void updateListOfShaders(std::vector<std::string>& p_shadersToAdd);
     void updateObjectShader();
     void applyForce();

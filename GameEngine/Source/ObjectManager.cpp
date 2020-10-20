@@ -319,8 +319,10 @@ void ObjectManager::activeTextures(Object& p_object)
 {
     auto& textureManager = Textures::TextureManager::getInstance();
     textureManager.deactiveTexture();
-    textureManager.setTextureIdInShader("textureShader");
+    textureManager.setTextureIdInShader(p_object.m_currentActiveShader);
+    textureManager.setNormalTextureIdInShader(p_object.m_currentActiveShader);
     textureManager.activeTexture(GL_TEXTURE0, p_object.m_currentAvaiableTexture);
+    textureManager.activeNormalTexture(GL_TEXTURE1, p_object.m_currentAvaiableNormalTexture);
 }
 
 void ObjectManager::deleteObject(std::string p_objName)

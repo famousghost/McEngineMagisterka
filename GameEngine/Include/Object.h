@@ -14,10 +14,12 @@ struct Object
     std::shared_ptr<Shaders::Shader> m_shaderProgram;
     std::list<IColiderObserver*> m_collsionObservers;
     std::vector<Collider> m_colider;
+    std::string m_currentActiveShader;
     Rigidbody m_rigidBody;
     glm::mat4 m_modelMatrix;
     int m_colliderNumber;
     std::string m_currentAvaiableTexture;
+    std::string m_currentAvaiableNormalTexture;
     Material m_material;
     Transform m_transform;
     std::string m_objectName;

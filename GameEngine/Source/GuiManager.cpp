@@ -8,6 +8,7 @@
 #include "FilePathParser.h"
 #include "PhysicsManager.h"
 #include "InputManager.h"
+#include "TextureManager.h"
 #include <algorithm>
 #include "Logger.h"
 
@@ -20,6 +21,7 @@ void GuiManager::start()
 {
     m_currentShader = "defaultShader";
     m_currentObject = "";
+    m_cuurentNormalTexture = "";
     m_materialType = "ROCK";
     m_currentObjectToAdd = "Cube";
     m_currentTexture = "Wall";
@@ -72,6 +74,8 @@ void GuiManager::renderGui()
                                                     "Awsomeface", 
                                                     "Face_Side1"};
 
+    static std::vector<std::string> normalTextureItems;
+
     static std::vector<std::string> objectsToAdd = { "Cube", 
                                                      "Sphere", 
                                                      "Cylinder", 
@@ -103,6 +107,10 @@ void GuiManager::renderGui()
     updateShaderComboBox(shadersItems);
     updateObjectShader();
     updateTextureComboBox(textureItems);
+    updateNormalTextureComboBox(normalTextureItems);
+    updateListOfTextures(textureItems);
+    updateListOfNormalTextures(normalTextureItems);
+    updateObjectTetxture();
     objectMoveOperations();
     setObjectProperties();
 
@@ -111,7 +119,6 @@ void GuiManager::renderGui()
 
     addObject(items, colliders);
     deleteObject(items, colliders);
-    updateObjectTetxture();
     updateListOfObjects(objectsToAdd);
     updateListOfShaders(shadersItems);
     updateObjectMassProperties();
@@ -216,6 +223,44 @@ void GuiManager::updateListOfObjects(std::vector<std::string>& p_objectsToAdd)
     }
 }
 
+void GuiManager::updateListOfTextures(std::vector<std::string>& p_textruresToAdd)
+{
+    static char l_filePath[1000];
+    ImGui::InputText("##TextureChatbox", l_filePath, 20, ImGuiInputTextFlags_EnterReturnsTrue);
+    if (ImGui::Button("Add Texture To List"))
+    {
+        auto l_textureIndex = Utility::FilePathParser::fetchObjectName(l_filePath);
+        auto& l_textureManager = Textures::TextureManager::getInstance();
+        std::string l_texturePath = "Textures/";
+        std::string l_textureName = l_filePath;
+        if (not l_textureManager.createTexture(l_texturePath + l_textureName, GL_REPEAT, GL_LINEAR, l_textureIndex))
+        {
+            return;
+        }
+        p_textruresToAdd.push_back(l_textureIndex);
+        strcpy(l_filePath, "");
+    }
+}
+
+void GuiManager::updateListOfNormalTextures(std::vector<std::string>& p_textruresToAdd)
+{
+    static char l_filePath[1000];
+    ImGui::InputText("##NormalTextureChatbox", l_filePath, 20, ImGuiInputTextFlags_EnterReturnsTrue);
+    if (ImGui::Button("Add NormalTexture To List"))
+    {
+        auto l_textureIndex = Utility::FilePathParser::fetchObjectName(l_filePath);
+        auto& l_textureManager = Textures::TextureManager::getInstance();
+        std::string l_texturePath = "Textures/NormalMaps/";
+        std::string l_textureName = l_filePath;
+        if (not l_textureManager.createNormalTexture(l_texturePath + l_textureName, GL_REPEAT, GL_LINEAR, l_textureIndex))
+        {
+            return;
+        }
+        p_textruresToAdd.push_back(l_textureIndex);
+        strcpy(l_filePath, "");
+    }
+}
+
 void GuiManager::updateListOfShaders(std::vector<std::string>& p_shadersToAdd)
 {
     static char l_filePath[1000];
@@ -258,6 +303,7 @@ void GuiManager::updateObjectTetxture()
             try
             {
                 objIt->first.m_currentAvaiableTexture = m_currentTexture;
+                objIt->first.m_currentAvaiableNormalTexture = m_cuurentNormalTexture;
             }
             catch (std::exception& ex)
             {
@@ -513,6 +559,24 @@ void GuiManager::updateTextureComboBox(std::vector<std::string>& p_textureItems)
     }
 }
 
+void GuiManager::updateNormalTextureComboBox(std::vector<std::string>& p_textureItems)
+{
+    if (ImGui::BeginCombo("##normalTextureCombo", m_cuurentNormalTexture.c_str()))
+    {
+        for (int i = 0; i < p_textureItems.size(); i++)
+        {
+            bool is_selected = (m_cuurentNormalTexture == p_textureItems.at(i));
+            if (ImGui::Selectable(p_textureItems.at(i).c_str(), is_selected))
+            {
+                m_cuurentNormalTexture = p_textureItems.at(i);
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
+}
+
 void GuiManager::objectChoosingComboBox(std::vector<std::string>& p_items,
                                         std::vector<std::string>& p_colliders)
 {
@@ -661,6 +725,7 @@ void GuiManager::updateObjectShader()
             try
             {
                 objIt->first.m_shaderProgram = Shaders::ShaderManager::getInstance().getShader(m_currentShader);
+                objIt->first.m_currentActiveShader = m_currentShader;
             }
             catch (std::exception& ex)
             {
