@@ -99,16 +99,27 @@ void GuiManager::renderGui()
                                                      "PILLOW",
                                                      "STATIC"};
 
+    ImGui::Text("Objects list:");
     objectChoosingComboBox(items, colliders);
+    ImGui::Text("Collider type list:");
     colliderTypeChoosingComboBox(colliderTypes);
+    ImGui::Text("Colliders list:");
     colliderChoosingComboBox(colliders);
+    ImGui::Text("Object to add list:");
     choosingObjectToAddComboBox(objectsToAdd);
+    ImGui::Text("Material type:");
     choosingObjectMaterialType(materialTypes);
+    ImGui::Text("Shaders list:");
     updateShaderComboBox(shadersItems);
     updateObjectShader();
+    refreshShader();
+    ImGui::Text("Textures list:");
     updateTextureComboBox(textureItems);
+    ImGui::Text("Normal Textures list:");
     updateNormalTextureComboBox(normalTextureItems);
+    ImGui::Text("Input new texture (with extension):");
     updateListOfTextures(textureItems);
+    ImGui::Text("Input new normal texture (with extension):");
     updateListOfNormalTextures(normalTextureItems);
     updateObjectTetxture();
     objectMoveOperations();
@@ -119,7 +130,9 @@ void GuiManager::renderGui()
 
     addObject(items, colliders);
     deleteObject(items, colliders);
+    ImGui::Text("Input new object name (with extension):");
     updateListOfObjects(objectsToAdd);
+    ImGui::Text("Input new shader name:");
     updateListOfShaders(shadersItems);
     updateObjectMassProperties();
     m_currentObject = l_objectManager.cloneObject(m_currentObject);
@@ -189,8 +202,6 @@ void GuiManager::renderGui()
     }
 
     applyForce();
-
-    refreshShader();
     
     ImGui::SliderFloat3("LightPosition", &l_objectManager.m_lightPosition.x, -10.0f, 10.0f);
 

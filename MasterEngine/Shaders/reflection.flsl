@@ -6,6 +6,7 @@ in vec3 wPos;
 out vec4 fragCoords;
 
 uniform samplerCube cubemap;
+uniform sampler2D normalTexture;
 
 uniform vec3 cameraPos;
 
