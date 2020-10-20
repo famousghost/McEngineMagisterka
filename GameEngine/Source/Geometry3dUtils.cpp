@@ -213,16 +213,17 @@ bool Geometry3dUtils::raycastOBB(const Meshes::Object & p_object,
                                   Physics::RaycastResult* p_raycastResult)
 {
     auto& l_collider = p_object.m_colider.at(0);
-    glm::vec3 l_size = glm::vec3(l_collider.m_width,
-                                 l_collider.m_height,
-                                 l_collider.m_length);
+    auto& l_objectProperties = p_object.m_rigidBody;
+    glm::vec3 l_size = glm::vec3(l_collider.m_width + l_objectProperties.m_width,
+                                 l_collider.m_height + l_objectProperties.m_height,
+                                 l_collider.m_length + l_objectProperties.m_length);
 
-    auto& l_orientation = p_object.m_transform.m_orientation;
+    auto& l_orientation = l_collider.m_transform.m_orientation;
     glm::vec3 l_x = glm::vec3(l_orientation[0][0], l_orientation[0][1], l_orientation[0][2]);
     glm::vec3 l_y = glm::vec3(l_orientation[1][0], l_orientation[1][1], l_orientation[1][2]);
     glm::vec3 l_z = glm::vec3(l_orientation[2][0], l_orientation[2][1], l_orientation[2][2]);
     
-    glm::vec3 l_p = p_object.m_transform.m_position - p_ray.m_origin;
+    glm::vec3 l_p = (p_object.m_transform.m_position + l_collider.m_transform.m_position) - p_ray.m_origin;
 
     glm::vec3 l_projectionOfDirectionToEachAxis = glm::vec3(glm::dot(l_x, p_ray.m_direction),
                                                             glm::dot(l_y, p_ray.m_direction),
@@ -343,16 +344,16 @@ glm::vec3 Geometry3dUtils::findClosestPointOnCubeOBB(const Meshes::Object& p_obj
 
     glm::vec3 l_dir = p_point - p_object.m_transform.m_position;
 
-    glm::vec3 l_size = glm::vec3(p_object.m_rigidBody.m_width,
-                                 p_object.m_rigidBody.m_height,
-                                 p_object.m_rigidBody.m_length);
+    glm::vec3 l_size = glm::vec3(p_object.m_colider.at(0).m_width,
+                                 p_object.m_colider.at(0).m_height,
+                                 p_object.m_colider.at(0).m_length);
 
     for (int i = 0; i < 3; ++i)
     {
         glm::vec3 l_axis =
-            glm::vec3(p_object.m_transform.m_orientation[i][0],
-                      p_object.m_transform.m_orientation[i][1],
-                      p_object.m_transform.m_orientation[i][2]);
+            glm::vec3(p_object.m_colider.at(0).m_transform.m_orientation[i][0],
+                      p_object.m_colider.at(0).m_transform.m_orientation[i][1],
+                      p_object.m_colider.at(0).m_transform.m_orientation[i][2]);
 
         float l_distance = glm::dot(l_dir, l_axis);
 
