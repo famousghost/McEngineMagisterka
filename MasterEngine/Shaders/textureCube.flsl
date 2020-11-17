@@ -29,17 +29,17 @@ vec3 calculateAmbientLight()
 	return ambientLight;
 }
 
-vec3 calculateDiffuseLight(vec3 lightPos)
+vec3 calculateDiffuseLight(vec3 lightPos, vec3 normalCor)
 {
-	float diffueColor = max(dot(lightPos, normCoords), 0.0);
+	float diffueColor = max(dot(lightPos, normalCor), 0.0);
 	vec3 diffuseLight = material.diffuse * diffueColor * material.objectColor;
 	
 	return diffuseLight;
 }
 
-vec3 calculateSpecularLight(vec3 lightPos)
+vec3 calculateSpecularLight(vec3 lightPos, vec3 normalCor)
 {
-	vec3 lightReflected = reflect(-lightPos, normCoords);
+	vec3 lightReflected = reflect(-lightPos, normalCor);
 	vec3 cameraWorldPostion = normalize(cameraPos - wPos);
 	float specularColor = pow(max(dot(cameraWorldPostion, lightReflected), 0.0), shinness);
 	vec3 specularLight = material.specular * specularColor * material.objectColor;
@@ -49,13 +49,22 @@ vec3 calculateSpecularLight(vec3 lightPos)
 
 void main()
 {
+	vec3 normalCor = texture(normalTexture, texturesCoords).rgb;
 	vec3 lightPos = normalize(lightPosition - wPos);
 	vec3 ambientLight = calculateAmbientLight();
-	vec3 diffuseLight = calculateDiffuseLight(lightPos);
-	vec3 specularLight = calculateSpecularLight(lightPos);
-	vec4 normalMap = texture(normalTexture, texturesCoords) 
-	                 * vec4(diffuseLight * material.objectColor, 1.0);
-	vec4 texture = texture(texture1, texturesCoords);
-	fragColor = mix(texture, normalMap , 0.5) 
-	            * vec4(ambientLight + specularLight, 1.0);
+	vec3 diffuseLight;
+	vec3 specularLight;
+	if (normalCor != vec3(0.0, 0.0, 0.0))
+	{
+		normalCor = normalize(normalCor * 2.0 - 1.0);
+		diffuseLight = calculateDiffuseLight(lightPos, normalCor) + calculateDiffuseLight(lightPos, normCoords);
+		specularLight = calculateSpecularLight(lightPos, normalCor) + calculateDiffuseLight(lightPos, normCoords);
+	}
+	else
+	{
+		diffuseLight = calculateDiffuseLight(lightPos, normCoords);
+		specularLight = calculateDiffuseLight(lightPos, normCoords);
+	}
+	vec4 textureColor = texture(texture1, texturesCoords);
+	fragColor = textureColor * vec4(ambientLight + diffuseLight + specularLight, 1.0);
 }

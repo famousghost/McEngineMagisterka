@@ -214,9 +214,9 @@ bool Geometry3dUtils::raycastOBB(const Meshes::Object & p_object,
 {
     auto& l_collider = p_object.m_colider.at(0);
     auto& l_objectProperties = p_object.m_rigidBody;
-    glm::vec3 l_size = glm::vec3(l_collider.m_width + l_objectProperties.m_width,
-                                 l_collider.m_height + l_objectProperties.m_height,
-                                 l_collider.m_length + l_objectProperties.m_length);
+    glm::vec3 l_size = glm::vec3(l_collider.m_width,
+                                 l_collider.m_height,
+                                 l_collider.m_length);
 
     auto& l_orientation = l_collider.m_transform.m_orientation;
     glm::vec3 l_x = glm::vec3(l_orientation[0][0], l_orientation[0][1], l_orientation[0][2]);
@@ -340,9 +340,9 @@ bool Geometry3dUtils::checkIfPointIsOnCubeOBB(const Meshes::Object& p_object,
 glm::vec3 Geometry3dUtils::findClosestPointOnCubeOBB(const Meshes::Object& p_object,
                                                      const glm::vec3& p_point)
 {
-    glm::vec3 l_result = p_object.m_transform.m_position;
+    glm::vec3 l_result = p_object.m_colider.at(0).m_transform.m_position + p_object.m_transform.m_position;
 
-    glm::vec3 l_dir = p_point - p_object.m_transform.m_position;
+    glm::vec3 l_dir = p_point - l_result;
 
     glm::vec3 l_size = glm::vec3(p_object.m_colider.at(0).m_width,
                                  p_object.m_colider.at(0).m_height,
@@ -473,11 +473,11 @@ void Geometry3dUtils::applyImpulse(Meshes::Object & p_objectA,
 
     glm::vec3 l_impulse = l_relativeNorm * l_j;
     p_objectA.m_rigidBody.m_velocity -= l_impulse * l_invMassA;
-    p_objectA.m_rigidBody.m_angularVelocity -= glm::cross(l_rA, l_impulse) * l_interiaTensorA;
+    //p_objectA.m_rigidBody.m_angularVelocity -= glm::cross(l_rA, l_impulse) * l_interiaTensorA;
     if(p_objectB.m_isRigidBody)
     {
         p_objectB.m_rigidBody.m_velocity +=  l_impulse * l_invMassB;
-        p_objectB.m_rigidBody.m_angularVelocity += glm::cross(l_rB, l_impulse) * l_interiaTensorB;
+        //p_objectB.m_rigidBody.m_angularVelocity += glm::cross(l_rB, l_impulse) * l_interiaTensorB;
     }
 
     glm::vec3 l_t = l_relativeVel - (l_relativeNorm *
@@ -522,11 +522,11 @@ void Geometry3dUtils::applyImpulse(Meshes::Object & p_objectA,
 
     glm::vec3 l_tangentImpuse = l_t * l_jt;
     p_objectA.m_rigidBody.m_velocity -= l_tangentImpuse * l_invMassA;
-    p_objectA.m_rigidBody.m_angularVelocity -= glm::cross(l_rA, l_tangentImpuse) * l_interiaTensorA;
+    //p_objectA.m_rigidBody.m_angularVelocity -= glm::cross(l_rA, l_tangentImpuse) * l_interiaTensorA;
     if(p_objectB.m_isRigidBody)
     {
         p_objectB.m_rigidBody.m_velocity += l_tangentImpuse * l_invMassB;
-        p_objectB.m_rigidBody.m_angularVelocity += glm::cross(l_rB, l_tangentImpuse) * l_interiaTensorB;
+        //p_objectB.m_rigidBody.m_angularVelocity += glm::cross(l_rB, l_tangentImpuse) * l_interiaTensorB;
     }
 }
 

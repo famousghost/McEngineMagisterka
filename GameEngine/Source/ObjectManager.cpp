@@ -142,7 +142,6 @@ void ObjectManager::moveObject(Object& p_object)
     }
 
     p_object.m_transform.m_position += (p_object.m_velocity + p_object.m_rigidBody.m_velocity)  * static_cast<float>(l_timeManager.getDeltaTime());
-    p_object.m_transform.m_rotatione += p_object.m_rigidBody.m_angularVelocity * static_cast<float>(l_timeManager.getDeltaTime());
 }
 
 void ObjectManager::resetValues(Object& p_object)

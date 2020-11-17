@@ -2,6 +2,7 @@
 #include "Geometry3dUtils.h"
 #include <algorithm>
 #include <math.h>
+#include <iostream>
 
 namespace McEngine
 {
@@ -203,6 +204,7 @@ Meshes::ColMainfold CubeOBBCollsionHandler::findCollsionFeatures(const Meshes::O
 
         else if (l_depth < l_mainfoldResult.m_depth) 
         {
+            std::cout << l_test[i].x << std::endl;
             if (l_shouldFlip) 
             {
                 l_test[i] *= -1.0f;

@@ -179,7 +179,6 @@ void CollisionHandler::collisionChecker(Meshes::Object& p_object,
 
                     colliderA.m_coliderColor = glm::vec3(1.0f, 0.0f, 0.0f);
 
-                    std::cout << "Contact points: " << m_colMainfold.m_contacts.size() << std::endl;
                     p_object.m_transform.m_position -= m_colMainfold.m_normal * m_colMainfold.m_depth;
 
                     if(p_objects[i].first.m_isRigidBody)
