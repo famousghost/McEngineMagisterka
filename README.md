@@ -11,6 +11,10 @@ Programming languages:
 - C++ -> cpu app
 - GLSL -> shaders
 
+Development Environments:
+Notepad++
+Visual studio 2017 (x64 support only)
+
 Link to short video clips presents application:
 1) [Adding new Shader program](https://drive.google.com/file/d/1AUdrd6WEztyjf6v-jzncwDIngdC3x5JQ/view?usp=sharing)
 2) [Adding new Object and textures](https://drive.google.com/file/d/1GmuJa4CIsN8mLzEaRalD6SMcWuEs6Q0F/view?usp=sharing)
