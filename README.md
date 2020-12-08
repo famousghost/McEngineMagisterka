@@ -20,16 +20,16 @@ Link to short video clips presents application:
 6) [Collisions](https://drive.google.com/file/d/1WZu4yotbxKC1KPDvx5z59qvmuj3DUhdi/view?usp=sharing)
 
 Controls:
-BOTTOM-LEFT WINDOW:
-w, s, a, d -> camera moving
+1) BOTTOM-LEFT WINDOW:
+- w, s, a, d -> camera moving
 
-UPPER_LEFT WINDOW:
-ctrl + mouse -> moving on X and Y Axis
-ctrl + scroll -> moving on Z Axis
-scroll button -> rotate camera
-shift + c -> copy current chosen object
-mouse left button -> choose object (simply click on object)
+2) UPPER_LEFT WINDOW:
+- ctrl + mouse -> moving on X and Y Axis
+- ctrl + scroll -> moving on Z Axis
+- scroll button -> rotate camera
+- shift + c -> copy current chosen object
+- mouse left button -> choose object (simply click on object)
 
-Rest of options are available on GUI on the right side of application.
+3) Rest of options are available on GUI on the right side of application.
 
 [Project still in development...]
