@@ -138,7 +138,7 @@ void RenderManager::drawColliders(Meshes::Object& p_object,
                                   Cameras::Camera& p_camera,
                                   Meshes::ObjectManager& p_objectManager)
 {
-    if(not p_object.m_colider.size())
+    if(p_object.m_colider.size() == 0)
     {
         return;
     }

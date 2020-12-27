@@ -68,9 +68,10 @@ void ObjectManager::addCustomObject(std::string p_objectLabel,
 }
 
 void ObjectManager::addTerrain(std::string p_objectLabel,
-    std::string p_shaderLabel)
+    std::string p_shaderLabel,
+    ColliderType p_defaultColliderType)
 {
-    TerrainBuilder l_terrainBuilder;
+    TerrainBuilder l_terrainBuilder(p_defaultColliderType);
     l_terrainBuilder.addShaderProgram(p_shaderLabel).addMesh();
     auto l_object = l_terrainBuilder.getObject();
     addObject(l_object, p_objectLabel);
@@ -240,7 +241,6 @@ void ObjectManager::setModelMatrixForObject(Object& p_object)
     float l_deltaTime = Time::TimeManager::getInstance().getDeltaTime();
 
     auto& l_rigidBody = p_object.m_rigidBody;
-    auto& l_collider = p_object.m_colider.at(0);
     l_model *= glm::toMat4(glm::normalize(l_rigidBody.m_quat));
     l_model = glm::translate(l_model, l_transform.m_position);
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.x), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -248,10 +248,14 @@ void ObjectManager::setModelMatrixForObject(Object& p_object)
     l_model = glm::rotate(l_model, glm::radians(l_transform.m_rotatione.z), glm::vec3(0.0f, 0.0f, 1.0f));
     l_model = glm::scale(l_model, l_transform.m_scale);
     scaleObjectSize(p_object);
-    auto l_colliderScale = p_object.m_transform.m_scale + l_collider.m_transform.m_scale;
-    l_collider.m_width *= l_colliderScale.x;
-    l_collider.m_height *= l_colliderScale.y;
-    l_collider.m_length *= l_colliderScale.z;
+    if(p_object.m_colider.size() > 0)
+    { 
+        auto& l_collider = p_object.m_colider.at(0);
+        auto l_colliderScale = p_object.m_transform.m_scale + l_collider.m_transform.m_scale;
+        l_collider.m_width *= l_colliderScale.x;
+        l_collider.m_height *= l_colliderScale.y;
+        l_collider.m_length *= l_colliderScale.z;
+    }
     p_object.m_modelMatrix = l_model;
     l_physcis.updatePhysics(p_object, m_objects);
     p_object.m_shaderProgram->uniformMatrix4(l_model, "model");
@@ -260,20 +264,23 @@ void ObjectManager::setModelMatrixForObject(Object& p_object)
 void ObjectManager::initState(Object& p_object)
 {
     auto& l_physicsManager = Physics::PhysicsManager::getInstance();
-    auto& l_collider = p_object.m_colider.at(0);
-    if(l_collider.m_colliderType == Meshes::ColliderType::CUBE_OBB)
+    if(p_object.m_colider.size() > 0)
     {
-        auto l_massDivision = p_object.m_rigidBody.m_massProperties.m_mass / 12.0f;
-        p_object.m_rigidBody.m_bodyTensorOfInertia[0][0] = l_massDivision * std::pow(p_object.m_rigidBody.m_height, 2.0) * std::pow(p_object.m_rigidBody.m_length, 2.0);
-        p_object.m_rigidBody.m_bodyTensorOfInertia[1][1] = l_massDivision * std::pow(p_object.m_rigidBody.m_width, 2.0) * std::pow(p_object.m_rigidBody.m_length, 2.0);
-        p_object.m_rigidBody.m_bodyTensorOfInertia[2][2] = l_massDivision * std::pow(p_object.m_rigidBody.m_width, 2.0) * std::pow(p_object.m_rigidBody.m_height, 2.0);
-    }
-    else if (l_collider.m_colliderType == Meshes::ColliderType::SPHERE)
-    {
-        auto l_massDivision = (2.0f * p_object.m_rigidBody.m_massProperties.m_mass) / 5.0f;
-        p_object.m_rigidBody.m_bodyTensorOfInertia[0][0] = l_massDivision * std::pow(l_collider.m_radius, 2.0);
-        p_object.m_rigidBody.m_bodyTensorOfInertia[1][1] = l_massDivision * std::pow(l_collider.m_radius, 2.0);
-        p_object.m_rigidBody.m_bodyTensorOfInertia[2][2] = l_massDivision * std::pow(l_collider.m_radius, 2.0);
+        auto& l_collider = p_object.m_colider.at(0);
+        if(l_collider.m_colliderType == Meshes::ColliderType::CUBE_OBB)
+        {
+            auto l_massDivision = p_object.m_rigidBody.m_massProperties.m_mass / 12.0f;
+            p_object.m_rigidBody.m_bodyTensorOfInertia[0][0] = l_massDivision * std::pow(p_object.m_rigidBody.m_height, 2.0) * std::pow(p_object.m_rigidBody.m_length, 2.0);
+            p_object.m_rigidBody.m_bodyTensorOfInertia[1][1] = l_massDivision * std::pow(p_object.m_rigidBody.m_width, 2.0) * std::pow(p_object.m_rigidBody.m_length, 2.0);
+            p_object.m_rigidBody.m_bodyTensorOfInertia[2][2] = l_massDivision * std::pow(p_object.m_rigidBody.m_width, 2.0) * std::pow(p_object.m_rigidBody.m_height, 2.0);
+        }
+        else if (l_collider.m_colliderType == Meshes::ColliderType::SPHERE)
+        {
+            auto l_massDivision = (2.0f * p_object.m_rigidBody.m_massProperties.m_mass) / 5.0f;
+            p_object.m_rigidBody.m_bodyTensorOfInertia[0][0] = l_massDivision * std::pow(l_collider.m_radius, 2.0);
+            p_object.m_rigidBody.m_bodyTensorOfInertia[1][1] = l_massDivision * std::pow(l_collider.m_radius, 2.0);
+            p_object.m_rigidBody.m_bodyTensorOfInertia[2][2] = l_massDivision * std::pow(l_collider.m_radius, 2.0);
+        }
     }
     p_object.m_rigidBody.m_invBodyTensorOfInteria = glm::inverse(p_object.m_rigidBody.m_bodyTensorOfInertia);
     p_object.m_rigidBody.m_position = &p_object.m_transform.m_position;

@@ -26,7 +26,10 @@ void main()
 	
 	vec3 reflectVec = reflect(cameraDir, normalize(normalCoords));
 	
-	vec4 reflectedTexture = texture(cubemap, reflectVec);
+	vec3 refractVec = refract(cameraDir, normalize(normalCoords), 1/1.21);
 	
-	fragCoords = reflectedTexture * vec4(material.objectColor, 1.0);
+	vec4 reflectedTexture = texture(cubemap, reflectVec);
+	vec4 refractedTexture = texture(cubemap, refractVec);
+	
+	fragCoords = mix(reflectedTexture, refractedTexture, 0.0) * vec4(material.objectColor, 1.0);
 }

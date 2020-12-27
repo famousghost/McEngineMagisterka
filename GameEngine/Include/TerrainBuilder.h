@@ -11,6 +11,7 @@ namespace Meshes
 class TerrainBuilder : public ObjectBuilder
 {
 public:
+    TerrainBuilder(ColliderType p_defaultColliderType);
     ObjectBuilder& addMesh() override;
     ObjectBuilder& addShaderProgram(std::string p_shaderLabel) override;
 

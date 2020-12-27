@@ -32,7 +32,7 @@ public:
                          std::string p_objectName, 
                          std::string p_shaderLabel);
 
-    void addTerrain(std::string p_objectLabel, std::string p_shaderLabel);
+    void addTerrain(std::string p_objectLabel, std::string p_shaderLabel, ColliderType p_defaultColliderType);
 
     void addSkyBox();
 

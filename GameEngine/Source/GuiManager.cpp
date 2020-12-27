@@ -372,9 +372,12 @@ void GuiManager::addObject(std::vector<std::string>& p_items,
             m_currentCollider = "";
             p_colliders.clear();
             p_items.push_back(l_objects.at(i).second);
-            for(auto& l_collider : l_objects.at(i).first.m_colider)
+            if(l_objects.at(i).first.m_colider.size() > 0)
             {
-                p_colliders.push_back(l_collider.m_colliderName);
+                for(auto& l_collider : l_objects.at(i).first.m_colider)
+                {
+                    p_colliders.push_back(l_collider.m_colliderName);
+                }
             }
         }
 
@@ -387,7 +390,7 @@ void GuiManager::addObject(std::vector<std::string>& p_items,
         auto& l_objManager = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene()->getObjectManager();
         if (m_currentObjectToAdd == "Terrain")
         {
-            l_objManager.addTerrain(label, m_currentShader);
+            l_objManager.addTerrain(label, m_currentShader, m_colliderType);
         }
         else
         {
@@ -444,11 +447,18 @@ void GuiManager::objectMoveOperations()
         auto& l_radius = l_obj.m_transform.m_radiusScale;
         ImGui::SliderFloat3("Translation", &l_transform.m_position.x, -10.0f, 10.0f);
         ImGui::SliderFloat3("Rotatione", &l_transform.m_rotatione.x, -360.0f, 360.0f);
-        if (objIt->first.m_colider.at(0).m_colliderType == Meshes::ColliderType::SPHERE)
+        if (objIt->first.m_colider.size() != 0)
         {
-            l_transform.m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
-            ImGui::SliderFloat("Scale", &l_radius, -10.0f, 10.0f);
-            l_transform.m_scale *= l_radius;
+            if (objIt->first.m_colider.at(0).m_colliderType == Meshes::ColliderType::SPHERE)
+            {
+                l_transform.m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
+                ImGui::SliderFloat("Scale", &l_radius, -10.0f, 10.0f);
+                l_transform.m_scale *= l_radius;
+            }
+            else
+            {
+                ImGui::SliderFloat3("Scale", &l_transform.m_scale.x, -10.0f, 10.0f);
+            }
         }
         else
         {
@@ -534,16 +544,16 @@ void GuiManager::updateShaderComboBox(std::vector<std::string>& p_shaderItems)
     }
 }
 
-void GuiManager::choosingObjectToAddComboBox(std::vector<std::string>& p_shaderItems)
+void GuiManager::choosingObjectToAddComboBox(std::vector<std::string>& p_objectList)
 {
     if (ImGui::BeginCombo("##objectToAddCombo", m_currentObjectToAdd.c_str()))
     {
-        for (int i = 0; i < p_shaderItems.size(); i++)
+        for (int i = 0; i < p_objectList.size(); i++)
         {
-            bool is_selected = (m_currentObjectToAdd == p_shaderItems.at(i));
-            if (ImGui::Selectable(p_shaderItems.at(i).c_str(), is_selected))
+            bool is_selected = (m_currentObjectToAdd == p_objectList.at(i));
+            if (ImGui::Selectable(p_objectList.at(i).c_str(), is_selected))
             {
-                m_currentObjectToAdd = p_shaderItems.at(i);
+                m_currentObjectToAdd = p_objectList.at(i);
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();
             }

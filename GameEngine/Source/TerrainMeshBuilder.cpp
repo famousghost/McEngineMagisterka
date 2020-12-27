@@ -23,8 +23,8 @@ namespace Meshes
         float rowOffset = 1.0f / m_rows;
         float columnOffset = 1.0f / m_columns;
 
-        std::random_device rd;  //Will be used to obtain a seed for the random number engine
-        std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+        std::random_device rd;
+        std::mt19937 gen(rd());
         std::uniform_real_distribution<> distrib(0, 1);
 
         for (int i = 0; i < m_rows; ++i)
