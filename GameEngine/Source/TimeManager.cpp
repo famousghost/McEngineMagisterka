@@ -29,9 +29,19 @@ double TimeManager::getAccumulator() const
     return m_accumulator;
 }
 
+float TimeManager::getCurrentTime() const
+{
+    return m_currentTime;
+}
+
 void TimeManager::setDeltaTime(double p_deltaTime)
 {
     m_deltaTime = p_deltaTime;
+}
+
+void TimeManager::setCurrentTime(float p_currentTime)
+{
+    m_currentTime = p_currentTime;
 }
 
 void TimeManager::setAccumulator(double p_deltaTime)

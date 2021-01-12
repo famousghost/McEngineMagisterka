@@ -215,7 +215,6 @@
     <ClInclude Include="..\Libs\ImGUI\imstb_truetype.h" />
     <ClInclude Include="Include\Camera.h" />
     <ClInclude Include="Include\ColiderBuilder.h" />
-    <ClInclude Include="Include\ColiderStates.h" />
     <ClInclude Include="Include\Collider.h" />
     <ClInclude Include="Include\CollisionHandler.h" />
     <ClInclude Include="Include\ColMainfold.h" />

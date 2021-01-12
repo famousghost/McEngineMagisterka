@@ -457,12 +457,12 @@ void GuiManager::objectMoveOperations()
             }
             else
             {
-                ImGui::SliderFloat3("Scale", &l_transform.m_scale.x, -10.0f, 10.0f);
+                ImGui::SliderFloat3("Scale", &l_transform.m_scale.x, -100.0f, 100.0f);
             }
         }
         else
         {
-            ImGui::SliderFloat3("Scale", &l_transform.m_scale.x, -10.0f, 10.0f);
+            ImGui::SliderFloat3("Scale", &l_transform.m_scale.x, -100.0f, 100.0f);
         }
         colliderMoveOperations(l_obj);
     }

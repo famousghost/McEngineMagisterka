@@ -32,7 +32,11 @@ namespace Meshes
             float z = -1.0f;
             for (int j = 0; j < m_columns; ++j)
             {
-                l_verticies.emplace_back(x, distrib(gen)/5.0f, z);
+                if (i == m_rows / 2 and j == m_columns / 2)
+                {
+                    m_center = glm::vec3(x, 0.0f, z);
+                }
+                l_verticies.emplace_back(x, 0.0f, z);
                 z += columnOffset;
             }
             x+= rowOffset;
@@ -92,6 +96,10 @@ namespace Meshes
     std::shared_ptr<Mesh> TerrainMeshBuilder::getMesh() const
     {
         return m_mesh;
+    }
+    glm::vec3 TerrainMeshBuilder::getTerrainCenter() const
+    {
+        return m_center;
     }
 }//Meshes
 }//McEngine

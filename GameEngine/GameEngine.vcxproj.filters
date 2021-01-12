@@ -392,9 +392,6 @@
     <ClInclude Include="Include\ColiderObserver.h">
       <Filter>Pliki nagłówkowe\Observers</Filter>
     </ClInclude>
-    <ClInclude Include="Include\ColiderStates.h">
-      <Filter>Pliki nagłówkowe\DEFINES</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Transform.h">
       <Filter>Pliki nagłówkowe\MESHES\OBJECTS</Filter>
     </ClInclude>

@@ -8,6 +8,7 @@
 #include "InputManager.h"
 #include "TimeManager.h"
 #include "GuiManager.h"
+#include "PrefabManager.h"
 #include <quaternion.hpp>
 #include "../glm-0.9.6.3/glm/glm/gtx/quaternion.hpp"
 #include "Geometry3dUtils.h"
@@ -91,7 +92,8 @@ void ObjectManager::addSkyBox()
 void ObjectManager::update(Object& p_object)
 {
     resetValues(p_object);
-    setMaterialForObjectObject(p_object);
+    setMaterialForObject(p_object);
+    setSpecialUniformsForObject(p_object);
     setModelMatrixForObject(p_object);
     moveObject(p_object);
     activeTextures(p_object);
@@ -306,13 +308,19 @@ void ObjectManager::scaleObjectSize(Object& p_object)
     p_object.m_rigidBody.m_length *= l_transform.m_scale.z;
 }
 
-void ObjectManager::setMaterialForObjectObject(Object& p_object)
+void ObjectManager::setMaterialForObject(Object& p_object)
 {
     p_object.m_shaderProgram->uniformVec3(m_lightPosition, "lightPosition");
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_ambientLight, "material.ambient");
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_diffuseLight, "material.diffuse");
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_specularLight, "material.specular");
     p_object.m_shaderProgram->uniformVec3(p_object.m_material.m_highlightColor, "material.objectColor");
+}
+
+void ObjectManager::setSpecialUniformsForObject(Object& p_object)
+{
+    p_object.m_shaderProgram->uniform1f(Time::TimeManager::getInstance().getCurrentTime(), "Time");
+    p_object.m_shaderProgram->uniformVec3(PrefabManager::getInstance().getTerrainCenter(), "TerrainCenter");
 }
 
 void ObjectManager::setTexture(Mesh& p_mesh,

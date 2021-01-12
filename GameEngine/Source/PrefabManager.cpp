@@ -83,7 +83,7 @@ void PrefabManager::createTerrainMesh()
 {
     TerrainMeshBuilder l_terrainMeshBuilder;
     m_terrainMesh = l_terrainMeshBuilder.buildVerticies().getMesh();
-
+    m_terrainCenter = l_terrainMeshBuilder.getTerrainCenter();
     prepareVertexArrayObject(m_terrainMesh);
 }
 
@@ -179,6 +179,11 @@ std::vector<std::shared_ptr<Mesh>> PrefabManager::getMeshes(std::string p_label)
         }
     }
     return l_meshes;
+}
+
+glm::vec3 PrefabManager::getTerrainCenter() const
+{
+    return m_terrainCenter;
 }
 
 std::vector<std::shared_ptr<Mesh>> PrefabManager::loadMesh(std::string p_filePath)

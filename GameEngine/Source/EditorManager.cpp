@@ -21,6 +21,7 @@ void EditorManager::start()
 
 void EditorManager::shutdown()
 {
+    glfwTerminate();
 }
 
 EditorManager & EditorManager::getInstance()
@@ -45,6 +46,7 @@ void EditorManager::editorLoop()
         l_currentTime = glfwGetTime();
         auto& l_timeManager = Time::TimeManager::getInstance();
         l_timeManager.setDeltaTime(l_currentTime - l_previousTime);
+        l_timeManager.setCurrentTime(l_currentTime);
 
         Gui::GuiManager::getInstance().renderGui();
         Renderer::RenderManager::getInstance().draw(*scene);

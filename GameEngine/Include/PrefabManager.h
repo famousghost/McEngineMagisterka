@@ -46,6 +46,8 @@ public:
 
     std::vector<std::shared_ptr<Mesh>> getMeshes(std::string p_label) const;
 
+    glm::vec3 getTerrainCenter() const;
+
 private:
     std::string m_directory;
     std::string m_objectName;
@@ -73,6 +75,8 @@ private:
     std::shared_ptr<Mesh> processMesh(aiMesh * p_mesh, const aiScene * p_scene);
 
     void addMeshesToMap(std::vector<std::shared_ptr<Mesh>>& p_meshes);
+
+    glm::vec3 m_terrainCenter;
 
     PrefabManager() = default;
     ~PrefabManager() = default;

@@ -66,7 +66,8 @@ private:
     std::vector<std::pair<Object, std::string>> m_objects;
     Object m_skyBox;
 
-    void setMaterialForObjectObject(Object & p_object);
+    void setMaterialForObject(Object & p_object);
+    void setSpecialUniformsForObject(Object & p_object);
     void setModelMatrixForObject(Object & p_object);
     void initState(Object & p_object);
     glm::vec3 getEulerAngelsFromTransform(const glm::vec3 & p_rotatione);

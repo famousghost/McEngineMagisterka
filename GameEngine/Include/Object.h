@@ -15,7 +15,6 @@ struct Object
     std::list<IColiderObserver*> m_collsionObservers;
     std::vector<Collider> m_colider;
     std::string m_currentActiveShader;
-    bool m_hasTexture;
     Rigidbody m_rigidBody;
     glm::mat4 m_modelMatrix;
     int m_colliderNumber;
@@ -56,7 +55,6 @@ struct Object
         m_rigidBody.m_position = &m_transform.m_position;
         m_isRigidBody = false;
         m_isColliding = false;
-        m_hasTexture = false;
         m_colliderNumber = 1;
         m_gravity = -9.87f;
         m_currentAvaiableTexture = "texture";
