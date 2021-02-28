@@ -6,15 +6,18 @@ layout(location = 1) in vec3 normalCoords;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 LightSpaceMatrix;
 
 out vec3 wPos;
 out vec3 normCoords;
+out vec4 fragPosInLightSpace;
 
 void main()
 {
 	vec4 worldPos = model * vec4(vertexCoords, 1.0);
 	normCoords = normalize(mat3(transpose(inverse(model))) * normalCoords);
 	vec4 vertPos = projection * view * worldPos;
+	fragPosInLightSpace = LightSpaceMatrix * worldPos;
 	wPos = vec3(worldPos);
 	gl_Position = vertPos;
 }

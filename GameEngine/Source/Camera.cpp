@@ -27,6 +27,7 @@ Camera::Camera()
     m_pitch = 0.0f;
     m_yaw = -90.0f;
     m_isEditorScene = false;
+    m_isShadowMappnig = false;
 }
 
 Camera::~Camera()
@@ -75,6 +76,11 @@ void Camera::moveGameCamera()
         m_cameraPosition += l_newCameraRight * MOVEMENT_SPEED * l_deltaTime;
     }
     m_view = glm::lookAt(m_cameraPosition, m_cameraPosition + m_cameraFront, m_cameraUp);
+}
+
+void Camera::setShadowMappnig()
+{
+    m_isShadowMappnig = true;
 }
 
 void Camera::rotateCamera()
@@ -135,6 +141,11 @@ void Camera::updateGameCamera()
     moveGameCamera();
 }
 
+void Camera::setLightPosition(const glm::vec3& p_lightPosition)
+{
+    m_lightPosition = p_lightPosition;
+}
+
 void Camera::updateShaderProgram(Shaders::Shader& p_shaderProgram,
                                  const std::string& p_cameraPostionUniform,
                                  const std::string& p_viewMatrixUniform,
@@ -143,6 +154,20 @@ void Camera::updateShaderProgram(Shaders::Shader& p_shaderProgram,
     p_shaderProgram.uniformVec3(m_cameraPosition, p_cameraPostionUniform);
     p_shaderProgram.uniformMatrix4(m_view, p_viewMatrixUniform);
     setProjectionMatrix(45.0f, 0.1f, 100.0f, p_shaderProgram, p_projectionMatrixUniform);
+}
+
+void Camera::updateShaderProgramForShadowMapping(float p_near,
+                                                 float p_far,
+                                                 Shaders::Shader& p_shaderProgram)
+{
+    glm::mat4 l_lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, p_near, p_far);
+
+    glm::mat4 l_lightView = glm::lookAt(m_lightPosition,
+                                        glm::vec3(0.0f, 0.0f, 0.0f),
+                                        glm::vec3(0.0f, 1.0f, 0.0f));
+
+    glm::mat4 l_lightSpaceMatrix = l_lightProjection * l_lightView;
+    p_shaderProgram.uniformMatrix4(l_lightSpaceMatrix, "LightSpaceMatrix");
 }
 
 void Camera::updateShaderProgramForSkybox(Shaders::Shader& p_shaderProgram,
@@ -174,6 +199,11 @@ glm::mat4 Camera::getViewMatrix() const
 bool Camera::isEditorScene() const
 {
     return m_isEditorScene;
+}
+
+bool Camera::isShadowMappnig() const
+{
+    return m_isShadowMappnig;
 }
 
 void Camera::setEditorScene(bool p_isEditorScene)

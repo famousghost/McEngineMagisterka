@@ -23,6 +23,8 @@ public:
     void uniform1I(GLuint p_textureUniformId, const std::string& p_uniformName);
     void uniform1f(float p_value, const std::string& p_uniformName);
 
+    GLuint getShaderProgramId() const;
+
     void refresh();
 private:
     GLuint createShader(const std::string& p_shaderPath, GLenum p_shaderType);

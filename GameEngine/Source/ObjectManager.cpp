@@ -9,6 +9,7 @@
 #include "TimeManager.h"
 #include "GuiManager.h"
 #include "PrefabManager.h"
+#include "WindowManager.h"
 #include <quaternion.hpp>
 #include "../glm-0.9.6.3/glm/glm/gtx/quaternion.hpp"
 #include "Geometry3dUtils.h"
@@ -332,11 +333,15 @@ void ObjectManager::setTexture(Mesh& p_mesh,
 void ObjectManager::activeTextures(Object& p_object)
 {
     auto& textureManager = Textures::TextureManager::getInstance();
+    auto& windowManager = GameWindow::WindowManager::getInstance();
     textureManager.deactiveTexture();
-    textureManager.setTextureIdInShader(p_object.m_currentActiveShader);
-    textureManager.setNormalTextureIdInShader(p_object.m_currentActiveShader);
     textureManager.activeTexture(GL_TEXTURE0, p_object.m_currentAvaiableTexture);
+    textureManager.setTextureIdInShader(p_object.m_currentActiveShader);
     textureManager.activeNormalTexture(GL_TEXTURE1, p_object.m_currentAvaiableNormalTexture);
+    textureManager.setNormalTextureIdInShader(p_object.m_currentActiveShader);
+    textureManager.activeTextureById(
+        GL_TEXTURE30, windowManager.getShadowMapId());
+    p_object.m_shaderProgram->uniform1I(30, "shadowMap");
 }
 
 void ObjectManager::deleteObject(std::string p_objName)

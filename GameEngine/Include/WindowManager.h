@@ -7,6 +7,11 @@ namespace McEngine
 {
 namespace GameWindow
 {
+enum class FrameBufferType
+{
+    EDITOR = 0,
+    GAME
+};
 class WindowManager
 {
 public:
@@ -21,6 +26,8 @@ public:
 
     glm::vec4 getBackgroundColor() const;
 
+    void setBackgroundColor(glm::vec4 p_backgroundColor);
+
     void createFrameBuffers();
 
     void bindEditorFrameBuffer();
@@ -29,7 +36,13 @@ public:
 
     void bindGameFrameBuffer();
 
-    void buildFrameBuffer(bool p_isEditorFrameBuffer, GLuint & p_colorTextureId);
+    void bindShadowFrameBuffer();
+
+    void buildShadowMapFrameBuffer(GLuint & p_depthMap);
+
+    void prepareDepthTexture(int p_shadowWidth, int p_shadowHeight, GLuint & p_depthMap);
+
+    void buildFrameBuffer(FrameBufferType p_isEditorFrameBuffer, GLuint & p_colorTextureId);
 
     void createWindowPlane();
 
@@ -39,9 +52,9 @@ public:
 
     void activeGameQuad();
 
-    void deactiveEditorQuad();
+    void activeShadowMapQuad();
 
-    void deactiveGameQuad();
+    void deactiveQuad();
 
     bool checkIfFrameBufferCorrectlyBuild();
 
@@ -49,7 +62,13 @@ public:
 
     void createRenderBufferObject();
 
+    void bindShadowMap();
+
     void updateViewPort();
+
+    GLuint getShadowMapId() const;
+
+    void updateShadowMapViewPort();
 
     Window& getWindow();
 
@@ -61,7 +80,6 @@ private:
     WindowManager() = default;
 
     void activeQuad(GLuint p_colorTextureId);
-    void deactiveQuad();
 
     Window m_window;
     glm::vec4 m_backgroundColor;
@@ -69,9 +87,11 @@ private:
     GLuint m_editorWindowFrameBuffer;
     GLuint m_gameWindowFrameBuffer;
     GLuint m_renderBufferObject;
+    GLuint m_shadowFrameBuffer;
 
     GLuint m_editorColorTextureId;
     GLuint m_gameColorTextureId;
+    GLuint m_shadowMapTextureId;
 
     Meshes::Object m_windowPlane;
     bool m_editMode;

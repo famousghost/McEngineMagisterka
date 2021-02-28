@@ -6,6 +6,7 @@
 #include "PhysicsManager.h"
 #include "MouseRay.h"
 #include "InputManager.h"
+#include "ShaderManager.h"
 
 namespace McEngine
 {
@@ -47,20 +48,34 @@ void RenderManager::draw(Scenes::Scene & p_scene)
     auto& l_currentAvaiableScene = Scenes::ScenesManager::getInstace().getCurrentAvaiableScene();
     auto& l_editorCamera = l_currentAvaiableScene->getEditorCamera();
     auto& l_gameCamera = l_currentAvaiableScene->getGameMainCamera();
+    auto& l_shadowMapCamera = l_currentAvaiableScene->getShadowMapCamera();
     auto& l_windowManager = GameWindow::WindowManager::getInstance();
     auto& l_objectManager = p_scene.getObjectManager();
     auto& l_window = l_windowManager.getWindow();
     l_editorCamera->setEditorScene(true);
     l_gameCamera->setEditorScene(false);
+    l_shadowMapCamera->setEditorScene(false);
     
-    l_windowManager.updateViewPort();
     l_window.poolEvents();
 
-    l_windowManager.bindEditorFrameBuffer();
     glClearColor(l_windowManager.getBackgroundColor().x,
-                 l_windowManager.getBackgroundColor().y,
-                 l_windowManager.getBackgroundColor().z,
-                 l_windowManager.getBackgroundColor().w);
+        l_windowManager.getBackgroundColor().y,
+        l_windowManager.getBackgroundColor().z,
+        l_windowManager.getBackgroundColor().w);
+
+    l_windowManager.updateShadowMapViewPort();
+
+    l_windowManager.bindShadowFrameBuffer();
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glCullFace(GL_FRONT);
+    drawObjects(p_scene, l_shadowMapCamera);
+    glCullFace(GL_BACK);
+
+    l_windowManager.unbindFrameBuffer();
+
+    l_windowManager.updateViewPort();
+
+    l_windowManager.bindEditorFrameBuffer();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -94,14 +109,10 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
 void RenderManager::drawScene()
 {
-    glDisable(GL_DEPTH_TEST);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     drawEditorWindow();
     drawGameWindow();
-
-
-    glEnable(GL_DEPTH_TEST);
 }
 
 void RenderManager::drawEditorWindow()
@@ -111,7 +122,7 @@ void RenderManager::drawEditorWindow()
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
-    l_windowManager.deactiveEditorQuad();
+    l_windowManager.deactiveQuad();
 }
 
 void RenderManager::drawGameWindow()
@@ -121,7 +132,7 @@ void RenderManager::drawGameWindow()
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
-    l_windowManager.deactiveGameQuad();
+    l_windowManager.deactiveQuad();
 }
 
 void RenderManager::showMesh()
@@ -170,8 +181,29 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
 
     auto& l_objects = l_objectManager.getObjects();
     auto& l_physicsManager = Physics::PhysicsManager::getInstance();
+    auto l_near = l_objectManager.l_nearFarPlane.x;
+    auto l_far = l_objectManager.l_nearFarPlane.y;
     for (auto& object : l_objects)
     {
+        auto& l_object = object.first;
+        auto l_prevShaderProgram = l_object.m_shaderProgram;
+        auto& l_currentShaderProgram = l_object.m_shaderProgram;
+        p_camera->setLightPosition(l_objectManager.m_lightPosition);
+        if (p_camera->isShadowMappnig())
+        {
+            l_currentShaderProgram = Shaders::ShaderManager::getInstance().getShader("shadowMapShader");
+            l_currentShaderProgram->bindShaderProgram();
+
+            l_objectManager.update(l_object);
+            p_camera->updateShaderProgramForShadowMapping(l_near, l_far, *l_currentShaderProgram);
+
+            drawMeshes(l_object);
+
+            l_currentShaderProgram->unbindShaderProgram();
+
+            l_currentShaderProgram = l_prevShaderProgram;
+            continue;
+        }
         if (p_camera->isEditorScene())
         {
             if (m_fillMesh)
@@ -183,19 +215,18 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             }
         }
-        auto& l_object = object.first;
-        auto& l_shaderProgram = *l_object.m_shaderProgram;
 
         drawColliders(l_object, *p_camera, l_objectManager);
 
-        l_shaderProgram.bindShaderProgram();
+        l_currentShaderProgram->bindShaderProgram();
 
         l_objectManager.update(l_object);
-        p_camera->updateShaderProgram(l_shaderProgram, "cameraPos", "view", "projection");
+        p_camera->updateShaderProgram(*l_currentShaderProgram, "cameraPos", "view", "projection");
+        p_camera->updateShaderProgramForShadowMapping(l_near, l_far, *l_currentShaderProgram);
 
         drawMeshes(l_object);
 
-        l_shaderProgram.unbindShaderProgram();
+        l_currentShaderProgram->unbindShaderProgram();
 
         if (Inputs::InputManager::getInstance().s_onClickMouse)
         {

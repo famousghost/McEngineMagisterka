@@ -473,11 +473,11 @@ void Geometry3dUtils::applyImpulse(Meshes::Object & p_objectA,
 
     glm::vec3 l_impulse = l_relativeNorm * l_j;
     p_objectA.m_rigidBody.m_velocity -= l_impulse * l_invMassA;
-    //p_objectA.m_rigidBody.m_angularVelocity -= glm::cross(l_rA, l_impulse) * l_interiaTensorA;
+    p_objectA.m_rigidBody.m_angularVelocity -= glm::cross(l_rA, l_impulse) * l_interiaTensorA;
     if(p_objectB.m_isRigidBody)
     {
         p_objectB.m_rigidBody.m_velocity +=  l_impulse * l_invMassB;
-        //p_objectB.m_rigidBody.m_angularVelocity += glm::cross(l_rB, l_impulse) * l_interiaTensorB;
+        p_objectB.m_rigidBody.m_angularVelocity += glm::cross(l_rB, l_impulse) * l_interiaTensorB;
     }
 
     glm::vec3 l_t = l_relativeVel - (l_relativeNorm *
@@ -522,11 +522,11 @@ void Geometry3dUtils::applyImpulse(Meshes::Object & p_objectA,
 
     glm::vec3 l_tangentImpuse = l_t * l_jt;
     p_objectA.m_rigidBody.m_velocity -= l_tangentImpuse * l_invMassA;
-    //p_objectA.m_rigidBody.m_angularVelocity -= glm::cross(l_rA, l_tangentImpuse) * l_interiaTensorA;
+    p_objectA.m_rigidBody.m_angularVelocity -= glm::cross(l_rA, l_tangentImpuse) * l_interiaTensorA;
     if(p_objectB.m_isRigidBody)
     {
         p_objectB.m_rigidBody.m_velocity += l_tangentImpuse * l_invMassB;
-        //p_objectB.m_rigidBody.m_angularVelocity += glm::cross(l_rB, l_tangentImpuse) * l_interiaTensorB;
+        p_objectB.m_rigidBody.m_angularVelocity += glm::cross(l_rB, l_tangentImpuse) * l_interiaTensorB;
     }
 }
 

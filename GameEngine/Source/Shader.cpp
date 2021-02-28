@@ -136,16 +136,21 @@ void Shader::uniformVec3(const glm::vec3& p_vec, const std::string& p_uniformNam
     glUniform3fv(l_uniformLocationId, 1, glm::value_ptr(p_vec));
 }
 
-void Shader::uniform1I(GLuint p_textureUniformId, const std::string & p_uniformName)
+void Shader::uniform1I(GLuint p_value, const std::string & p_uniformName)
 {
     GLuint l_uniformLocationId = glGetUniformLocation(m_shaderProgramId, p_uniformName.c_str());
-    glUniform1i(l_uniformLocationId, p_textureUniformId);
+    glUniform1i(l_uniformLocationId, p_value);
 }
 
 void Shader::uniform1f(float p_value, const std::string & p_uniformName)
 {
     GLuint l_uniformLocationId = glGetUniformLocation(m_shaderProgramId, p_uniformName.c_str());
     glUniform1f(l_uniformLocationId, p_value);
+}
+
+GLuint Shader::getShaderProgramId() const
+{
+    return m_shaderProgramId;
 }
 
 void Shader::refresh()

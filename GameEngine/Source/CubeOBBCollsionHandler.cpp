@@ -68,12 +68,12 @@ std::vector<Meshes::Plane> CubeOBBCollsionHandler::getFaces(const Meshes::Collid
     glm::vec3 l_y = glm::vec3(l_orientation[1][0], l_orientation[1][1], l_orientation[1][2]);
     glm::vec3 l_z = glm::vec3(l_orientation[2][0], l_orientation[2][1], l_orientation[2][2]);
 
-    l_result[0] = Meshes::Plane(l_x, glm::dot(l_x, l_normals.x));
-    l_result[1] = Meshes::Plane(l_x * -1.0f, -glm::dot(l_x, -l_normals.x));
-    l_result[2] = Meshes::Plane(l_y, glm::dot(l_y, l_normals.y));
-    l_result[3] = Meshes::Plane(l_y * -1.0f, -glm::dot(l_y, -l_normals.y));
-    l_result[4] = Meshes::Plane(l_z, glm::dot(l_z, l_normals.z));
-    l_result[5] = Meshes::Plane(l_z * -1.0f, -glm::dot(l_z, -l_normals.z));
+    l_result[0] = Meshes::Plane(l_x, glm::dot(l_x, l_pos + l_x * l_size.x));
+    l_result[1] = Meshes::Plane(l_x * -1.0f, -glm::dot(l_x, l_pos - l_x * l_size.x));
+    l_result[2] = Meshes::Plane(l_y, glm::dot(l_y, l_pos + l_y * l_size.y));
+    l_result[3] = Meshes::Plane(l_y * -1.0f, -glm::dot(l_y, l_pos - l_y * l_size.y));
+    l_result[4] = Meshes::Plane(l_z, glm::dot(l_z, l_pos + l_z * l_size.z));
+    l_result[5] = Meshes::Plane(l_z * -1.0f, -glm::dot(l_z, l_pos - l_z * l_size.z));
 
     return l_result;
 }
@@ -204,7 +204,6 @@ Meshes::ColMainfold CubeOBBCollsionHandler::findCollsionFeatures(const Meshes::O
 
         else if (l_depth < l_mainfoldResult.m_depth) 
         {
-            std::cout << l_test[i].x << std::endl;
             if (l_shouldFlip) 
             {
                 l_test[i] *= -1.0f;

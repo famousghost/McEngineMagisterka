@@ -14,14 +14,14 @@ out vec3 wPos;
 out vec3 normCoords;
 out vec2 texturesCoords;
 
-const float amplitude = 0.125;
+const float amplitude = 0.2;
 const float frequency = 7;
 const float PI = 3.14159;
 
 void main()
 {
 	float distance = distance(TerrainCenter, vertexCoords);
-	float y = amplitude * sin(-PI * distance * frequency + Time);
+	float y = amplitude * sin(-PI * distance * frequency + Time * 6.0);
 	vec4 worldPos = model * vec4(vertexCoords.x, y, vertexCoords.z, 1.0);
 	normCoords = normalize(mat3(transpose(inverse(model))) * normalCoords);
 	wPos = vec3(worldPos);

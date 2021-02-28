@@ -16,6 +16,9 @@ Scene::Scene()
     m_editorCamera = m_cameras.at(0);
     m_cameras.emplace_back(new Cameras::Camera);
     m_gameMainCamera = m_cameras.at(1);
+    m_cameras.emplace_back(new Cameras::Camera);
+    m_shadowMapCamera = m_cameras.at(2);
+    m_shadowMapCamera->setShadowMappnig();
 }
 
 Meshes::ObjectManager& Scene::getObjectManager()
@@ -31,6 +34,11 @@ std::shared_ptr<Cameras::Camera>& Scene::getEditorCamera()
 std::shared_ptr<Cameras::Camera>& Scene::getGameMainCamera()
 {
     return m_gameMainCamera;
+}
+
+std::shared_ptr<Cameras::Camera>& Scene::getShadowMapCamera()
+{
+    return m_shadowMapCamera;
 }
 
 }//Scenes

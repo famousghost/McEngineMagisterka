@@ -58,6 +58,7 @@ public:
 
     std::vector<std::pair<Object, std::string>>& getObjects();
     glm::vec3 m_lightPosition;
+    glm::vec2 l_nearFarPlane = glm::vec2(1.0, 7.5);
 private:
     void resetValues(Object & p_object);
 

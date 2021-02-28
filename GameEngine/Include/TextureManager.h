@@ -37,6 +37,8 @@ public:
 
     void activeTexture(GLenum p_textureId, const std::string & p_textureLabel);
 
+    void activeTextureById(GLenum p_textureLabel, GLuint p_textureId);
+
     void activeNormalTexture(GLenum p_textureId, const std::string & p_textureLabel);
 
     void activeCubemapTexture(Meshes::Object & p_object);

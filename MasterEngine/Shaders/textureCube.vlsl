@@ -7,10 +7,12 @@ layout(location = 2) in vec2 textureCoords;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 LightSpaceMatrix;
 
 out vec3 wPos;
 out vec3 normCoords;
 out vec2 texturesCoords;
+out vec4 fragPosInLightSpace;
 
 void main()
 {
@@ -18,6 +20,7 @@ void main()
 	normCoords = normalize(mat3(transpose(inverse(model))) * normalCoords);
 	wPos = vec3(worldPos);
 	vec4 vertPos = projection * view * worldPos;
+	fragPosInLightSpace = LightSpaceMatrix * worldPos;
 	texturesCoords = textureCoords;
 	gl_Position = vertPos;
 }

@@ -1,0 +1,15 @@
+﻿
+Zmieniono nazwę elementu „l_width” na „l_shadowWidth”:
+------------------------------------------------------
+D:\GIT_MAGISTERKA\GameEngine\Source\WindowManager.cpp(88, 9)
+D:\GIT_MAGISTERKA\GameEngine\Source\WindowManager.cpp(95, 9)
+
+Zmieniono nazwę elementu „l_height” na „l_shadowHeight”:
+--------------------------------------------------------
+D:\GIT_MAGISTERKA\GameEngine\Source\WindowManager.cpp(89, 9)
+D:\GIT_MAGISTERKA\GameEngine\Source\WindowManager.cpp(95, 24)
+
+Zmieniono nazwę elementu „m_shadowMapColorTextureId” na „m_shadowMapTextureId”:
+-------------------------------------------------------------------------------
+D:\GIT_MAGISTERKA\GameEngine\Include\WindowManager.h(91, 12)
+D:\GIT_MAGISTERKA\GameEngine\Source\WindowManager.cpp(254, 34)

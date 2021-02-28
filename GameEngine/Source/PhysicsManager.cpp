@@ -71,6 +71,10 @@ void PhysicsManager::computeForceAndTorque(Meshes::Object& p_object)
     {
         m_rigidbodyHandler = std::make_shared<RigidbodyHandlerOBB>(&p_object.m_rigidBody);
     }
+    else if (p_object.m_colider.at(0).m_colliderType == Meshes::ColliderType::CUBE_AABB)
+    {
+        m_rigidbodyHandler = std::make_shared<RigidbodyHandlerOBB>(&p_object.m_rigidBody);
+    }
     else if (p_object.m_colider.at(0).m_colliderType == Meshes::ColliderType::SPHERE)
     {
         m_rigidbodyHandler = std::make_shared<RigidbodyHandlerOBB>(&p_object.m_rigidBody);

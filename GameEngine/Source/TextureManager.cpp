@@ -141,6 +141,12 @@ void TextureManager::activeTexture(GLenum p_textureId,
     }
 }
 
+void TextureManager::activeTextureById(GLenum p_textureLabel, GLuint p_textureId)
+{
+    glActiveTexture(p_textureLabel);
+    glBindTexture(GL_TEXTURE_2D, p_textureId);
+}
+
 void TextureManager::activeNormalTexture(GLenum p_textureId,
                                          const std::string& p_textureLabel)
 {

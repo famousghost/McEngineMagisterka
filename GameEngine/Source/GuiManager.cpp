@@ -127,6 +127,7 @@ void GuiManager::renderGui()
 
     auto l_backgroundColor = GameWindow::WindowManager::getInstance().getBackgroundColor();
     ImGui::ColorEdit3("Change Color", (float*)&l_backgroundColor);
+    GameWindow::WindowManager::getInstance().setBackgroundColor(l_backgroundColor);
 
     addObject(items, colliders);
     deleteObject(items, colliders);
@@ -136,6 +137,8 @@ void GuiManager::renderGui()
     updateListOfShaders(shadersItems);
     updateObjectMassProperties();
     m_currentObject = l_objectManager.cloneObject(m_currentObject);
+
+    ImGui::SliderFloat2("Plane", &l_objectManager.l_nearFarPlane.x, 0.1f, 1000.0f);
 
     static std::string buttonName = "show collider";
     if (ImGui::Button(buttonName.c_str()))

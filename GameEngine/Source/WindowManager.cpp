@@ -28,8 +28,10 @@ void WindowManager::start()
         exit(0);
     }
     createFrameBuffers();
-    buildFrameBuffer(true, m_editorColorTextureId);
-    buildFrameBuffer(false, m_gameColorTextureId);
+    buildFrameBuffer(FrameBufferType::EDITOR, m_editorColorTextureId);
+    buildFrameBuffer(FrameBufferType::GAME, m_gameColorTextureId);
+    buildShadowMapFrameBuffer(m_shadowMapTextureId);
+
 }
 
 void WindowManager::shutdown()
@@ -54,10 +56,16 @@ glm::vec4 WindowManager::getBackgroundColor() const
     return m_backgroundColor;
 }
 
+void WindowManager::setBackgroundColor(glm::vec4 p_backgroundColor)
+{
+    m_backgroundColor = p_backgroundColor;
+}
+
 void WindowManager::createFrameBuffers()
 {
     glGenFramebuffers(1, &m_editorWindowFrameBuffer);
     glGenFramebuffers(1, &m_gameWindowFrameBuffer);
+    glGenFramebuffers(1, &m_shadowFrameBuffer);
 }
 
 void WindowManager::bindEditorFrameBuffer()
@@ -75,15 +83,64 @@ void WindowManager::bindGameFrameBuffer()
     glBindFramebuffer(GL_FRAMEBUFFER, m_gameWindowFrameBuffer);
 }
 
-void WindowManager::buildFrameBuffer(bool p_isEditorFrameBuffer, GLuint& p_colorTextureId)
+void WindowManager::bindShadowFrameBuffer()
 {
-    if(p_isEditorFrameBuffer)
-    { 
-        bindEditorFrameBuffer();
-    }
-    else
+    glBindFramebuffer(GL_FRAMEBUFFER, m_shadowFrameBuffer);
+}
+
+void WindowManager::buildShadowMapFrameBuffer(GLuint& p_depthMap)
+{
+    int l_shadowWidth = 1024;
+    int l_shadowHeight = 1024;
+
+    prepareDepthTexture(l_shadowWidth, l_shadowHeight, p_depthMap);
+
+    bindShadowFrameBuffer();
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, p_depthMap, 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+
+    if (checkIfFrameBufferCorrectlyBuild())
     {
+        LOG("ERROR::FRAMEBUFFER:: shadow mpa is not complete!", LogType::ERR);
+        exit(0);
+    }
+
+    unbindFrameBuffer();
+}
+
+void WindowManager::prepareDepthTexture(int p_shadowWidth, int p_shadowHeight, GLuint& p_depthMap)
+{
+    glGenTextures(1, &p_depthMap);
+    glBindTexture(GL_TEXTURE_2D, p_depthMap);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+        p_shadowWidth, p_shadowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    float l_borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, l_borderColor);
+}
+
+void WindowManager::buildFrameBuffer(FrameBufferType p_frameBufferType, GLuint& p_colorTextureId)
+{
+
+    int l_width;
+    int l_height;
+    switch (p_frameBufferType)
+    {
+    case McEngine::GameWindow::FrameBufferType::EDITOR:
+        bindEditorFrameBuffer();
+        break;
+    case McEngine::GameWindow::FrameBufferType::GAME:
         bindGameFrameBuffer();
+        break;
+    default:
+        LOG("CANNOT FIND FRAMEBUFFER TYPE", LogType::ERR);
+        break;
     }
     createColorAttachment(p_colorTextureId);
     createRenderBufferObject();
@@ -126,14 +183,14 @@ void WindowManager::activeGameQuad()
     activeQuad(m_gameColorTextureId);
 }
 
-void WindowManager::deactiveEditorQuad()
+void WindowManager::activeShadowMapQuad()
 {
-    deactiveQuad();
-}
-
-void WindowManager::deactiveGameQuad()
-{
-    deactiveQuad();
+    m_windowPlane.m_shaderProgram->bindShaderProgram();
+    m_windowPlane.m_shaderProgram->uniform1f(GAMESCREEN_OFFSET, SCREEN_OFFSET_UNIFORM);
+    m_windowPlane.m_shaderProgram->uniform1f(1.0f, "near_plane");
+    m_windowPlane.m_shaderProgram->uniform1f(7.5f, "far_plane");
+    m_windowPlane.m_shaderProgram->unbindShaderProgram();
+    activeQuad(m_shadowMapTextureId);
 }
 
 bool WindowManager::checkIfFrameBufferCorrectlyBuild()
@@ -173,6 +230,16 @@ void WindowManager::updateViewPort()
     glViewport(0, 0, l_width, l_height);
 }
 
+GLuint WindowManager::getShadowMapId() const
+{
+    return m_shadowMapTextureId;
+}
+
+void WindowManager::updateShadowMapViewPort()
+{
+    glViewport(0, 0, 1024, 1024);
+}
+
 Window& WindowManager::getWindow()
 {
     return m_window;
@@ -197,6 +264,11 @@ void WindowManager::deactiveQuad()
     m_windowPlane.m_meshes.at(0)->m_vertexArray.unbindVao();
     m_windowPlane.m_shaderProgram->unbindShaderProgram();
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void WindowManager::bindShadowMap()
+{
+    glBindTexture(GL_TEXTURE_2D, m_shadowMapTextureId);
 }
 
 void WindowManager::framebuffer_size_callback(GLFWwindow * window, int width, int height)

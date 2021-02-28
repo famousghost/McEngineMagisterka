@@ -25,6 +25,7 @@ void ShaderManager::start()
     addShader("coliderShader", "Shaders/colider.vlsl", "Shaders/colider.flsl");
     addShader("lightShader", "Shaders/light.vlsl", "Shaders/light.flsl");
     addShader("skyBoxShader", "Shaders/skybox.vlsl", "Shaders/skybox.flsl");
+    addShader("shadowMapShader", "Shaders/ShadowMap.vlsl", "Shaders/ShadowMap.flsl");
     GameWindow::WindowManager::getInstance().createWindowPlane();
 }
 
