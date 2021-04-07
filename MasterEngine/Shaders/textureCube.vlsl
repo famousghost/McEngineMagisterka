@@ -28,7 +28,7 @@ void main()
 	
 	vec3 B = cross(N, T);
 	
-	TBN = mat3(T, B, N);
+	TBN = transpose(mat3(T, B, N));
 	
 	wPos = vec3(worldPos);
 	vec4 vertPos = projection * view * worldPos;
