@@ -141,6 +141,17 @@ void Camera::updateGameCamera()
     moveGameCamera();
 }
 
+void Camera::updateCameraAngle(float p_yaw, float p_pitch)
+{
+    glm::vec3 l_newFront;
+
+    l_newFront.x = std::cos(glm::radians(p_pitch)) * std::cos(glm::radians(p_yaw));
+    l_newFront.y = std::sin(glm::radians(p_pitch));
+    l_newFront.z = std::cos(glm::radians(p_pitch)) * std::sin(glm::radians(p_yaw));
+
+    m_cameraFront = glm::normalize(l_newFront);
+}
+
 void Camera::setLightPosition(const glm::vec3& p_lightPosition)
 {
     m_lightPosition = p_lightPosition;

@@ -13,6 +13,25 @@ namespace McEngine
 namespace Renderer
 {
 
+namespace
+{
+    const glm::vec2 l_cameraDir[6]
+    {
+       //    "Textures/Cubemap/xpos.jpg",
+        //"Textures/Cubemap/xneg.jpg",
+       // "Textures/Cubemap/ypos.jpg",
+       // "Textures/Cubemap/yneg.jpg",
+       // "Textures/Cubemap/zpos.jpg",
+       // "Textures/Cubemap/zneg.jpg"
+        glm::vec2(0.0f, 0.0f), // Right
+        glm::vec2(-180.0f, 0.0f), // Left
+        glm::vec2(-90.0f, 89.0f), // Up
+        glm::vec2(-90.0f, -89.0f), // Down
+        glm::vec2(90.0f, 0.0f), // Back
+        glm::vec2(-90.0f, 0.0f) //Front
+    };
+}
+
 void RenderManager::start()
 {
     m_fillMesh = true;
@@ -73,17 +92,13 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
     l_windowManager.unbindFrameBuffer();
 
+    drawToCubeMap(p_scene, l_editorCamera);
+
     l_windowManager.updateViewPort();
 
     l_windowManager.bindEditorFrameBuffer();
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    l_editorCamera->update();
-
-    drawSkybox(l_objectManager, *l_editorCamera);
-
-    drawObjects(p_scene, l_editorCamera);
+    drawCompleteScene(p_scene, l_editorCamera);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -91,13 +106,7 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
     l_windowManager.bindGameFrameBuffer();
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    l_gameCamera->updateGameCamera();
-
-    drawSkybox(l_objectManager, *l_gameCamera);
-
-    drawObjects(p_scene, l_gameCamera);
+    drawCompleteScene(p_scene, l_gameCamera);
 
     l_windowManager.unbindFrameBuffer();
 
@@ -105,6 +114,87 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     l_window.swapBuffer();
+}
+
+void RenderManager::drawToCubeMap(Scenes::Scene& p_scene, std::shared_ptr<Cameras::Camera>& p_camera)
+{
+    auto& l_objectManager = p_scene.getObjectManager();
+    auto& l_window = GameWindow::WindowManager::getInstance().getWindow();
+
+    glGenTextures(1, &m_generatedCubeMapTexture);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, m_generatedCubeMapTexture);
+
+    int l_width;
+    int l_height;
+    glfwGetFramebufferSize(l_window.getGlfwWindow(), &l_width, &l_height);
+
+    for (int i = 0; i < 6; ++i)
+    {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, l_width, l_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    }
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+    glGenFramebuffers(1, &m_cubeMapFrameBuffer);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, m_cubeMapFrameBuffer);
+
+    glDrawBuffer(GL_COLOR_ATTACHMENT0);
+
+    glGenRenderbuffers(1, &m_cubeMapRenderBuffer);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, m_cubeMapRenderBuffer);
+
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, l_width, l_height);
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                              GL_RENDERBUFFER, m_cubeMapRenderBuffer);
+
+    glViewport(0, 0, l_width, l_height);
+    int i = 0;
+    for (auto dir : l_cameraDir)
+    {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, m_generatedCubeMapTexture, 0);
+
+        p_camera->updateCameraAngle(dir.x, dir.y);
+
+        drawSkybox(l_objectManager, *p_camera);
+
+        drawObjects(p_scene, p_camera);
+        i++;
+    }
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        LOG("ERROR::FRAMEBUFFER:: Framebuffer is not complete I DONT KNOW WHY!", LogType::ERR);
+        //exit(0);
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    glDeleteRenderbuffers(1, &m_cubeMapRenderBuffer);
+    glDeleteFramebuffers(1, &m_cubeMapFrameBuffer);
+}
+
+void RenderManager::drawCompleteScene(Scenes::Scene& p_scene, std::shared_ptr<Cameras::Camera>& p_camera)
+{
+    auto& l_objectManager = p_scene.getObjectManager();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    p_camera->update();
+
+    drawSkybox(l_objectManager, *p_camera);
+
+    drawObjects(p_scene, p_camera);
 }
 
 void RenderManager::drawScene()
@@ -188,6 +278,10 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
         auto& l_object = object.first;
         auto l_prevShaderProgram = l_object.m_shaderProgram;
         auto& l_currentShaderProgram = l_object.m_shaderProgram;
+        if (l_object.m_currentActiveShader == "reflectionEnv")
+        {
+            continue;
+        }
         p_camera->setLightPosition(l_objectManager.m_lightPosition);
         if (p_camera->isShadowMappnig())
         {
@@ -221,6 +315,7 @@ void RenderManager::drawObjects(Scenes::Scene & p_scene, std::shared_ptr<Cameras
         l_currentShaderProgram->bindShaderProgram();
 
         l_objectManager.update(l_object);
+        l_object.m_shaderProgram->uniform1I(m_generatedCubeMapTexture, "envMap");
         p_camera->updateShaderProgram(*l_currentShaderProgram, "cameraPos", "view", "projection");
         p_camera->updateShaderProgramForShadowMapping(l_near, l_far, *l_currentShaderProgram);
 

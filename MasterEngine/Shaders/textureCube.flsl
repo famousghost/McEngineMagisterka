@@ -6,6 +6,7 @@ uniform sampler2D normalTexture;
 in vec3 normCoords;
 in vec3 wPos;
 in vec2 texturesCoords;
+in mat3 TBN;
 
 out vec4 fragColor;
 
@@ -90,6 +91,7 @@ void main()
 	if (normalCor != vec3(0.0, 0.0, 0.0))
 	{
 		normalCor = normalize(normalCor * 2.0 - 1.0);
+		normalCor = normalize(TBN * normalCor);
 		diffuseLight = calculateDiffuseLight(lightPos, normalCor) + calculateDiffuseLight(lightPos, normCoords);
 		specularLight = calculateSpecularLight(lightPos, normalCor) + calculateDiffuseLight(lightPos, normCoords);
 	}

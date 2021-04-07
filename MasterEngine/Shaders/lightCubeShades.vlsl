@@ -2,8 +2,6 @@
 
 layout(location = 0) in vec3 vertexCoords;
 layout(location = 1) in vec3 normalCoords;
-layout(location = 2) in vec2 textureCoords;
-layout(location = 3) in vec3 tangentCoords;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -12,27 +10,14 @@ uniform mat4 LightSpaceMatrix;
 
 out vec3 wPos;
 out vec3 normCoords;
-out vec2 texturesCoords;
 out vec4 fragPosInLightSpace;
-out mat3 TBN;
 
 void main()
 {
-	vec4 worldPos = model * vec4(vertexCoords, 1.0f);
+	vec4 worldPos = model * vec4(vertexCoords, 1.0);
 	normCoords = normalize(mat3(transpose(inverse(model))) * normalCoords);
-	
-	vec3 T = normalize(vec3(model * vec4(tangentCoords, 1.0f)));
-	vec3 N = normalize(vec3(model * vec4(normCoords, 1.0f)));
-	
-	T = normalize(T - dot(T, N) * N);
-	
-	vec3 B = cross(N, T);
-	
-	TBN = mat3(T, B, N);
-	
-	wPos = vec3(worldPos);
 	vec4 vertPos = projection * view * worldPos;
 	fragPosInLightSpace = LightSpaceMatrix * worldPos;
-	texturesCoords = textureCoords;
+	wPos = vec3(worldPos);
 	gl_Position = vertPos;
 }

@@ -191,7 +191,8 @@ std::vector<std::shared_ptr<Mesh>> PrefabManager::loadMesh(std::string p_filePat
     Assimp::Importer l_import;
     const aiScene *l_scene = l_import.ReadFile(p_filePath,
                                                aiProcess_Triangulate 
-                                               | aiProcess_FlipUVs);
+                                               | aiProcess_FlipUVs
+                                               | aiProcess_CalcTangentSpace);
 
     std::vector<std::shared_ptr<Mesh>> l_meshes;
 
@@ -276,6 +277,10 @@ void PrefabManager::fillMeshValues(std::shared_ptr<Mesh>& p_prefabMesh, aiMesh* 
         l_vertex.m_normalCoords = glm::vec3(p_mesh->mNormals[i].x,
                                             p_mesh->mNormals[i].y,
                                             p_mesh->mNormals[i].z);
+
+        l_vertex.m_tangent = glm::vec3(p_mesh->mTangents[i].x,
+                                       p_mesh->mTangents[i].y,
+                                       p_mesh->mTangents[i].z);
         if (p_mesh->mTextureCoords[0])
         {
             l_vertex.m_textureCoords = glm::vec2(p_mesh->mTextureCoords[0][i].x,

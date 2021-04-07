@@ -1,0 +1,35 @@
+#version 330 core
+in vec3 normalCoords;
+in vec3 FragPosition;
+in vec3 wPos;
+
+out vec4 fragCoords;
+
+uniform samplerCube envMap;
+uniform sampler2D normalTexture;
+
+uniform vec3 cameraPos;
+
+struct Material
+{
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	vec3 objectColor;
+};
+
+uniform Material material;
+
+void main()
+{
+	vec3 cameraDir = normalize(wPos - cameraPos);
+	
+	vec3 reflectVec = reflect(cameraDir, normalize(normalCoords));
+	
+	vec3 refractVec = refract(cameraDir, normalize(normalCoords), 1/1.21);
+	
+	vec4 reflectedTexture = texture(envMap, reflectVec);
+	vec4 refractedTexture = texture(envMap, refractVec);
+	
+	fragCoords = mix(reflectedTexture, refractedTexture, 0.0) * vec4(material.objectColor, 1.0);
+}

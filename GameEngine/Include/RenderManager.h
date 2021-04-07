@@ -15,6 +15,10 @@ public:
     void drawSkybox(Meshes::ObjectManager & p_objectManager, Cameras::Camera & p_camera);
     void draw(Scenes::Scene& p_scene);
 
+    void drawToCubeMap(Scenes::Scene & p_scene, std::shared_ptr<Cameras::Camera>& p_camera);
+
+    void drawCompleteScene(Scenes::Scene & p_scene, std::shared_ptr<Cameras::Camera>& p_camera);
+
     void showMesh();
 
     void fillMesh();
@@ -39,6 +43,10 @@ private:
     void initGlad();
 
     bool m_fillMesh;
+
+    GLuint m_generatedCubeMapTexture;
+    GLuint m_cubeMapFrameBuffer;
+    GLuint m_cubeMapRenderBuffer;
 };
 
 }//Renderer

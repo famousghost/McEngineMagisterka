@@ -25,6 +25,8 @@ public:
 
     void updateGameCamera();
 
+    void updateCameraAngle(float p_yaw, float p_pitch);
+
     void setLightPosition(const glm::vec3 & p_lightPosition);
 
     void updateShaderProgram(Shaders::Shader & p_shaderProgram, const std::string & p_cameraPostionUniform, const std::string & p_viewMatrixUniform, const std::string & p_projectionMatrixUniform);

@@ -45,12 +45,18 @@ void VertexArray::addValuesToAttribPointer(const std::vector<Vertex>& p_values)
 
     glEnableVertexAttribArray(1);
 
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(l_offset));
+
+    l_offset += sizeof(glm::vec3);
+
+    glEnableVertexAttribArray(3);
+
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(l_offset));
 
     l_offset += sizeof(glm::vec2);
 
     glEnableVertexAttribArray(2);
-    
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 

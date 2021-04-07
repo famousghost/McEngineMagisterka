@@ -57,7 +57,7 @@ struct Object
         m_isColliding = false;
         m_colliderNumber = 1;
         m_gravity = -9.87f;
-        m_currentAvaiableTexture = "texture";
+        m_currentAvaiableTexture = "Wall";
         m_movementDirection = glm::vec3();
         m_cloneNum = 0;
     }

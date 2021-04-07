@@ -1,0 +1,37 @@
+#version 330 core
+in vec2 Tcordinates;
+
+out vec4 fragCoords;
+
+in vec4 clipSpace;
+
+uniform sampler2D screenTexture;
+uniform sampler2D texture1;
+
+const float waveStrength = 0.05;
+
+const vec3 normalsFromVerticies = vec3(0.0,1.0,0.0);
+
+uniform float moveWave;
+
+void main()
+{
+	vec4 waterColor = vec4(0.25,0.64,0.87,1.0);//-- dirty water vec4(0.2, 0.45, 0.4, 1.0);
+	vec2 ndc = (clipSpace.xy/clipSpace.w)/2.0 + 0.5;
+	
+	vec2 reflectedCoords = vec2(ndc.x,-ndc.y);
+
+	
+	vec2 distortion1 = (texture(texture1,vec2(Tcordinates.x + moveWave,-Tcordinates.y)).xy * 2.0 - 1.0) * waveStrength;
+	vec2 distortion2 = (texture(texture1,vec2(-Tcordinates.x + moveWave,Tcordinates.y + moveWave)).xy * 2.0 - 1.0) * waveStrength;
+	vec2 totalDistorition = distortion1+ distortion2;
+	//reflectedCoords += totalDistorition;
+	
+	reflectedCoords.x = clamp(reflectedCoords.x,0.001,0.999);
+	reflectedCoords.y = clamp(reflectedCoords.y,-0.999,-0.001);
+
+	
+	vec4 reflectedTexture = texture(screenTexture, reflectedCoords) * waterColor;
+
+	fragCoords = reflectedTexture;
+}

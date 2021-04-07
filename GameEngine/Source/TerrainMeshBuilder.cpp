@@ -81,6 +81,7 @@ namespace Meshes
             Vertex l_vertex;
             l_vertex.m_position = l_verticies.at(i);
             l_vertex.m_normalCoords = glm::vec3(0.0f, 1.0f, 0.0f);
+            l_vertex.m_tangent = glm::vec3(0.0f, 1.0f, 0.0f);
             l_vertex.m_textureCoords = l_textureCoords.at(i);
             m_mesh->m_verticies.push_back(l_vertex);
         }
