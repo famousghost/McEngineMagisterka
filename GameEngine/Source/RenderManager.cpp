@@ -92,7 +92,7 @@ void RenderManager::draw(Scenes::Scene & p_scene)
 
     l_windowManager.unbindFrameBuffer();
 
-    drawToCubeMap(p_scene, l_editorCamera);
+    //drawToCubeMap(p_scene, l_editorCamera);
 
     l_windowManager.updateViewPort();
 
@@ -127,24 +127,43 @@ void RenderManager::drawToCubeMap(Scenes::Scene& p_scene, std::shared_ptr<Camera
     int l_width;
     int l_height;
     glfwGetFramebufferSize(l_window.getGlfwWindow(), &l_width, &l_height);
-
-    for (int i = 0; i < 6; ++i)
-    {
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, l_width, l_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    }
-
+    
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, 0);
 
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    std::vector<GLubyte> testData(l_width * l_height * 256, 128);
+    std::vector<GLubyte> xData(l_width * l_height * 256, 255);
+
+    for (int i = 0; i < 6; ++i)
+    {
+        //glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, l_width, l_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+        if (i)
+        {
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA8,
+                l_width, l_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &testData[0]);
+        }
+        else
+        {
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA8,
+                l_width, l_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &xData[0]);
+        }
+    }
 
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
     glGenFramebuffers(1, &m_cubeMapFrameBuffer);
 
     glBindFramebuffer(GL_FRAMEBUFFER, m_cubeMapFrameBuffer);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, m_generatedCubeMapTexture, 0);
 
     glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
@@ -162,19 +181,20 @@ void RenderManager::drawToCubeMap(Scenes::Scene& p_scene, std::shared_ptr<Camera
     for (auto dir : l_cameraDir)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, m_generatedCubeMapTexture, 0);
-
         p_camera->updateCameraAngle(dir.x, dir.y);
 
         drawSkybox(l_objectManager, *p_camera);
 
         drawObjects(p_scene, p_camera);
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, m_generatedCubeMapTexture, 0);
+
         i++;
     }
-
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status != GL_FRAMEBUFFER_COMPLETE)
     {
-        LOG("ERROR::FRAMEBUFFER:: Framebuffer is not complete I DONT KNOW WHY!", LogType::ERR);
+        LOG("ERROR::FRAMEBUFFER::Framebuffer is not complete I DONT KNOW WHY!", LogType::ERR);
         //exit(0);
     }
 
