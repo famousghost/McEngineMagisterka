@@ -67,7 +67,7 @@ std::string Logger::getCurrentTime()
 
 std::string Logger::prepareLogFile()
 {
-    return "Logs/LOG_" + getCurrentTime() + ".log";
+    return "Engine_Logs/LOG_" + getCurrentTime() + ".log";
 }
 
 Logger& Logger::getInstance()
